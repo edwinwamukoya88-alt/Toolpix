@@ -7,6 +7,8 @@ import {
 import { Button } from "@/components/ui/button"
 import ToolCard from "@/components/tool-card"
 import { tools, categories } from "@/lib/tools-data"
+import { getLatestPosts } from "@/lib/blog"
+import BlogCard from "@/components/blog/blog-card"
 import AdSlot from "@/components/ads/AdSlot"
 import type { LucideIcon } from "lucide-react"
 
@@ -149,6 +151,26 @@ export default function HomePage() {
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
           {tools.slice(0, 12).map((tool) => (
             <ToolCard key={tool.slug} {...tool} />
+          ))}
+        </div>
+      </section>
+
+      {/* ─── Latest From The Blog ─── */}
+      <section className="container py-12">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h2 className="text-2xl font-bold">Latest From The Blog</h2>
+            <p className="text-sm text-muted-foreground mt-1">Guides, tutorials, and insights from the ToolForge team</p>
+          </div>
+          <Link href="/blog">
+            <Button variant="outline" size="sm">
+              View All <ArrowRight className="h-3.5 w-3.5 ml-1" />
+            </Button>
+          </Link>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {getLatestPosts(3).map((post) => (
+            <BlogCard key={post.slug} post={post} />
           ))}
         </div>
       </section>

@@ -50,6 +50,7 @@ const toolComponents: Record<string, React.ComponentType> = {
   "teacher-comment-generator": dynamic(() => import("@/tools/teacher-comment-generator")),
   "revision-planner": dynamic(() => import("@/tools/revision-planner")),
   "exam-generator": dynamic(() => import("@/tools/exam-generator")),
+  "blog-generator": dynamic(() => import("@/tools/blog-generator")),
 }
 
 export default function ToolPageClient({ slug, tool }: { slug: string; tool: Tool }) {

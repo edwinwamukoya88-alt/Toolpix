@@ -127,3 +127,115 @@ body {
   }
   max-width: 80rem;
 }
+
+/* Blog prose styles */
+.blog-content h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.02em;
+  scroll-margin-top: 5rem;
+}
+
+.blog-content h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  scroll-margin-top: 5rem;
+}
+
+.blog-content p {
+  margin-bottom: 1rem;
+  line-height: 1.75;
+  color: hsl(var(--muted-foreground));
+}
+
+.blog-content p strong {
+  color: hsl(var(--foreground));
+  font-weight: 600;
+}
+
+.blog-content ul, .blog-content ol {
+  margin-bottom: 1rem;
+  padding-left: 1.5rem;
+  color: hsl(var(--muted-foreground));
+  line-height: 1.75;
+}
+
+.blog-content ul {
+  list-style-type: disc;
+}
+
+.blog-content ol {
+  list-style-type: decimal;
+}
+
+.blog-content li {
+  margin-bottom: 0.25rem;
+}
+
+.blog-content li strong {
+  color: hsl(var(--foreground));
+}
+
+.blog-content a {
+  color: hsl(var(--primary));
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: opacity 0.2s;
+}
+
+.blog-content a:hover {
+  opacity: 0.8;
+}
+
+.blog-content blockquote {
+  border-left: 3px solid hsl(var(--primary) / 0.5);
+  padding-left: 1rem;
+  margin: 1.5rem 0;
+  color: hsl(var(--muted-foreground));
+  font-style: italic;
+}
+
+.blog-content table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.blog-content table th,
+.blog-content table td {
+  padding: 0.625rem 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid hsl(var(--border));
+  font-size: 0.875rem;
+}
+
+.blog-content table th {
+  font-weight: 600;
+  background: hsl(var(--muted) / 0.5);
+  color: hsl(var(--foreground));
+}
+
+.blog-content table td {
+  color: hsl(var(--muted-foreground));
+}
+
+.blog-content hr {
+  margin: 2rem 0;
+  border-color: hsl(var(--border));
+}
+
+.blog-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-lg);
+}
+
+.blog-content pre code {
+  background: transparent;
+  padding: 0;
+  font-size: 0.8125rem;
+  line-height: 1.7;
+}

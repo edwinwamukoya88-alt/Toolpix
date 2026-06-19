@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useCallback, useMemo } from "react"
-import { FileSpreadsheet, Copy, Printer, FileDown, RefreshCw } from "lucide-react"
+import { ClipboardCheck, Copy, Printer, FileDown, RefreshCw } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -9,243 +9,201 @@ import { Separator } from "@/components/ui/separator"
 import { toast } from "sonner"
 import { trackToolUse, trackDownload } from "@/lib/analytics"
 
-type Difficulty = "easy" | "medium" | "hard"
+type TaskType = "project" | "practical" | "observation" | "problem-solving" | "group-work"
 
-const questionBanks: Record<string, Record<Difficulty, { mcq: { question: string; options: string[]; answer: string }[]; shortAnswer: { question: string; answer: string }[] }>> = {
-  Mathematics: {
-    easy: {
-      mcq: [
-        { question: "What is 5 + 3?", options: ["6", "7", "8", "9"], answer: "8" },
-        { question: "What is 12 - 4?", options: ["6", "7", "8", "9"], answer: "8" },
-        { question: "What is 3 × 4?", options: ["10", "11", "12", "14"], answer: "12" },
-        { question: "What is 15 ÷ 3?", options: ["3", "4", "5", "6"], answer: "5" },
-        { question: "What is the next number: 2, 4, 6, ?", options: ["7", "8", "9", "10"], answer: "8" },
-        { question: "How many sides does a triangle have?", options: ["2", "3", "4", "5"], answer: "3" },
-        { question: "What is 10 × 10?", options: ["50", "100", "150", "200"], answer: "100" },
-        { question: "What is half of 20?", options: ["5", "10", "15", "20"], answer: "10" },
-      ],
-      shortAnswer: [
-        { question: "What is 7 + 8?", answer: "15" },
-        { question: "What is 20 - 9?", answer: "11" },
-        { question: "How many corners does a square have?", answer: "4" },
-        { question: "What is 6 × 5?", answer: "30" },
-      ],
-    },
-    medium: {
-      mcq: [
-        { question: "What is 45 + 37?", options: ["72", "82", "92", "102"], answer: "82" },
-        { question: "What is 100 - 63?", options: ["27", "37", "47", "57"], answer: "37" },
-        { question: "What is 12 × 8?", options: ["86", "96", "106", "116"], answer: "96" },
-        { question: "What is 144 ÷ 12?", options: ["10", "11", "12", "13"], answer: "12" },
-        { question: "What is the perimeter of a 5cm square?", options: ["15cm", "20cm", "25cm", "30cm"], answer: "20cm" },
-        { question: "What is 3/4 as a decimal?", options: ["0.25", "0.5", "0.75", "1.25"], answer: "0.75" },
-        { question: "What is 25% of 80?", options: ["15", "20", "25", "30"], answer: "20" },
-        { question: "How many degrees in a right angle?", options: ["45°", "60°", "90°", "180°"], answer: "90°" },
-      ],
-      shortAnswer: [
-        { question: "What is 156 + 89?", answer: "245" },
-        { question: "What is 250 - 178?", answer: "72" },
-        { question: "What is 15 × 15?", answer: "225" },
-        { question: "What is the area of a 6cm by 4cm rectangle?", answer: "24cm²" },
-      ],
-    },
-    hard: {
-      mcq: [
-        { question: "What is 15% of 240?", options: ["26", "30", "36", "40"], answer: "36" },
-        { question: "Solve: 3x + 7 = 22. What is x?", options: ["3", "5", "7", "9"], answer: "5" },
-        { question: "What is the square root of 169?", options: ["11", "12", "13", "14"], answer: "13" },
-        { question: "What is 2⁵?", options: ["16", "24", "32", "64"], answer: "32" },
-        { question: "What is the LCM of 6 and 8?", options: ["12", "16", "24", "48"], answer: "24" },
-        { question: "What is the GCF of 36 and 54?", options: ["6", "9", "12", "18"], answer: "18" },
-        { question: "What is (a² - b²) equal to?", options: ["(a-b)²", "(a+b)(a-b)", "(a+b)²", "a²-2ab+b²"], answer: "(a+b)(a-b)" },
-        { question: "What is 7! (7 factorial)?", options: ["720", "5040", "40320", "840"], answer: "5040" },
-      ],
-      shortAnswer: [
-        { question: "Solve: 2x - 5 = 15. What is x?", answer: "10" },
-        { question: "What is the area of a circle with radius 7cm? (use π=22/7)", answer: "154cm²" },
-        { question: "What is 12.5% as a fraction in simplest form?", answer: "1/8" },
-        { question: "What is the volume of a 3cm cube?", answer: "27cm³" },
-      ],
-    },
+const taskBanks: Record<string, Record<TaskType, { title: string; description: string; materials?: string; criteria: string[] }[]>> = {
+  "Science and Technology": {
+    "project": [
+      { title: "Water Conservation System", description: "Design a simple water harvesting system using local materials to collect rainwater for household use.", materials: "Guttering, container, mesh, pipe connectors", criteria: ["Functionality of design", "Use of local materials", "Clear labelled diagram", "Written explanation"] },
+      { title: "Energy Sources Model", description: "Create a model showing three different sources of energy used in your community.", materials: "Cardboard, markers, small LED bulbs, wires", criteria: ["Accuracy of energy sources", "Quality of model", "Labels and descriptions", "Presentation"] },
+      { title: "Plant Growth Investigation", description: "Grow two types of seeds under different conditions and document their growth over 14 days.", materials: "Seeds, soil, containers, water, sunlight", criteria: ["Daily observation records", "Measurement accuracy", "Comparison of results", "Conclusion drawn"] },
+    ],
+    "practical": [
+      { title: "Magnetic Properties", description: "Test various objects to determine which materials are attracted to a magnet and classify them.", materials: "Bar magnet, paper clips, coins, plastic, wood, cloth", criteria: ["Correct classification", "Recording of results", "Safety during activity", "Clean-up procedure"] },
+      { title: "Simple Circuit", description: "Construct a simple electrical circuit that lights a bulb using a battery, wires, and a switch.", materials: "Battery, wires, bulb, switch holder", criteria: ["Circuit completeness", "Bulb lights successfully", "Correct use of switch", "Safety awareness"] },
+      { title: "Floating and Sinking", description: "Test various objects to predict and observe which float and which sink in water.", materials: "Basin of water, various objects (sponge, stone, coin, cork, plastic)", criteria: ["Prediction accuracy", "Observation recording", "Classification of objects", "Explanation of results"] },
+    ],
+    "observation": [
+      { title: "Weather Patterns", description: "Observe and record weather conditions daily for one week, including temperature, rainfall, and cloud cover.", criteria: ["Daily consistency", "Use of symbols/chart", "Accuracy of observations", "Weekly summary"] },
+      { title: "Living Things in the Environment", description: "Observe and record five different living things found in the school compound.", criteria: ["Identification accuracy", "Detailed description", "Habitat recording", "Drawing/sketch included"] },
+    ],
+    "problem-solving": [
+      { title: "Waste Management Solution", description: "Identify a waste problem in your school and propose a practical solution for managing it.", criteria: ["Problem identification", "Practical solution", "Use of local resources", "Feasibility"] },
+      { title: "Clean Water Challenge", description: "Design a simple water filtration system using household materials to clean muddy water.", materials: "Plastic bottle, sand, charcoal, cloth, gravel", criteria: ["Filtration effectiveness", "Use of materials", "Process documentation", "Improvement suggestions"] },
+    ],
+    "group-work": [
+      { title: "Environmental Conservation Campaign", description: "In groups, plan and present a campaign to promote tree planting in the local community.", criteria: ["Group collaboration", "Quality of presentation", "Creativity", "Community focus"] },
+      { title: "Healthy Living Skit", description: "Create and perform a short skit about healthy eating habits and physical exercise.", criteria: ["Teamwork", "Message clarity", "Creativity", "Confidence in presentation"] },
+    ],
   },
-  English: {
-    easy: {
-      mcq: [
-        { question: "Which is a noun?", options: ["run", "beautiful", "book", "quickly"], answer: "book" },
-        { question: "What is the opposite of 'hot'?", options: ["warm", "cold", "cool", "mild"], answer: "cold" },
-        { question: "Which word is a verb?", options: ["happy", "jump", "blue", "house"], answer: "jump" },
-        { question: "What is the plural of 'child'?", options: ["childs", "childes", "children", "child's"], answer: "children" },
-        { question: "Which sentence is correct?", options: ["She go to school", "She goes to school", "She going school", "She go school"], answer: "She goes to school" },
-        { question: "What is an adjective?", options: ["A doing word", "A describing word", "A naming word", "A connecting word"], answer: "A describing word" },
-        { question: "Which word is a pronoun?", options: ["table", "she", "quickly", "and"], answer: "she" },
-        { question: "What is the past tense of 'walk'?", options: ["walked", "walking", "walks", "walk"], answer: "walked" },
-      ],
-      shortAnswer: [
-        { question: "What is the opposite of 'big'?", answer: "small" },
-        { question: "How many letters are in the word 'education'?", answer: "9" },
-        { question: "What is the plural of 'box'?", answer: "boxes" },
-        { question: "Which is correct: 'a apple' or 'an apple'?", answer: "an apple" },
-      ],
-    },
-    medium: {
-      mcq: [
-        { question: "Which sentence uses correct punctuation?", options: ["Hi how are you", "Hi, how are you?", "Hi how are you?", "Hi, how are you"], answer: "Hi, how are you?" },
-        { question: "What is a synonym of 'happy'?", options: ["sad", "angry", "joyful", "tired"], answer: "joyful" },
-        { question: "Identify the conjunction: 'I like tea and coffee.'", options: ["like", "and", "tea", "coffee"], answer: "and" },
-        { question: "What tense is 'She has eaten'?", options: ["past", "present", "present perfect", "future"], answer: "present perfect" },
-        { question: "Which is a compound word?", options: ["table", "sunflower", "quickly", "happiness"], answer: "sunflower" },
-        { question: "What is an antonym of 'beautiful'?", options: ["pretty", "ugly", "charming", "lovely"], answer: "ugly" },
-        { question: "Which is a proper noun?", options: ["city", "dog", "London", "book"], answer: "London" },
-        { question: "What is the comparative form of 'good'?", options: ["gooder", "more good", "better", "best"], answer: "better" },
-      ],
-      shortAnswer: [
-        { question: "Give the past tense of 'write'", answer: "wrote" },
-        { question: "What is the prefix in 'unhappy'?", answer: "un" },
-        { question: "How many syllables in 'elephant'?", answer: "3" },
-        { question: "What is the feminine form of 'actor'?", answer: "actress" },
-      ],
-    },
-    hard: {
-      mcq: [
-        { question: "Identify the figure of speech: 'The world is a stage.'", options: ["simile", "metaphor", "personification", "alliteration"], answer: "metaphor" },
-        { question: "Which sentence is in passive voice?", options: ["The cat chased the mouse", "The mouse was chased by the cat", "The cat is chasing", "The mouse runs"], answer: "The mouse was chased by the cat" },
-        { question: "What is the correct spelling?", options: ["accomodate", "accommodate", "acommodate", "accomoddate"], answer: "accommodate" },
-        { question: "Which is a dangling modifier?", options: ["Walking home, the rain started", "Walking home, I got wet", "While walking home, it rained", "I walked home in the rain"], answer: "Walking home, the rain started" },
-        { question: "What type of clause is 'because she was tired'?", options: ["independent", "dependent", "relative", "noun"], answer: "dependent" },
-        { question: "Identify the literary device: 'bang', 'hiss', 'pop'", options: ["metaphor", "simile", "onomatopoeia", "oxymoron"], answer: "onomatopoeia" },
-        { question: "What is the subjunctive form? 'If I ___ you...'", options: ["was", "am", "were", "be"], answer: "were" },
-        { question: "Which word is a gerund?", options: ["running", "runs", "ran", "runner"], answer: "running" },
-      ],
-      shortAnswer: [
-        { question: "What is the difference between 'affect' and 'effect'? (brief)", answer: "Affect is a verb, effect is a noun" },
-        { question: "Identify the error: 'Me and John went to the store'", answer: "Should be 'John and I'" },
-        { question: "What is the past participle of 'sing'?", answer: "sung" },
-        { question: "Define an oxymoron with an example", answer: "A figure of speech combining contradictory terms (e.g., 'deafening silence')" },
-      ],
-    },
+  "Mathematics": {
+    "project": [
+      { title: "Budget Planning", description: "Plan a budget for a small family event, including income, expenses, and savings calculations.", materials: "Paper, calculator, price lists", criteria: ["Accurate calculations", "Realistic budget", "Clear presentation", "Reflection on choices"] },
+      { title: "Shape City", description: "Create a model of a city using different geometric shapes, labelling each shape correctly.", materials: "Cardboard, scissors, glue, markers", criteria: ["Variety of shapes used", "Correct labelling", "Quality of model", "Creativity"] },
+      { title: "Data Collection Survey", description: "Conduct a survey on a topic of interest, collect data from 20 people, and present it in a chart.", materials: "Survey form, graph paper, markers", criteria: ["Data collection method", "Accuracy of tally", "Appropriate chart type", "Analysis of findings"] },
+    ],
+    "practical": [
+      { title: "Measurement Hunt", description: "Measure the length, width, and height of five different objects in the classroom using a ruler or tape measure.", materials: "Ruler, measuring tape, recording sheet", criteria: ["Correct use of measuring tool", "Accuracy of measurements", "Unit recording (cm/m)", "Comparison of sizes"] },
+      { title: "Fraction Pizza", description: "Create a paper 'pizza' divided into equal parts and label the fractions represented.", materials: "Coloured paper, scissors, glue, markers", criteria: ["Equal division", "Correct fraction labels", "Visual clarity", "Understanding shown"] },
+      { title: "Telling Time", description: "Create a clock face and demonstrate telling time to the nearest hour, half-hour, and quarter-hour.", materials: "Paper plate, cardboard hands, split pin", criteria: ["Clock construction", "Accuracy of time shown", "Variety of times demonstrated", "Verbal explanation"] },
+    ],
+    "observation": [
+      { title: "Pattern Hunt", description: "Observe and record five different patterns found in the classroom or school environment.", criteria: ["Pattern identification", "Drawing of patterns", "Pattern rule explanation", "Creativity in finding patterns"] },
+      { title: "Traffic Count", description: "Observe and count vehicles passing the school for 30 minutes, categorising by type.", criteria: ["Organised tally", "Categories used", "Accuracy of count", "Data representation"] },
+    ],
+    "problem-solving": [
+      { title: "Sharing Equally", description: "Solve a real-life sharing problem: divide 24 sweets among 4 children fairly. Show three different ways.", materials: "Counters, paper", criteria: ["Correct division", "Multiple strategies shown", "Clear explanation", "Real-life connection"] },
+      { title: "Classroom Reorganisation", description: "The classroom has 30 desks that need to be arranged in equal rows. Find all possible arrangements.", criteria: ["Finding all factors", "Systematic approach", "Visual arrangement", "Explanation of findings"] },
+    ],
+    "group-work": [
+      { title: "Market Day Maths", description: "In groups, set up a mock market stall with prices and practice buying and selling items.", criteria: ["Pricing accuracy", "Correct change giving", "Team collaboration", "Realistic scenario"] },
+      { title: "Maths Board Game", description: "Design and create a board game that teaches a mathematical concept to younger learners.", criteria: ["Game rules clarity", "Maths concept integration", "Creativity", "Playability"] },
+    ],
   },
-  Science: {
-    easy: {
-      mcq: [
-        { question: "What is H₂O?", options: ["Salt", "Water", "Sugar", "Oxygen"], answer: "Water" },
-        { question: "Which planet is closest to the sun?", options: ["Venus", "Earth", "Mercury", "Mars"], answer: "Mercury" },
-        { question: "What do plants need for photosynthesis?", options: ["Water only", "Sunlight only", "Sunlight and water", "Soil only"], answer: "Sunlight and water" },
-        { question: "What is the largest organ in the human body?", options: ["Liver", "Heart", "Skin", "Brain"], answer: "Skin" },
-        { question: "What gas do we breathe out?", options: ["Oxygen", "Nitrogen", "Carbon dioxide", "Hydrogen"], answer: "Carbon dioxide" },
-        { question: "How many bones are in the adult human body?", options: ["106", "206", "306", "406"], answer: "206" },
-        { question: "What is the boiling point of water?", options: ["90°C", "100°C", "110°C", "120°C"], answer: "100°C" },
-        { question: "Which animal is known as the 'king of the jungle'?", options: ["Tiger", "Lion", "Elephant", "Gorilla"], answer: "Lion" },
-      ],
-      shortAnswer: [
-        { question: "What are the three states of matter?", answer: "Solid, liquid, gas" },
-        { question: "What planet is known as the Red Planet?", answer: "Mars" },
-        { question: "What is the sense organ for sight?", answer: "Eyes" },
-        { question: "What do roots of a plant do?", answer: "Absorb water and nutrients from soil" },
-      ],
-    },
-    medium: {
-      mcq: [
-        { question: "What is the chemical symbol for gold?", options: ["Go", "Gd", "Au", "Ag"], answer: "Au" },
-        { question: "What is the speed of light approximately?", options: ["300,000 km/s", "150,000 km/s", "500,000 km/s", "100,000 km/s"], answer: "300,000 km/s" },
-        { question: "Which blood type is the universal donor?", options: ["A", "B", "AB", "O"], answer: "O" },
-        { question: "What process converts sugar into energy in cells?", options: ["Photosynthesis", "Respiration", "Digestion", "Fermentation"], answer: "Respiration" },
-        { question: "What is the pH of pure water?", options: ["5", "6", "7", "8"], answer: "7" },
-        { question: "Which vitamin is produced when skin is exposed to sunlight?", options: ["Vitamin A", "Vitamin B", "Vitamin C", "Vitamin D"], answer: "Vitamin D" },
-        { question: "What is the smallest unit of life?", options: ["Atom", "Cell", "Tissue", "Organ"], answer: "Cell" },
-        { question: "What type of rock is formed from magma?", options: ["Sedimentary", "Igneous", "Metamorphic", "Fossilized"], answer: "Igneous" },
-      ],
-      shortAnswer: [
-        { question: "What is the function of the mitochondria?", answer: "Powerhouse of the cell; produces energy" },
-        { question: "What causes tides on Earth?", answer: "Gravitational pull of the moon" },
-        { question: "What is the chemical formula for table salt?", answer: "NaCl" },
-        { question: "What is metamorphosis?", answer: "Transformation in body structure (e.g., caterpillar to butterfly)" },
-      ],
-    },
-    hard: {
-      mcq: [
-        { question: "What is the half-life of Carbon-14?", options: ["2,730 years", "5,730 years", "11,460 years", "22,920 years"], answer: "5,730 years" },
-        { question: "Which particle is responsible for electrical current?", options: ["Proton", "Neutron", "Electron", "Photon"], answer: "Electron" },
-        { question: "What is the function of the Golgi apparatus?", options: ["Protein synthesis", "Energy production", "Packaging and transport", "Cell division"], answer: "Packaging and transport" },
-        { question: "What is the Heisenberg Uncertainty Principle?", options: ["Energy equals mass", "Position and momentum cannot both be perfectly known", "Light is both wave and particle", "Entropy always increases"], answer: "Position and momentum cannot both be perfectly known" },
-        { question: "What is the unit of electrical resistance?", options: ["Volt", "Ampere", "Ohm", "Watt"], answer: "Ohm" },
-        { question: "Which hormone regulates blood sugar?", options: ["Adrenaline", "Insulin", "Thyroxine", "Estrogen"], answer: "Insulin" },
-        { question: "What is the difference between DNA and RNA?", options: ["RNA has uracil instead of thymine", "DNA has uracil", "RNA is double-stranded", "They are identical"], answer: "RNA has uracil instead of thymine" },
-        { question: "What is absolute zero in Celsius?", options: ["-100°C", "-200°C", "-273.15°C", "-373.15°C"], answer: "-273.15°C" },
-      ],
-      shortAnswer: [
-        { question: "What is the theory of general relativity about?", answer: "Gravity as the curvature of spacetime" },
-        { question: "What is the role of the enzyme helicase in DNA replication?", answer: "Unwinds the DNA double helix" },
-        { question: "What is stoichiometry?", answer: "Calculation of reactants and products in chemical reactions" },
-        { question: "What is the photoelectric effect?", answer: "Emission of electrons from a material when light shines on it" },
-      ],
-    },
+  "English": {
+    "project": [
+      { title: "Story Book Creation", description: "Write and illustrate a short story (minimum 5 pages) with a clear beginning, middle, and end.", materials: "Paper, markers, stapler", criteria: ["Story structure", "Use of vocabulary", "Illustrations", "Creativity"] },
+      { title: "Community News Report", description: "Write a news report about a recent event in your school or community.", materials: "Paper, pen, interview notes", criteria: ["Factual accuracy", "Report structure", "Use of quotes", "Clarity of writing"] },
+    ],
+    "practical": [
+      { title: "Oral Presentation", description: "Prepare and deliver a 2-minute talk about your favourite book or hobby.", criteria: ["Confidence", "Clear pronunciation", "Organisation of ideas", "Eye contact"] },
+      { title: "Recipe Writing", description: "Write a simple recipe for a traditional Kenyan meal, including ingredients and step-by-step instructions.", materials: "Paper, pen", criteria: ["Clear instructions", "List of ingredients", "Step sequencing", "Use of imperative verbs"] },
+    ],
+    "observation": [
+      { title: "Environmental Description", description: "Observe a place in the school compound and write a descriptive paragraph about what you see, hear, and smell.", criteria: ["Use of sensory details", "Descriptive vocabulary", "Paragraph structure", "Originality"] },
+    ],
+    "problem-solving": [
+      { title: "Letter to the Principal", description: "Write a formal letter to the principal suggesting one improvement for the school.", criteria: ["Letter format", "Clear argument", "Polite tone", "Persuasive language"] },
+    ],
+    "group-work": [
+      { title: "Debate Preparation", description: "In groups, prepare and present arguments for or against a given motion.", criteria: ["Teamwork", "Quality of arguments", "Respectful listening", "Confident delivery"] },
+      { title: "Role Play", description: "In groups, create and perform a role play about a visit to a health centre.", criteria: ["Realistic scenario", "Use of dialogue", "Team coordination", "Audience engagement"] },
+    ],
+  },
+  "Kiswahili": {
+    "project": [
+      { title: "Hadithi Fupi", description: "Andika hadithi fupi yenye mwanzo, katikati na mwisho kuhusu maisha ya shule.", materials: "Karatasi, kalamu, picha", criteria: ["Muundo wa hadithi", "Matumizi ya msamiati", "Ubunifu", "Wasilisho"] },
+    ],
+    "practical": [
+      { title: "Mazungumzo", description: "Andaa mazungumzo kati ya wanafunzi wawili kuhusu usafi wa mazingira ya shule.", criteria: ["Matumizi sahihi ya lugha", "Muundo wa mazungumzo", "Uhalisia", "Kujiamini"] },
+    ],
+    "observation": [
+      { title: "Uchunguzi wa Mazingira", description: "Chunguza mazingira ya shule yako na andika maelezo kuhusu kile unachokiona, kusikia na kunusa.", criteria: ["Matumizi ya hisi", "Msamiati sahihi", "Muundo wa maelezo", "Usahihi"] },
+    ],
+    "problem-solving": [
+      { title: "Suluhisho la Tatizo", description: "Tambua tatizo moja shuleni kwako na pendekeza suluhisho la vitendo.", criteria: ["Utambuzi wa tatizo", "Suluhisho la vitendo", "Uhalisia", "Uwasilishaji"] },
+    ],
+    "group-work": [
+      { title: "Sajili", description: "Kwa vikundi, andaa sajili fupi yenye mandhari ya utunzaji wa mazingira.", criteria: ["Ushirikiano", "Ubunifu", "Ufasaha wa lugha", "Wasilisho"] },
+    ],
+  },
+  "Social Studies": {
+    "project": [
+      { title: "Community Map", description: "Draw a map of your local community showing key features such as roads, rivers, schools, and markets.", materials: "Paper, markers, ruler", criteria: ["Map key and symbols", "Accuracy of features", "Compass direction", "Neatness"] },
+      { title: "Family History Timeline", description: "Create a timeline showing important events in your family's history across three generations.", materials: "Paper, photos, markers", criteria: ["Chronological order", "Historical accuracy", "Visual presentation", "Family involvement"] },
+    ],
+    "practical": [
+      { title: "Cultural Artefact", description: "Create a traditional artefact from one Kenyan community and explain its cultural significance.", materials: "Clay, wood, beads, fabric", criteria: ["Authenticity", "Cultural accuracy", "Craftsmanship", "Explanation"] },
+    ],
+    "observation": [
+      { title: "Weather and Climate", description: "Observe and record weather patterns in your area for one week, noting how they affect daily activities.", criteria: ["Daily recording", "Impact analysis", "Use of symbols", "Weekly summary"] },
+    ],
+    "problem-solving": [
+      { title: "Road Safety Solution", description: "Identify a road safety issue near your school and propose a practical solution.", criteria: ["Problem identification", "Practical solution", "Community consideration", "Feasibility"] },
+    ],
+    "group-work": [
+      { title: "Cultural Festival", description: "In groups, plan and present a mini cultural festival showcasing traditions from different Kenyan communities.", criteria: ["Research quality", "Teamwork", "Authenticity", "Engagement"] },
+    ],
   },
 }
 
-const grades = ["Grade 1", "Grade 2", "Grade 3", "Grade 4", "Grade 5", "Grade 6", "Grade 7", "Grade 8", "Grade 9", "Grade 10", "Grade 11", "Grade 12"]
-const subjectsList = ["Mathematics", "English", "Science"]
+const learningAreas = ["Science and Technology", "Mathematics", "English", "Kiswahili", "Social Studies"]
+const grades = ["Grade 1", "Grade 2", "Grade 3", "Grade 4", "Grade 5", "Grade 6", "Grade 7", "Grade 8", "Grade 9"]
 
-export default function ExamGenerator() {
+export default function CBCAssessmentTool() {
   const [grade, setGrade] = useState("Grade 4")
-  const [subject, setSubject] = useState("Mathematics")
-  const [numQuestions, setNumQuestions] = useState("10")
-  const [difficulty, setDifficulty] = useState<Difficulty>("medium")
-  const [examGenerated, setExamGenerated] = useState(false)
-  const [mcqs, setMcqs] = useState<{ question: string; options: string[]; answer: string }[]>([])
-  const [shortAnswers, setShortAnswers] = useState<{ question: string; answer: string }[]>([])
+  const [learningArea, setLearningArea] = useState("Science and Technology")
+  const [numTasks, setNumTasks] = useState("4")
+  const [generated, setGenerated] = useState(false)
+  const [tasks, setTasks] = useState<{ type: TaskType; task: { title: string; description: string; materials?: string; criteria: string[] } }[]>([])
 
+  const taskTypes: TaskType[] = ["project", "practical", "observation", "problem-solving", "group-work"]
+
+  const pick = <T,>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)]
   const shuffle = <T,>(arr: T[]): T[] => {
     const a = [...arr]
     for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1))
-      ;[a[i], a[j]] = [a[j], a[i]]
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]]
     }
     return a
   }
 
   const generate = () => {
-    const bank = questionBanks[subject]
+    const bank = taskBanks[learningArea]
     if (!bank) {
-      toast.error(`Question bank for ${subject} not available`)
+      toast.error(`Task bank for ${learningArea} not available`)
       return
     }
 
-    const diffBank = bank[difficulty]
-    const total = Math.max(1, Math.min(Number(numQuestions) || 10, 50))
-    const mcqCount = Math.ceil(total * 0.6)
-    const saCount = total - mcqCount
+    const count = Math.max(1, Math.min(Number(numTasks) || 4, 12))
+    const allTasks: { type: TaskType; task: typeof bank[TaskType][0] }[] = []
 
-    const shuffledMcq = shuffle(diffBank.mcq).slice(0, mcqCount)
-    const shuffledSa = shuffle(diffBank.shortAnswer).slice(0, saCount)
+    taskTypes.forEach((type) => {
+      if (bank[type]) {
+        bank[type].forEach((task) => {
+          allTasks.push({ type, task })
+        })
+      }
+    })
 
-    setMcqs(shuffledMcq)
-    setShortAnswers(shuffledSa)
-    setExamGenerated(true)
+    const shuffled = shuffle(allTasks)
+    const selected = shuffled.slice(0, count)
+
+    setTasks(selected.map((s) => ({ type: s.type, task: s.task })))
+    setGenerated(true)
     trackToolUse("exam-generator", "generate")
-    toast.success("Exam generated")
+    toast.success("CBC performance assessment generated")
+  }
+
+  const typeLabels: Record<TaskType, string> = {
+    "project": "Project",
+    "practical": "Practical Activity",
+    "observation": "Observation Task",
+    "problem-solving": "Problem-Solving Task",
+    "group-work": "Group Work Assignment",
+  }
+
+  const typeColors: Record<TaskType, string> = {
+    "project": "border-blue-500/30 bg-blue-500/10",
+    "practical": "border-green-500/30 bg-green-500/10",
+    "observation": "border-amber-500/30 bg-amber-500/10",
+    "problem-solving": "border-purple-500/30 bg-purple-500/10",
+    "group-work": "border-rose-500/30 bg-rose-500/10",
   }
 
   const handleCopy = useCallback(() => {
     const lines = [
-      `${subject} EXAMINATION`,
-      `Grade: ${grade}  |  Difficulty: ${difficulty}  |  Total Questions: ${mcqs.length + shortAnswers.length}`,
+      "CBC PERFORMANCE-BASED ASSESSMENT",
+      "=".repeat(50),
+      `Learning Area: ${learningArea}`,
+      `Grade: ${grade}`,
+      `Total Tasks: ${tasks.length}`,
       "",
-      "SECTION A: MULTIPLE CHOICE",
-      ...mcqs.map((q, i) => `${i + 1}. ${q.question}\n   ${q.options.map((o, j) => `${String.fromCharCode(97 + j)}) ${o}`).join("  ")}`),
-      "",
-      "SECTION B: SHORT ANSWER",
-      ...shortAnswers.map((q, i) => `${i + 1}. ${q.question}`),
-      "",
-      "--- ANSWER KEY ---",
-      "Multiple Choice:",
-      ...mcqs.map((q, i) => `${i + 1}. ${q.answer}`),
-      "Short Answer:",
-      ...shortAnswers.map((q, i) => `${i + 1}. ${q.answer}`),
+      ...tasks.map((t, i) => [
+        `Task ${i + 1}: ${typeLabels[t.type]}`,
+        `Title: ${t.task.title}`,
+        `Description: ${t.task.description}`,
+        ...(t.task.materials ? [`Materials: ${t.task.materials}`] : []),
+        "Assessment Criteria:",
+        ...t.task.criteria.map((c) => `   • ${c}`),
+        "",
+      ]).flat(),
     ]
     navigator.clipboard.writeText(lines.join("\n"))
     trackToolUse("exam-generator", "copy")
-    toast.success("Exam copied")
-  }, [subject, grade, difficulty, mcqs, shortAnswers])
+    toast.success("Assessment copied")
+  }, [learningArea, grade, tasks])
 
   const handlePrint = useCallback(() => {
     trackToolUse("exam-generator", "print")
@@ -258,152 +216,102 @@ export default function ExamGenerator() {
       const doc = new jsPDF()
       let y = 20
       const margin = 20
-      const pageWidth = doc.internal.pageSize.getWidth()
-      const maxWidth = pageWidth - margin * 2
-      const lineHeight = 7
+      const maxWidth = 170
+      const lineHeight = 6
 
-      doc.setFontSize(16)
-      doc.text(`${subject} EXAMINATION`, margin, y)
+      doc.setFontSize(14)
+      doc.text("CBC PERFORMANCE-BASED ASSESSMENT", margin, y)
       y += 9
       doc.setFontSize(10)
-      doc.text(`Grade: ${grade}  |  Difficulty: ${difficulty}`, margin, y)
-      y += 14
+      doc.text(`Learning Area: ${learningArea}    Grade: ${grade}    Tasks: ${tasks.length}`, margin, y)
+      y += 10
 
-      const writeLine = (text: string) => {
-        if (y > 275) { doc.addPage(); y = 20 }
-        doc.text(text, margin, y)
-        y += lineHeight
-      }
-
-      doc.setFontSize(12)
-      writeLine("SECTION A: MULTIPLE CHOICE")
-      doc.setFontSize(10)
-      y += 3
-
-      mcqs.forEach((q, i) => {
-        if (y > 260) { doc.addPage(); y = 20; doc.setFontSize(10) }
-        const lines = doc.splitTextToSize(`${i + 1}. ${q.question}`, maxWidth)
-        lines.forEach((l: string) => writeLine(l))
-        q.options.forEach((opt, j) => {
-          writeLine(`   ${String.fromCharCode(97 + j)}) ${opt}`)
+      tasks.forEach((t, i) => {
+        if (y > 260) { doc.addPage(); y = 20 }
+        doc.setFont("helvetica", "bold")
+        doc.setFontSize(11)
+        doc.text(`Task ${i + 1}: ${typeLabels[t.type]}`, margin, y)
+        y += 7
+        doc.setFont("helvetica", "normal")
+        doc.setFontSize(10)
+        doc.text(`Title: ${t.task.title}`, margin, y)
+        y += 6
+        const descLines = doc.splitTextToSize(t.task.description, maxWidth)
+        descLines.forEach((l: string) => {
+          if (y > 270) { doc.addPage(); y = 20 }
+          doc.text(l, margin, y)
+          y += lineHeight
         })
-        y += 3
-      })
-
-      y += 5
-      if (y > 260) { doc.addPage(); y = 20 }
-      doc.setFontSize(12)
-      writeLine("SECTION B: SHORT ANSWER")
-      doc.setFontSize(10)
-      y += 3
-
-      shortAnswers.forEach((q, i) => {
-        if (y > 270) { doc.addPage(); y = 20 }
-        const lines = doc.splitTextToSize(`${i + 1}. ${q.question}`, maxWidth)
-        lines.forEach((l: string) => writeLine(l))
+        y += 2
+        if (t.task.materials) {
+          doc.text(`Materials: ${t.task.materials}`, margin, y)
+          y += 6
+        }
+        doc.setFont("helvetica", "bold")
+        doc.text("Assessment Criteria:", margin, y)
+        y += 5
+        doc.setFont("helvetica", "normal")
+        t.task.criteria.forEach((c) => {
+          if (y > 275) { doc.addPage(); y = 20 }
+          doc.text(`   • ${c}`, margin, y)
+          y += lineHeight
+        })
         y += 5
       })
 
-      doc.addPage()
-      y = 20
-      doc.setFontSize(14)
-      writeLine("ANSWER KEY")
-      y += 5
-      doc.setFontSize(11)
-      writeLine("Section A: Multiple Choice")
-      doc.setFontSize(10)
-      mcqs.forEach((q, i) => writeLine(`${i + 1}. ${q.answer}`))
-      y += 5
-      doc.setFontSize(11)
-      writeLine("Section B: Short Answer")
-      doc.setFontSize(10)
-      shortAnswers.forEach((q, i) => {
-        const lines = doc.splitTextToSize(`${i + 1}. ${q.answer}`, maxWidth)
-        lines.forEach((l: string) => writeLine(l))
-      })
-
-      doc.save(`${subject.toLowerCase()}-exam.pdf`)
+      doc.save("cbc-assessment.pdf")
       trackDownload("exam-generator", "pdf")
       toast.success("PDF downloaded")
     } catch {
       toast.error("Failed to generate PDF")
     }
-  }, [subject, grade, difficulty, mcqs, shortAnswers])
+  }, [learningArea, grade, tasks])
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">
       <div className="text-center space-y-1">
-        <h2 className="text-2xl font-bold tracking-tight">Exam Generator</h2>
-        <p className="text-sm text-muted-foreground">Generate structured exams from predefined question banks</p>
+        <h2 className="text-2xl font-bold tracking-tight">CBC Assessment Tool</h2>
+        <p className="text-sm text-muted-foreground">Generate performance-based assessments — projects, practical tasks, observations, and group work</p>
       </div>
 
       <Card>
         <CardContent className="p-5 space-y-5">
-          <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="space-y-1.5">
               <label className="text-xs font-medium text-muted-foreground">Grade</label>
-              <select
-                value={grade}
-                onChange={(e) => setGrade(e.target.value)}
-                className="h-10 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-sm transition-colors outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-input/30"
-              >
-                {grades.map((g) => (
-                  <option key={g} value={g}>{g}</option>
-                ))}
+              <select value={grade} onChange={(e) => setGrade(e.target.value)}
+                className="h-10 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-sm outline-none focus-visible:border-ring dark:bg-input/30">
+                {grades.map((g) => (<option key={g} value={g}>{g}</option>))}
               </select>
             </div>
             <div className="space-y-1.5">
-              <label className="text-xs font-medium text-muted-foreground">Subject</label>
-              <select
-                value={subject}
-                onChange={(e) => setSubject(e.target.value)}
-                className="h-10 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-sm transition-colors outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-input/30"
-              >
-                {subjectsList.map((s) => (
-                  <option key={s} value={s}>{s}</option>
-                ))}
+              <label className="text-xs font-medium text-muted-foreground">Learning Area</label>
+              <select value={learningArea} onChange={(e) => setLearningArea(e.target.value)}
+                className="h-10 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-sm outline-none focus-visible:border-ring dark:bg-input/30">
+                {learningAreas.map((s) => (<option key={s} value={s}>{s}</option>))}
               </select>
             </div>
             <div className="space-y-1.5">
-              <label className="text-xs font-medium text-muted-foreground">Questions</label>
-              <Input
-                type="number"
-                value={numQuestions}
-                onChange={(e) => setNumQuestions(e.target.value)}
-                min="1"
-                max="50"
-                className="h-10 text-sm"
-              />
-            </div>
-            <div className="space-y-1.5">
-              <label className="text-xs font-medium text-muted-foreground">Difficulty</label>
-              <select
-                value={difficulty}
-                onChange={(e) => setDifficulty(e.target.value as Difficulty)}
-                className="h-10 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-sm transition-colors outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-input/30"
-              >
-                <option value="easy">Easy</option>
-                <option value="medium">Medium</option>
-                <option value="hard">Hard</option>
-              </select>
+              <label className="text-xs font-medium text-muted-foreground">Number of Tasks</label>
+              <Input type="number" value={numTasks} onChange={(e) => setNumTasks(e.target.value)} min="1" max="12" className="h-10 text-sm" />
             </div>
           </div>
 
           <Button onClick={generate} className="w-full">
-            <FileSpreadsheet className="h-4 w-4" /> Generate Exam
+            <ClipboardCheck className="h-4 w-4" /> Generate Performance Assessment
           </Button>
         </CardContent>
       </Card>
 
-      {examGenerated && (
+      {generated && (
         <>
           <Card className="border-primary/30">
             <CardContent className="p-5 space-y-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="font-semibold">{subject} Examination</h3>
+                  <h3 className="font-semibold">Performance-Based Assessment</h3>
                   <p className="text-xs text-muted-foreground">
-                    Grade: {grade} &middot; Difficulty: {difficulty} &middot; Total: {mcqs.length + shortAnswers.length} questions
+                    {learningArea} &middot; Grade {grade} &middot; {tasks.length} task{tasks.length !== 1 ? "s" : ""}
                   </p>
                 </div>
                 <div className="flex gap-2">
@@ -424,60 +332,48 @@ export default function ExamGenerator() {
 
               <Separator />
 
-              <div>
-                <h4 className="text-sm font-semibold mb-2">Section A: Multiple Choice ({mcqs.length} questions)</h4>
-                <div className="space-y-3">
-                  {mcqs.map((q, i) => (
-                    <div key={i} className="rounded-lg border bg-muted/10 p-3 text-sm">
-                      <p className="font-medium mb-2">{i + 1}. {q.question}</p>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-1">
-                        {q.options.map((opt, j) => (
-                          <label key={j} className="flex items-center gap-2 text-xs text-muted-foreground py-0.5">
-                            <input type="radio" name={`mcq-${i}`} className="accent-primary" />
-                            <span>{String.fromCharCode(97 + j)}) {opt}</span>
-                          </label>
-                        ))}
+              <div className="space-y-4">
+                {tasks.map((t, i) => (
+                  <Card key={i} className={`border ${typeColors[t.type]}`}>
+                    <CardContent className="p-4 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${typeColors[t.type]}`}>
+                          {typeLabels[t.type]}
+                        </span>
+                        <span className="text-[10px] text-muted-foreground">Task {i + 1}</span>
                       </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <Separator />
-
-              <div>
-                <h4 className="text-sm font-semibold mb-2">Section B: Short Answer ({shortAnswers.length} questions)</h4>
-                <div className="space-y-2">
-                  {shortAnswers.map((q, i) => (
-                    <div key={i} className="rounded-lg border bg-muted/10 p-3 text-sm">
-                      <p className="font-medium">{mcqs.length + i + 1}. {q.question}</p>
-                      <div className="mt-2 border-b border-dashed border-muted-foreground/20 h-6" />
-                    </div>
-                  ))}
-                </div>
+                      <h4 className="font-semibold text-sm">{t.task.title}</h4>
+                      <p className="text-xs text-muted-foreground leading-relaxed">{t.task.description}</p>
+                      {t.task.materials && (
+                        <p className="text-[10px] text-muted-foreground/70">
+                          <span className="font-medium">Materials:</span> {t.task.materials}
+                        </p>
+                      )}
+                      <div>
+                        <p className="text-[10px] font-medium text-muted-foreground mb-1">Assessment Criteria:</p>
+                        <ul className="list-disc list-inside text-[10px] text-muted-foreground space-y-0.5">
+                          {t.task.criteria.map((c, ci) => (
+                            <li key={ci}>{c}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
               </div>
             </CardContent>
           </Card>
 
           <Card>
             <CardContent className="p-5 space-y-3">
-              <h3 className="font-semibold text-sm">Answer Key</h3>
+              <h3 className="font-semibold text-sm">CBC Competency Mapping</h3>
               <Separator />
-              <div className="text-xs space-y-2">
-                <p className="font-medium text-muted-foreground">Section A: Multiple Choice</p>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-1">
-                  {mcqs.map((q, i) => (
-                    <div key={i} className="font-mono"><span className="text-muted-foreground">{i + 1}.</span> {q.answer}</div>
-                  ))}
-                </div>
-                <p className="font-medium text-muted-foreground mt-3">Section B: Short Answer (Model Answers)</p>
-                <div className="space-y-1">
-                  {shortAnswers.map((q, i) => (
-                    <div key={i} className="font-mono">
-                      <span className="text-muted-foreground">{mcqs.length + i + 1}.</span> {q.answer}
-                    </div>
-                  ))}
-                </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-muted-foreground">
+                <div className="flex items-center gap-2"><div className="h-2 w-2 rounded-full bg-blue-500" /> Projects — Creativity, Critical Thinking</div>
+                <div className="flex items-center gap-2"><div className="h-2 w-2 rounded-full bg-green-500" /> Practical — Self-Efficacy, Digital Literacy</div>
+                <div className="flex items-center gap-2"><div className="h-2 w-2 rounded-full bg-amber-500" /> Observation — Learning to Learn, Communication</div>
+                <div className="flex items-center gap-2"><div className="h-2 w-2 rounded-full bg-purple-500" /> Problem-Solving — Critical Thinking, Creativity</div>
+                <div className="flex items-center gap-2"><div className="h-2 w-2 rounded-full bg-rose-500" /> Group Work — Collaboration, Citizenship</div>
               </div>
             </CardContent>
           </Card>
