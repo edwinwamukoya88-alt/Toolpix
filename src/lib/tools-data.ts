@@ -19,12 +19,12 @@ export const tools: Tool[] = [
   { slug: "kanban", name: "Kanban Board", description: "Organize tasks with drag-and-drop boards", icon: "Columns3", category: "Productivity", badge: "Free" },
 
   // 2. EDUCATION & CBC TOOLS (HIGH PRIORITY NICHE)
-  { slug: "grade-calculator", name: "Grade Calculator", description: "Calculate scores, percentages, grades, and performance levels", icon: "Percent", category: "Education & CBC Tools", badge: "Free" },
-  { slug: "revision-planner", name: "Revision Planner", description: "Create study schedules and exam preparation timetables", icon: "CalendarDays", category: "Education & CBC Tools", badge: "Free" },
-  { slug: "lesson-plan-generator", name: "Lesson Plan Generator", description: "Generate structured CBC lesson plans using predefined templates", icon: "BookOpen", category: "Education & CBC Tools", badge: "Free" },
-  { slug: "exam-generator", name: "Exam Generator", description: "Generate structured exams from predefined question banks", icon: "FileSpreadsheet", category: "Education & CBC Tools", badge: "Free" },
-  { slug: "teacher-comment-generator", name: "Teacher Comment Generator", description: "Generate professional report card comments from predefined comment banks", icon: "MessageSquare", category: "Education & CBC Tools", badge: "Free" },
-  { slug: "scheme-of-work-generator", name: "Scheme of Work Generator", description: "Create termly schemes of work from structured curriculum inputs", icon: "ClipboardList", category: "Education & CBC Tools", badge: "Free" },
+  { slug: "grade-calculator", name: "CBC Grade Calculator", description: "Calculate scores and competency levels (EE/ME/AE/BE) per KICD", icon: "Percent", category: "Education & CBC Tools", badge: "Free" },
+  { slug: "revision-planner", name: "CBC Revision Planner", description: "Plan skill-based practice, projects, and competency reinforcement", icon: "CalendarDays", category: "Education & CBC Tools", badge: "Free" },
+  { slug: "lesson-plan-generator", name: "CBC Lesson Planner", description: "Generate full KICD-compliant lesson plans with competencies and PCIs", icon: "BookOpen", category: "Education & CBC Tools", badge: "Free" },
+  { slug: "exam-generator", name: "CBC Assessment Tool", description: "Generate performance-based assessments — projects, tasks, observations", icon: "FileSpreadsheet", category: "Education & CBC Tools", badge: "Free" },
+  { slug: "teacher-comment-generator", name: "CBC Teacher Comment Generator", description: "Generate competency-based feedback aligned to CBC levels", icon: "MessageSquare", category: "Education & CBC Tools", badge: "Free" },
+  { slug: "scheme-of-work-generator", name: "CBC Scheme of Work Generator", description: "Create KICD schemes of work with inquiry questions and competencies", icon: "ClipboardList", category: "Education & CBC Tools", badge: "Free" },
 
   // 3. SECURITY & TEXT TOOLS
   { slug: "password-generator", name: "Password Generator", description: "Generate strong, secure passwords", icon: "Key", category: "Security & Text", badge: "Secure" },
@@ -63,6 +63,7 @@ export const tools: Tool[] = [
   { slug: "loan-calculator", name: "Loan / EMI Calculator", description: "Calculate loan payments and EMI schedules", icon: "Landmark", category: "Finance Tools", badge: "Free" },
   { slug: "profit-calculator", name: "Profit Calculator", description: "Calculate profit margins and ROI", icon: "TrendingUp", category: "Finance Tools", badge: "Free" },
   { slug: "expense-tracker", name: "Expense Tracker", description: "Track and analyze your monthly spending", icon: "Wallet", category: "Finance Tools", badge: "Free" },
+  { slug: "blog-generator", name: "Blog Generator", description: "Generate SEO-optimized MDX blog posts instantly from a title", icon: "FileText", category: "Productivity", badge: "Free" },
 ]
 
 export const categories = [

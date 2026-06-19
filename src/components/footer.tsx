@@ -24,6 +24,7 @@ export default function Footer() {
           <div>
             <h4 className="font-medium text-sm mb-3">Resources</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
+              <li><Link href="/blog" className="hover:text-foreground transition-colors">Blog</Link></li>
               <li><Link href="/help" className="hover:text-foreground transition-colors">FAQ</Link></li>
               <li><Link href="/help" className="hover:text-foreground transition-colors">Help Center</Link></li>
             </ul>

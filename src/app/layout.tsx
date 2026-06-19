@@ -5,7 +5,6 @@ import Header from "@/components/header"
 import Footer from "@/components/footer"
 import ToastProvider from "@/components/toast-provider"
 import CookieConsent from "@/components/ads/cookie-consent"
-import AdSenseScript from "@/components/ads/AdSenseScript"
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] })
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] })
@@ -23,9 +22,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className="dark">
       <head>
         <meta name="google-adsense-account" content={AD_CLIENT} />
+        <script
+          async
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${AD_CLIENT}`}
+          crossOrigin="anonymous"
+        />
       </head>
       <body className="min-h-screen flex flex-col antialiased">
-        <AdSenseScript />
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />
