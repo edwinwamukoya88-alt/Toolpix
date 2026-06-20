@@ -4,6 +4,7 @@ export interface TrendItem {
   category: string
   type: "blog" | "tool-guide"
   relatedTools: string[]
+  href?: string
 }
 
 function seedHash(dateStr: string, category: string): number {
@@ -90,7 +91,11 @@ export function generateUniversalTrends(): TrendItem[] {
     const count = 3 + (hash % 3)
     const shuffled = shuffle(pool, hash)
     for (let i = 0; i < Math.min(count, shuffled.length); i++) {
-      allTrends.push(shuffled[i])
+      const item = shuffled[i]
+      allTrends.push({
+        ...item,
+        href: item.relatedTools.length > 0 ? `/tools/${item.relatedTools[0]}` : "/tools",
+      })
     }
   }
 

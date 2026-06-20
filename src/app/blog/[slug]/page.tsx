@@ -1,16 +1,16 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
-import { getAllPosts, getPostBySlug, getRelatedPosts, getToolSlugsForArticle } from "@/lib/blog"
+import { getBlogBySlug, getAllBlogs, getBlogSlugs, getRelatedPosts, getToolSlugsForArticle } from "@/lib/blog"
 import BlogArticleClient from "./blog-article-client"
 
 export async function generateStaticParams() {
-  const posts = getAllPosts()
-  return posts.map((post) => ({ slug: post.slug }))
+  const slugs = getBlogSlugs()
+  return slugs.map((slug) => ({ slug }))
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params
-  const post = getPostBySlug(slug)
+  const post = getBlogBySlug(slug)
   if (!post) return {}
 
   return {
@@ -41,7 +41,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function BlogArticlePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const post = getPostBySlug(slug)
+  const post = getBlogBySlug(slug)
 
   if (!post) notFound()
 

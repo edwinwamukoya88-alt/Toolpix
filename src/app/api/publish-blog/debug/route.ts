@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server"
 import { verifyGitHubAccess } from "@/lib/github-publisher"
-import { checkGitHubEnv } from "@/lib/env"
+import { checkGitHubEnvVerbose } from "@/lib/env"
 
 export const runtime = "nodejs"
 
 export async function GET() {
-  const env = checkGitHubEnv()
+  const env = checkGitHubEnvVerbose()
 
   let gitHubStatus = null
   try {
@@ -18,22 +18,11 @@ export async function GET() {
     }
   }
 
-  const config = {
-    owner: env.owner ? process.env.GITHUB_OWNER!.charAt(0) + "***" : null,
-    repo: env.repo ? process.env.GITHUB_REPO!.charAt(0) + "***" : null,
-    branch: env.branch ? process.env.GITHUB_BRANCH : "main",
-  }
-
   return NextResponse.json({
-    env: {
-      GITHUB_TOKEN: env.token,
-      GITHUB_OWNER: env.owner,
-      GITHUB_REPO: env.repo,
-      GITHUB_BRANCH: env.branch,
-    },
+    env,
     loadedFrom: "process.env (runtime)",
+    note: '"missing" means the variable is not defined at all (undefined). "empty" means it is defined but set to an empty string (KEY=). "set" means it has a non-empty value.',
     gitHub: gitHubStatus,
-    config,
     timestamp: new Date().toISOString(),
   })
 }

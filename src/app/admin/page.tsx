@@ -1,6 +1,7 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import Link from "next/link"
+import { useMemo, useState, useEffect } from "react"
 import { TrendingUp, BarChart3, FileText, Wrench, AlertTriangle, RefreshCw, Search, ArrowUp, ArrowDown } from "lucide-react"
 import { generateUniversalTrends } from "@/lib/universal-trends"
 import { getTrackerSummary, type PagePerformance } from "@/lib/universal-seo-tracker"
@@ -61,7 +62,11 @@ export default function AdminPage() {
 }
 
 function OverviewPanel() {
-  const summary = typeof window !== "undefined" ? getTrackerSummary() : null
+  const [summary, setSummary] = useState<ReturnType<typeof getTrackerSummary> | null>(null)
+
+  useEffect(() => {
+    setSummary(getTrackerSummary())
+  }, [])
 
   const toolCount = tools.length
   const categoryCount = categories.length
@@ -135,14 +140,18 @@ function TrendsPanel() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {filtered.map((trend, i) => (
-          <div key={i} className="rounded-xl border bg-background/40 p-5 space-y-3 hover:border-primary/30 transition-colors">
+          <Link
+            key={i}
+            href={trend.href || "/tools"}
+            className="rounded-xl border bg-background/40 p-5 space-y-3 hover:border-primary/30 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 block cursor-pointer"
+          >
             <div className="flex items-start justify-between gap-2">
               <span className="text-xs font-medium text-primary bg-primary/10 px-2 py-0.5 rounded-full shrink-0">
                 {trend.type === "blog" ? "📝 Blog" : "🔧 Tool Guide"}
               </span>
               <span className="text-[10px] text-muted-foreground shrink-0">{trend.category}</span>
             </div>
-            <h3 className="font-semibold text-sm leading-snug">{trend.title}</h3>
+            <h3 className="font-semibold text-sm leading-snug hover:text-primary transition-colors">{trend.title}</h3>
             <p className="text-xs text-muted-foreground line-clamp-2">{trend.description}</p>
             {trend.relatedTools.length > 0 && (
               <div className="flex flex-wrap gap-1">
@@ -153,7 +162,7 @@ function TrendsPanel() {
                 ))}
               </div>
             )}
-          </div>
+          </Link>
         ))}
       </div>
     </div>
@@ -161,7 +170,11 @@ function TrendsPanel() {
 }
 
 function SEOPanel() {
-  const summary = typeof window !== "undefined" ? getTrackerSummary() : null
+  const [summary, setSummary] = useState<ReturnType<typeof getTrackerSummary> | null>(null)
+
+  useEffect(() => {
+    setSummary(getTrackerSummary())
+  }, [])
 
   if (!summary) {
     return (
@@ -185,14 +198,14 @@ function SEOPanel() {
           <h2 className="text-lg font-semibold">Tool Pages by Popularity</h2>
           <div className="space-y-2">
             {summary.topTools.map((p, i) => (
-              <div key={p.path} className="flex items-center justify-between gap-4 text-sm">
+              <Link key={p.path} href={p.path} className="flex items-center justify-between gap-4 text-sm rounded-lg px-2 py-1.5 -mx-2 transition-all hover:bg-muted/50 hover:text-primary">
                 <span className="text-muted-foreground w-6 shrink-0">#{i + 1}</span>
                 <span className="flex-1 font-medium truncate">{p.path}</span>
                 <span className="text-xs text-muted-foreground w-16 text-right">{p.pageViews} views</span>
                 <span className="text-xs w-20 text-right">
                   <ScoreBadge score={p.popularityScore} />
                 </span>
-              </div>
+              </Link>
             ))}
           </div>
         </section>
@@ -203,14 +216,14 @@ function SEOPanel() {
           <h2 className="text-lg font-semibold">Blog Posts by Popularity</h2>
           <div className="space-y-2">
             {summary.topBlogs.map((p, i) => (
-              <div key={p.path} className="flex items-center justify-between gap-4 text-sm">
+              <Link key={p.path} href={p.path} className="flex items-center justify-between gap-4 text-sm rounded-lg px-2 py-1.5 -mx-2 transition-all hover:bg-muted/50 hover:text-primary">
                 <span className="text-muted-foreground w-6 shrink-0">#{i + 1}</span>
                 <span className="flex-1 font-medium truncate">{p.path}</span>
                 <span className="text-xs text-muted-foreground w-16 text-right">{p.pageViews} views</span>
                 <span className="text-xs w-20 text-right">
                   <ScoreBadge score={p.popularityScore} />
                 </span>
-              </div>
+              </Link>
             ))}
           </div>
         </section>
@@ -224,12 +237,12 @@ function SEOPanel() {
           </h2>
           <div className="space-y-2">
             {summary.lowPerforming.map((p) => (
-              <div key={p.path} className="flex items-center justify-between gap-4 text-sm">
+              <Link key={p.path} href={p.path} className="flex items-center justify-between gap-4 text-sm rounded-lg px-2 py-1.5 -mx-2 transition-all hover:bg-muted/50 hover:text-primary">
                 <span className="flex-1 font-medium truncate">{p.path}</span>
                 <span className="text-xs text-muted-foreground">
                   Eng: {p.engagementScore}% · Pop: {p.popularityScore}%
                 </span>
-              </div>
+              </Link>
             ))}
           </div>
         </section>
@@ -264,10 +277,14 @@ function OptimizationPanel() {
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {toolEntries.map((t) => (
-            <div key={t.path} className="rounded-lg border bg-background/40 p-3 space-y-1">
-              <span className="text-sm font-medium truncate block">{t.name}</span>
+            <Link
+              key={t.path}
+              href={t.path}
+              className="rounded-lg border bg-background/40 p-3 space-y-1 block transition-all hover:shadow-md hover:-translate-y-0.5 hover:border-primary/30"
+            >
+              <span className="text-sm font-medium truncate block hover:text-primary transition-colors">{t.name}</span>
               <span className="text-[10px] text-muted-foreground">{t.path}</span>
-            </div>
+            </Link>
           ))}
         </div>
       </section>
@@ -290,8 +307,11 @@ function StatCard({ icon: Icon, label, value, variant }: { icon: typeof BarChart
 
 function PageCard({ perf, lowPerf }: { perf: PagePerformance; lowPerf?: boolean }) {
   return (
-    <div className={`rounded-lg border p-3 space-y-1 ${lowPerf ? "border-red-500/20" : ""}`}>
-      <div className="text-sm font-medium truncate">{perf.path}</div>
+    <Link
+      href={perf.path}
+      className={`rounded-lg border p-3 space-y-1 block transition-all hover:shadow-md hover:-translate-y-0.5 hover:border-primary/30 ${lowPerf ? "border-red-500/20" : ""}`}
+    >
+      <div className="text-sm font-medium truncate hover:text-primary transition-colors">{perf.path}</div>
       <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
         <span>{perf.pageViews} views</span>
         <span>·</span>
@@ -299,7 +319,7 @@ function PageCard({ perf, lowPerf }: { perf: PagePerformance; lowPerf?: boolean 
         <span>·</span>
         <span>Pop: {perf.popularityScore}%</span>
       </div>
-    </div>
+    </Link>
   )
 }
 

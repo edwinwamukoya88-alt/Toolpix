@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { publishBlog as githubPublish } from "@/lib/github-publisher"
-import { getGitHubConfig, checkGitHubEnv, MissingEnvError } from "@/lib/env"
+import { getGitHubConfig, checkGitHubEnv, checkGitHubEnvVerbose, MissingEnvError } from "@/lib/env"
 import { correctSpelling, optimizeTitle, validateDescription, cleanTags, optimizeSlug, autoFixAll, runPrePublishValidation } from "@/lib/seo-cleanup"
 
 export const runtime = "nodejs"
@@ -16,9 +16,19 @@ function diagError(step: string, message: string, details?: string) {
 }
 
 export async function POST(request: Request) {
-  const env = checkGitHubEnv()
+  const envVerbose = checkGitHubEnvVerbose()
   console.log("[publish-blog] POST received")
-  console.log(`[publish-blog] Env: TOKEN=${env.token} OWNER=${env.owner} REPO=${env.repo} BRANCH=${env.branch}`)
+  console.log("[publish-blog] Env states:", JSON.stringify(envVerbose))
+
+  const isMissingOrEmpty = (key: "GITHUB_TOKEN" | "GITHUB_OWNER" | "GITHUB_REPO") =>
+    envVerbose[key] === "missing" || envVerbose[key] === "empty"
+  if (isMissingOrEmpty("GITHUB_TOKEN") || isMissingOrEmpty("GITHUB_OWNER") || isMissingOrEmpty("GITHUB_REPO")) {
+    const failed: string[] = []
+    if (isMissingOrEmpty("GITHUB_TOKEN")) failed.push(`GITHUB_TOKEN=${process.env.GITHUB_TOKEN === undefined ? "not defined" : "empty string"}`)
+    if (isMissingOrEmpty("GITHUB_OWNER")) failed.push(`GITHUB_OWNER=${process.env.GITHUB_OWNER === undefined ? "not defined" : "empty string"}`)
+    if (isMissingOrEmpty("GITHUB_REPO")) failed.push(`GITHUB_REPO=${process.env.GITHUB_REPO === undefined ? "not defined" : "empty string"}`)
+    console.warn(`[publish-blog] ${failed.join(", ")}`)
+  }
 
   try {
     let body
