@@ -34,10 +34,6 @@ function getTodayKey(): DayKey {
   return WEEKDAY_INDEX[new Date().getDay()]
 }
 
-function currentHourValue(): number {
-  return new Date().getHours()
-}
-
 function defaultWeekData(): WeekTasks {
   return {
     monday: {},
@@ -56,13 +52,14 @@ export default function DayPlanner() {
   const [now, setNow] = useState(() => Date.now())
 
   useEffect(() => {
+    setNow(Date.now())
     const id = setInterval(() => setNow(Date.now()), 30_000)
     return () => clearInterval(id)
   }, [])
 
   const currentDate = useMemo(() => new Date(now), [now])
   const currentHour = currentDate.getHours()
-  const todayKey = getTodayKey()
+  const todayKey = WEEKDAY_INDEX[currentDate.getDay()]
   const isToday = activeDay === todayKey
 
   const getTask = useCallback(

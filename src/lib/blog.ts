@@ -140,3 +140,31 @@ export function getToolSlugsForArticle(slug: string): string[] {
 export function getLatestPosts(limit = 3): BlogMeta[] {
   return getAllPosts().slice(0, limit)
 }
+
+export function getBlogSlugs(): string[] {
+  if (!fs.existsSync(BLOG_DIR)) return []
+  return fs.readdirSync(BLOG_DIR)
+    .filter((f) => f.endsWith(".mdx"))
+    .map((f) => f.replace(/\.mdx$/, ""))
+}
+
+export function getAllBlogs(): BlogMeta[] {
+  return getAllPosts()
+}
+
+export function getBlogBySlug(slug: string): BlogPost | null {
+  const filePath = path.join(BLOG_DIR, `${slug}.mdx`)
+  if (fs.existsSync(filePath)) return getPostBySlug(slug)
+
+  const files = fs.readdirSync(BLOG_DIR).filter((f) => f.endsWith(".mdx"))
+  for (const file of files) {
+    const raw = fs.readFileSync(path.join(BLOG_DIR, file), "utf-8")
+    const { data } = matter(raw)
+    const fmSlug = data.slug
+    if (fmSlug === slug) {
+      return getPostBySlug(file.replace(/\.mdx$/, ""))
+    }
+  }
+
+  return null
+}
