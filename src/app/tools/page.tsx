@@ -2,7 +2,7 @@
 
 import { Suspense, useState, useMemo, useCallback, useRef } from "react"
 import { useSearchParams } from "next/navigation"
-import { ArrowRight } from "lucide-react"
+import { ArrowRight, LayoutGrid } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import ToolCard from "@/components/tool-card"
 import SearchBar from "@/components/search-bar"
@@ -15,6 +15,8 @@ function ToolsContent() {
   const [search, setSearch] = useState(searchParams.get("q") || "")
   const [activeCat, setActiveCat] = useState(searchParams.get("category") || "All")
 
+  const isFiltering = activeCat !== "All" || search.trim().length > 0
+
   const filtered = useMemo(() => {
     return tools.filter((t) => {
       if (activeCat !== "All" && t.category !== activeCat) return false
@@ -25,6 +27,16 @@ function ToolsContent() {
       return true
     })
   }, [search, activeCat])
+
+  const grouped = useMemo(() => {
+    const map = new Map<string, typeof tools>()
+    for (const tool of tools) {
+      const cat = tool.category
+      if (!map.has(cat)) map.set(cat, [])
+      map.get(cat)!.push(tool)
+    }
+    return Array.from(map.entries())
+  }, [])
 
   const searchTimer = useRef<number | null>(null)
 
@@ -67,10 +79,27 @@ function ToolsContent() {
           <p className="text-muted-foreground text-lg">No tools found</p>
           <p className="text-sm text-muted-foreground">Try a different search or category</p>
         </div>
-      ) : (
+      ) : isFiltering ? (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-4">
           {filtered.map((tool) => (
             <ToolCard key={tool.slug} {...tool} />
+          ))}
+        </div>
+      ) : (
+        <div className="space-y-12">
+          {grouped.map(([category, catTools]) => (
+            <section key={category}>
+              <div className="flex items-center gap-2 mb-4">
+                <LayoutGrid className="h-4 w-4 text-primary" />
+                <h2 className="text-lg font-semibold">{category}</h2>
+                <span className="text-xs text-muted-foreground">({catTools.length} tools)</span>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-4">
+                {catTools.map((tool) => (
+                  <ToolCard key={tool.slug} {...tool} />
+                ))}
+              </div>
+            </section>
           ))}
         </div>
       )}

@@ -80,6 +80,83 @@ body {
   color: hsl(var(--foreground));
 }
 
+/* Biblical Theme Mode — opt-in warm tones */
+.biblical-theme {
+  --background: 30 12% 6%;
+  --foreground: 40 20% 88%;
+  --card: 30 10% 9%;
+  --card-foreground: 40 18% 86%;
+  --popover: 30 10% 9%;
+  --popover-foreground: 40 18% 86%;
+  --primary: 40 55% 48%;
+  --primary-foreground: 30 20% 96%;
+  --secondary: 120 15% 16%;
+  --secondary-foreground: 40 18% 86%;
+  --muted: 35 10% 13%;
+  --muted-foreground: 40 8% 56%;
+  --accent: 40 25% 20%;
+  --accent-foreground: 40 18% 86%;
+  --destructive: 0 50% 32%;
+  --destructive-foreground: 0 0% 96%;
+  --border: 40 8% 19%;
+  --input: 40 8% 19%;
+  --ring: 40 50% 42%;
+  --chart-1: 40 55% 48%;
+  --chart-2: 120 35% 40%;
+  --chart-3: 30 60% 50%;
+  --chart-4: 160 30% 40%;
+  --chart-5: 15 45% 45%;
+}
+
+.biblical-theme body {
+  font-family: Georgia, "Times New Roman", serif, var(--font-sans);
+}
+
+.biblical-theme .blog-content blockquote {
+  border-left-color: hsl(var(--primary) / 0.4);
+  background: linear-gradient(to right, hsl(var(--primary) / 0.04), transparent);
+}
+
+/* Calm Mode — focus-friendly with reduced noise */
+.calm-mode {
+  --color-bg-soft: hsl(var(--background));
+}
+
+.calm-mode * {
+  animation-duration: 0s !important;
+  transition-duration: 0.15s !important;
+}
+
+.calm-mode nav:not([data-calm-keep]),
+.calm-mode aside:not([data-calm-keep]),
+.calm-mode .ad-container {
+  opacity: 0;
+  pointer-events: none;
+  max-height: 0;
+  overflow: hidden;
+  transition: opacity 0.3s, max-height 0.3s;
+}
+
+.calm-mode .blog-content {
+  max-width: 42rem;
+  margin-inline: auto;
+}
+
+.calm-mode .blog-content p,
+.calm-mode .blog-content li {
+  line-height: 2;
+}
+
+.calm-mode .blog-content h2 {
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+}
+
+.calm-mode [data-calm-card] {
+  box-shadow: none !important;
+  border-color: hsl(var(--border) / 0.5) !important;
+}
+
 /* Subtle transitions for UI polish */
 *,
 *::before,

@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { getAllPosts, getFeaturedPost } from "@/lib/blog"
+import { getAllBlogs, getFeaturedPost } from "@/lib/blog"
 import BlogHomeClient from "./blog-home-client"
 import type { BlogMeta } from "@/lib/blog-types"
 
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 }
 
 export default function BlogPage() {
-  const posts = getAllPosts()
+  const posts = getAllBlogs()
   const featured = getFeaturedPost()
 
   const postsJson: BlogMeta[] = posts.map((p) => ({

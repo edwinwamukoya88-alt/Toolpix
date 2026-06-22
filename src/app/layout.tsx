@@ -5,6 +5,7 @@ import Header from "@/components/header"
 import Footer from "@/components/footer"
 import ToastProvider from "@/components/toast-provider"
 import CookieConsent from "@/components/ads/cookie-consent"
+import { BiblicalThemeProvider } from "@/contexts/biblical-theme-context"
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] })
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] })
@@ -29,11 +30,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className="min-h-screen flex flex-col antialiased">
-        <Header />
-        <main className="flex-1">{children}</main>
-        <Footer />
-        <CookieConsent />
-        <ToastProvider />
+        <BiblicalThemeProvider>
+          <Header />
+          <main className="flex-1">{children}</main>
+          <Footer />
+          <CookieConsent />
+          <ToastProvider />
+        </BiblicalThemeProvider>
       </body>
     </html>
   )

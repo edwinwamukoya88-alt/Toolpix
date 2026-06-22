@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { Calendar, Clock, User, ArrowLeft, ChevronRight, BarChart3, Link as LinkIcon } from "lucide-react"
+import { Calendar, Clock, User, ArrowLeft, ChevronRight } from "lucide-react"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import type { BlogPost, BlogMeta } from "@/lib/blog-types"
@@ -10,32 +10,12 @@ import TableOfContents from "@/components/blog/table-of-contents"
 import ShareButtons from "@/components/blog/share-buttons"
 import RelatedArticles from "@/components/blog/related-articles"
 import RelatedTools from "@/components/blog/related-tools"
-import { getAIBadge } from "@/lib/ai-badge"
 import { formatDate } from "@/lib/utils"
 
 interface BlogArticleClientProps {
   post: BlogPost
   relatedPosts: BlogMeta[]
   toolSlugs: string[]
-}
-
-function AIScoreDisplay({ post }: { post: BlogPost }) {
-  const badge = getAIBadge(post.ai.score)
-  return (
-    <div className="flex flex-wrap items-center gap-3 text-xs">
-      <span className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 font-medium ${badge.className}`}>
-        <BarChart3 className="h-3.5 w-3.5" />
-        AI Score: {post.ai.score}/100
-      </span>
-      <span className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 font-medium ${badge.className}`}>
-        {badge.emoji} {badge.label}
-      </span>
-      <span className="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs text-muted-foreground">
-        <LinkIcon className="h-3.5 w-3.5" />
-        {post.ai.internalLinks} internal {post.ai.internalLinks === 1 ? "link" : "links"}
-      </span>
-    </div>
-  )
 }
 
 export default function BlogArticleClient({ post, relatedPosts, toolSlugs }: BlogArticleClientProps) {
@@ -73,8 +53,6 @@ export default function BlogArticleClient({ post, relatedPosts, toolSlugs }: Blo
 
           <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight mb-4">{post.title}</h1>
           <p className="text-base md:text-lg text-muted-foreground mb-4">{post.description}</p>
-
-          <AIScoreDisplay post={post} />
 
           <div className="flex flex-wrap items-center justify-between gap-4 mb-8 pb-8 border-b mt-6">
             <ShareButtons title={post.title} slug={post.slug} />

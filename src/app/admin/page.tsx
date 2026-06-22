@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { useMemo, useState, useEffect } from "react"
+import type { TrendItem } from "@/lib/universal-trends"
 import { TrendingUp, BarChart3, FileText, Wrench, AlertTriangle, RefreshCw, Search, ArrowUp, ArrowDown } from "lucide-react"
 import { generateUniversalTrends } from "@/lib/universal-trends"
 import { getTrackerSummary, type PagePerformance } from "@/lib/universal-seo-tracker"
@@ -9,8 +10,11 @@ import { tools, categories } from "@/lib/tools-data"
 import { calculateAIVisibilityScore } from "@/lib/ai-score"
 import { aiImprovementTips } from "@/lib/ai-score"
 import { getAIBadge } from "@/lib/ai-badge"
+import SEOInspector from "@/components/admin/SEOInspector"
 
 type Tab = "overview" | "trends" | "seo" | "optimization"
+
+const isAdmin = true
 
 export default function AdminPage() {
   const [activeTab, setActiveTab] = useState<Tab>("overview")
@@ -112,8 +116,12 @@ function OverviewPanel() {
 }
 
 function TrendsPanel() {
-  const trends = useMemo(() => generateUniversalTrends(), [])
+  const [trends, setTrends] = useState<TrendItem[]>([])
   const [categoryFilter, setCategoryFilter] = useState<string>("All")
+
+  useEffect(() => {
+    setTrends(generateUniversalTrends())
+  }, [])
 
   const filtered = categoryFilter === "All" ? trends : trends.filter((t) => t.category === categoryFilter)
   const uniqueCategories = [...new Set(trends.map((t) => t.category))]
@@ -262,13 +270,37 @@ function OptimizationPanel() {
     }))
   }, [])
 
+  const [blogs, setBlogs] = useState<{ title: string; slug: string; aiScore: number; internalLinks: number; aiStatus: string }[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetch("/api/admin/blogs")
+      .then((r) => r.json())
+      .then((data) => { setBlogs(data); setLoading(false) })
+      .catch(() => setLoading(false))
+  }, [])
+
   return (
     <div className="space-y-6">
-      <div className="rounded-xl border bg-background/40 p-8 text-center space-y-3">
-        <FileText className="h-8 w-8 mx-auto text-muted-foreground" />
-        <p className="text-sm text-muted-foreground">Blog optimization data is computed at build time. Run <code className="rounded bg-muted px-1.5 py-0.5 text-xs">npm run build</code> to generate AI scores for all blog posts.</p>
-        <p className="text-xs text-muted-foreground">AI scores, badge data, and improvement tips are embedded in each blog's metadata during build.</p>
-      </div>
+      {isAdmin && (
+        <section className="rounded-xl border bg-background/40 p-6 space-y-4">
+          <h2 className="text-lg font-semibold flex items-center gap-2">
+            <FileText className="h-4 w-4 text-primary" />
+            Blog SEO Inspector ({loading ? "..." : blogs.length} posts)
+          </h2>
+          {loading ? (
+            <p className="text-sm text-muted-foreground">Loading blog data...</p>
+          ) : blogs.length === 0 ? (
+            <p className="text-sm text-muted-foreground">No blog posts found.</p>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {blogs.map((b) => (
+                <SEOInspector key={b.slug} post={b} />
+              ))}
+            </div>
+          )}
+        </section>
+      )}
 
       <section className="rounded-xl border bg-background/40 p-6 space-y-4">
         <h2 className="text-lg font-semibold flex items-center gap-2">

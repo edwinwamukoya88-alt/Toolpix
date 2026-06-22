@@ -2,11 +2,9 @@ import Link from "next/link"
 import { Calendar, Clock, ArrowRight } from "lucide-react"
 import type { BlogMeta } from "@/lib/blog-types"
 import BlogCoverImage from "@/components/blog/blog-cover-image"
-import { getAIBadge } from "@/lib/ai-badge"
 import { formatDate } from "@/lib/utils"
 
 export default function FeaturedPost({ post }: { post: BlogMeta }) {
-  const badge = getAIBadge(post.ai.score)
   return (
     <Link
       href={`/blog/${post.slug}`}
@@ -38,14 +36,6 @@ export default function FeaturedPost({ post }: { post: BlogMeta }) {
         </div>
         <h2 className="text-xl md:text-2xl font-bold group-hover:text-primary transition-colors">{post.title}</h2>
         <p className="text-sm text-muted-foreground line-clamp-3">{post.description}</p>
-        <div className="flex flex-wrap items-center gap-2">
-          <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-medium ${badge.className}`}>
-            {badge.emoji} {post.ai.score}/100
-          </span>
-          <span className="text-[10px] text-muted-foreground">
-            {post.ai.internalLinks} internal {post.ai.internalLinks === 1 ? "link" : "links"}
-          </span>
-        </div>
         <div className="flex items-center gap-1 text-sm text-primary font-medium pt-1">
           Read Article <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
         </div>

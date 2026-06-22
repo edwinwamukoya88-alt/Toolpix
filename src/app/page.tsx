@@ -39,60 +39,118 @@ export default function HomePage() {
     <div>
 
       {/* ─── Hero ─── */}
-      <section className="relative overflow-hidden py-20 md:py-28">
+      <section className="relative overflow-hidden py-20 md:py-28 lg:py-32">
+        {/* Animated gradient background */}
         <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.07] via-transparent to-purple-500/[0.07]" />
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-primary/5 blur-3xl pointer-events-none" />
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-primary/5 blur-3xl pointer-events-none floating-glow" />
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-gradient-to-t from-purple-500/[0.04] to-transparent pointer-events-none" />
+        {/* Floating orbs */}
+        <div className="absolute top-1/6 right-1/6 w-64 h-64 rounded-full bg-purple-500/[0.06] blur-3xl pointer-events-none floating-orb floating-orb-1" />
+        <div className="absolute bottom-1/4 left-1/6 w-48 h-48 rounded-full bg-blue-500/[0.05] blur-3xl pointer-events-none floating-orb floating-orb-2" />
+        <div className="absolute top-1/3 left-1/3 w-56 h-56 rounded-full bg-orange-500/[0.04] blur-3xl pointer-events-none floating-orb floating-orb-3" />
+        <style>{`
+          @keyframes float1 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(20px,-30px) scale(1.1); } }
+          @keyframes float2 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(-25px,20px) scale(0.9); } }
+          @keyframes float3 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(15px,25px) scale(1.05); } }
+          @keyframes pulse-glow { 0%,100% { opacity: 0.6; } 50% { opacity: 1; } }
+          .floating-orb { animation-duration: 12s; animation-iteration-count: infinite; animation-timing-function: ease-in-out; }
+          .floating-orb-1 { animation-name: float1; }
+          .floating-orb-2 { animation-name: float2; animation-duration: 15s; }
+          .floating-orb-3 { animation-name: float3; animation-duration: 18s; }
+          .floating-glow { animation: pulse-glow 6s ease-in-out infinite; }
+        `}</style>
+
         <div className="container relative">
-          <div className="max-w-2xl mx-auto text-center space-y-6">
+          <div className="max-w-3xl mx-auto text-center space-y-8">
+            {/* Top badge */}
             <div className="inline-flex items-center gap-1.5 rounded-full border px-4 py-1.5 text-xs font-medium text-muted-foreground bg-background/50 backdrop-blur-sm">
               <Sparkles className="h-3.5 w-3.5 text-primary" />
-              Privacy-first. No login required.
+              Privacy-first &middot; No login required &middot; 39+ tools
             </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight">
-              Smart Utility Tools for <span className="text-primary">Every Task</span>
+
+            {/* Headline */}
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1]">
+              Smart Tools for{" "}
+              <span className="text-primary">Teachers, Students, Creators, Developers &amp; Businesses</span>
             </h1>
-            <p className="text-base md:text-lg text-muted-foreground max-w-lg mx-auto leading-relaxed">
-              Todo lists, notes, grade calculators, lesson plans, and more — all processing stays in your browser.
+
+            {/* Subheading */}
+            <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+              Everything you need to plan lessons, manage tasks, create content, and boost productivity &mdash; all running in your browser. No data ever leaves your device.
             </p>
+
+            {/* CTAs */}
             <div className="flex items-center justify-center gap-3 pt-2">
               <Link href="/tools">
-                <Button size="lg" className="gap-2">
+                <Button size="lg" className="gap-2 h-11 px-6 text-base">
                   Explore Tools
                   <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>
-              <Link href="/tools?category=Productivity">
-                <Button variant="outline" size="lg">
-                  View Popular
+              <Link href="/blog">
+                <Button variant="outline" size="lg" className="h-11 px-6 text-base">
+                  Read Guides
                 </Button>
               </Link>
             </div>
-          </div>
 
-          {/* Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto mt-16">
-            {[
-              { value: "39+", label: "Daily Tools", icon: LayoutGrid },
-              { value: "100%", label: "Private", icon: Lock },
-              { value: "Instant", label: "Browser-Based", icon: Globe },
-              { value: "0", label: "No Login Required", icon: Users as LucideIcon },
-            ].map((stat) => {
-              const Icon = stat.icon
-              return (
-                <div
-                  key={stat.label}
-                  className="group rounded-xl border bg-background/40 backdrop-blur-sm p-4 text-center space-y-2 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md hover:border-primary/20"
+            {/* Instant Tool Entry */}
+            <div className="space-y-2 pt-2">
+              <p className="text-xs text-muted-foreground tracking-wide uppercase font-medium">Try instantly:</p>
+              <div className="flex flex-wrap items-center justify-center gap-2">
+                <Link
+                  href="/tools/grade-calculator"
+                  className="inline-flex items-center gap-1.5 rounded-full border bg-background/60 backdrop-blur-sm px-3.5 py-1.5 text-sm font-medium hover:bg-primary/10 hover:text-primary hover:border-primary/30 transition-all"
                 >
-                  <div className="inline-flex items-center justify-center h-9 w-9 rounded-lg bg-primary/10 text-primary group-hover:bg-primary/15 transition-colors">
-                    <Icon className="h-4 w-4" />
-                  </div>
-                  <div>
-                    <div className="text-xl font-bold tabular-nums">{stat.value}</div>
-                    <div className="text-xs text-muted-foreground">{stat.label}</div>
-                  </div>
+                  🧮 CBC Grade Calculator
+                </Link>
+                <Link
+                  href="/tools/pomodoro"
+                  className="inline-flex items-center gap-1.5 rounded-full border bg-background/60 backdrop-blur-sm px-3.5 py-1.5 text-sm font-medium hover:bg-primary/10 hover:text-primary hover:border-primary/30 transition-all"
+                >
+                  ⏱ Pomodoro Timer
+                </Link>
+                <Link
+                  href="/tools/lesson-plan-generator"
+                  className="inline-flex items-center gap-1.5 rounded-full border bg-background/60 backdrop-blur-sm px-3.5 py-1.5 text-sm font-medium hover:bg-primary/10 hover:text-primary hover:border-primary/30 transition-all"
+                >
+                  📝 Lesson Planner
+                </Link>
+              </div>
+            </div>
+
+            {/* Trust stats */}
+            <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-2 pt-4">
+              {[
+                { value: "39+", label: "Free Tools" },
+                { value: "100%", label: "Privacy-First" },
+                { value: "0", label: "Login Required" },
+              ].map((stat) => (
+                <div key={stat.label} className="flex items-center gap-2">
+                  <span className="text-lg font-bold tabular-nums">{stat.value}</span>
+                  <span className="text-sm text-muted-foreground">{stat.label}</span>
                 </div>
-              )
-            })}
+              ))}
+            </div>
+
+            {/* Audience chips */}
+            <div className="flex flex-wrap items-center justify-center gap-2 pt-4">
+              {[
+                { emoji: "👩‍🏫", label: "Teachers" },
+                { emoji: "🎓", label: "Students" },
+                { emoji: "🚀", label: "Creators" },
+                { emoji: "💻", label: "Developers" },
+                { emoji: "📊", label: "Businesses" },
+              ].map((item) => (
+                <span
+                  key={item.label}
+                  className="inline-flex items-center gap-1.5 rounded-full border bg-background/60 backdrop-blur-sm px-3.5 py-1.5 text-sm font-medium hover:bg-background/80 transition-colors"
+                >
+                  <span>{item.emoji}</span>
+                  <span>{item.label}</span>
+                </span>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -101,6 +159,53 @@ export default function HomePage() {
       <div className="container flex justify-center">
         <AdSlot type="sponsored" slot="hero" />
       </div>
+
+      {/* ─── Problem → Solution ─── */}
+      <section className="container py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          {/* Problem */}
+          <div className="rounded-xl border border-red-500/20 bg-red-500/[0.03] p-6 md:p-8 space-y-4">
+            <h3 className="text-lg font-semibold text-red-500 flex items-center gap-2">
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-red-500/10 text-red-500 text-xs font-bold">!</span>
+              The Old Way
+            </h3>
+            <ul className="space-y-3">
+              {[
+                { icon: "🔀", label: "Scattered tools everywhere" },
+                { icon: "📝", label: "Manual planning" },
+                { icon: "🐌", label: "Slow workflows" },
+                { icon: "📋", label: "No structure" },
+              ].map((item) => (
+                <li key={item.label} className="flex items-center gap-3 text-sm text-muted-foreground">
+                  <span>{item.icon}</span>
+                  <span>{item.label}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Solution */}
+          <div className="rounded-xl border border-green-500/20 bg-green-500/[0.03] p-6 md:p-8 space-y-4">
+            <h3 className="text-lg font-semibold text-green-500 flex items-center gap-2">
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-green-500/10 text-green-500">✓</span>
+              The ToolForge Way
+            </h3>
+            <ul className="space-y-3">
+              {[
+                { icon: "🌐", label: "Everything in browser" },
+                { icon: "⚡", label: "Structured productivity system" },
+                { icon: "🚀", label: "Instant tools access" },
+                { icon: "🏗️", label: "Organized workflow for teachers, students, and businesses" },
+              ].map((item) => (
+                <li key={item.label} className="flex items-center gap-3 text-sm text-muted-foreground">
+                  <span>{item.icon}</span>
+                  <span>{item.label}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
 
       {/* ─── Categories ─── */}
       <section className="container py-12">
@@ -153,6 +258,62 @@ export default function HomePage() {
             <ToolCard key={tool.slug} {...tool} />
           ))}
         </div>
+      </section>
+
+      {/* ─── Featured Tools ─── */}
+      <section className="container py-12">
+        <div className="text-center mb-10">
+          <h2 className="text-2xl font-bold">Your Most-Used Tools</h2>
+          <p className="text-sm text-muted-foreground mt-1">Start with our most popular utilities — all free, all private</p>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {[
+            { slug: "grade-calculator", name: "CBC Grade Calculator", emoji: "🧮", desc: "Compute scores and competency levels per KICD" },
+            { slug: "lesson-plan-generator", name: "CBC Lesson Planner", emoji: "📝", desc: "Generate KICD-compliant lesson plans" },
+            { slug: "pomodoro", name: "Pomodoro Timer", emoji: "⏱", desc: "Stay focused with timed intervals" },
+            { slug: "notes", name: "Notes App", emoji: "📄", desc: "Write and organize notes locally" },
+            { slug: "habit-tracker", name: "Habit Tracker", emoji: "🎯", desc: "Build streaks and track daily habits" },
+            { slug: "day-planner", name: "Day Planner", emoji: "📅", desc: "Plan your day hour by hour" },
+            { slug: "kanban", name: "Kanban Board", emoji: "📋", desc: "Organize with drag-and-drop boards" },
+            { slug: "revision-planner", name: "CBC Revision Planner", emoji: "📚", desc: "Plan skill-based practice and revision" },
+          ].map((tool) => (
+            <Link
+              key={tool.slug}
+              href={`/tools/${tool.slug}`}
+              className="group rounded-xl border bg-background/40 p-5 space-y-3 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/5 hover:border-primary/30"
+            >
+              <div className="text-2xl">{tool.emoji}</div>
+              <div>
+                <h3 className="font-semibold text-sm group-hover:text-primary transition-colors">{tool.name}</h3>
+                <p className="text-xs text-muted-foreground mt-0.5">{tool.desc}</p>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* ─── Teacher CTA ─── */}
+      <section className="container py-6">
+        <Link
+          href="/tools/lesson-plan-generator"
+          className="group block rounded-2xl border border-primary/20 bg-gradient-to-r from-primary/[0.08] to-purple-500/[0.08] p-6 md:p-8 text-center space-y-3 relative overflow-hidden transition-all hover:shadow-lg hover:shadow-primary/5"
+        >
+          <div className="absolute top-0 right-0 w-48 h-48 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+          <div className="relative space-y-2">
+            <p className="text-lg md:text-xl font-semibold">
+              👩‍🏫 Are you a teacher? Try CBC Lesson Planner →
+            </p>
+            <p className="text-sm text-muted-foreground">
+              Generate KICD-compliant lesson plans with competencies, PCIs, and assessments in minutes.
+            </p>
+            <div className="pt-2">
+              <Button size="lg" className="gap-2">
+                Open Lesson Planner
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              </Button>
+            </div>
+          </div>
+        </Link>
       </section>
 
       {/* ─── Latest From The Blog ─── */}
