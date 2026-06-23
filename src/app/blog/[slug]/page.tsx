@@ -13,10 +13,12 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const post = getBlogBySlug(slug)
   if (!post) return {}
 
+  const ogImageUrl = `https://toolforge.app/api/og?title=${encodeURIComponent(post.title)}&category=${encodeURIComponent(post.category)}`
+
   return {
     title: `${post.title} - ToolForge Blog`,
     description: post.description,
-    keywords: post.tags.join(", "),
+    keywords: [post.imageKeywords, post.tags.join(", ")].filter(Boolean).join(", "),
     authors: [{ name: post.author }],
     openGraph: {
       title: post.title,
@@ -27,14 +29,27 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       publishedTime: post.date,
       authors: [post.author],
       tags: post.tags,
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: post.imageAlt,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title: post.title,
       description: post.description,
+      images: [ogImageUrl],
     },
     alternates: {
       canonical: `https://toolforge.app/blog/${post.slug}`,
+    },
+    other: {
+      "image-prompt": post.imagePrompt,
+      "image-keywords": post.imageKeywords,
     },
   }
 }

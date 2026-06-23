@@ -21,54 +21,59 @@ interface BlogArticleClientProps {
 export default function BlogArticleClient({ post, relatedPosts, toolSlugs }: BlogArticleClientProps) {
   return (
     <div className="min-h-screen">
-      <article className="container py-8 md:py-12">
-        <div className="max-w-3xl mx-auto">
-          <Link
-            href="/blog"
-            className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors mb-6"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back to Blog
-          </Link>
-
-          <BlogCoverImage coverImage={post.coverImage} title={post.title} size="article" className="mb-8" />
-
-          <div className="flex flex-wrap items-center gap-3 text-xs md:text-sm text-muted-foreground mb-4">
-            <span className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-[10px] md:text-xs font-medium">
-              {post.category}
-            </span>
-            <span className="flex items-center gap-1">
-              <Calendar className="h-3.5 w-3.5" />
-              {formatDate(post.date, "long")}
-            </span>
-            <span className="flex items-center gap-1">
-              <Clock className="h-3.5 w-3.5" />
-              {post.readingTime} min read
-            </span>
-            <span className="flex items-center gap-1">
-              <User className="h-3.5 w-3.5" />
-              {post.author}
-            </span>
-          </div>
-
-          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight mb-4">{post.title}</h1>
-          <p className="text-base md:text-lg text-muted-foreground mb-4">{post.description}</p>
-
-          <div className="flex flex-wrap items-center justify-between gap-4 mb-8 pb-8 border-b mt-6">
-            <ShareButtons title={post.title} slug={post.slug} />
-          </div>
-
-          <div className="flex gap-8">
-            <aside className="hidden lg:block w-56 shrink-0">
-              <div className="sticky top-24">
-                <TableOfContents />
+      <article>
+        <div className="relative">
+          <BlogCoverImage coverImage={post.coverImage} title={post.title} size="article" className="rounded-none" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
+          <div className="absolute bottom-0 left-0 right-0 container pb-8 md:pb-12">
+            <Link
+              href="/blog"
+              className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors mb-4"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Back to Blog
+            </Link>
+            <div className="max-w-3xl">
+              <div className="flex flex-wrap items-center gap-3 text-xs md:text-sm text-muted-foreground mb-3">
+                <span className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-[10px] md:text-xs font-medium bg-background/60 backdrop-blur-sm">
+                  {post.category}
+                </span>
+                <span className="flex items-center gap-1">
+                  <Calendar className="h-3.5 w-3.5" />
+                  {formatDate(post.date, "long")}
+                </span>
+                <span className="flex items-center gap-1">
+                  <Clock className="h-3.5 w-3.5" />
+                  {post.readingTime} min read
+                </span>
+                <span className="flex items-center gap-1">
+                  <User className="h-3.5 w-3.5" />
+                  {post.author}
+                </span>
               </div>
-            </aside>
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight">{post.title}</h1>
+              <p className="text-sm md:text-base text-muted-foreground mt-2 max-w-2xl">{post.description}</p>
+            </div>
+          </div>
+        </div>
 
-            <div className="min-w-0 flex-1 blog-content prose prose-invert prose-sm md:prose-base max-w-none">
-              <ReactMarkdown
-                remarkPlugins={[remarkGfm]}
-                components={{
+        <div className="container py-8 md:py-10">
+          <div className="max-w-3xl mx-auto">
+            <div className="flex flex-wrap items-center justify-between gap-4 mb-8 pb-8 border-b">
+              <ShareButtons title={post.title} slug={post.slug} />
+            </div>
+
+            <div className="flex gap-8">
+              <aside className="hidden lg:block w-56 shrink-0">
+                <div className="sticky top-24">
+                  <TableOfContents />
+                </div>
+              </aside>
+
+              <div className="min-w-0 flex-1 blog-content prose prose-invert prose-sm md:prose-base max-w-none">
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
+                  components={{
                   h2: ({ children, ...props }) => {
                     const id = String(children).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")
                     return <h2 id={id} {...props}>{children}</h2>
@@ -157,6 +162,7 @@ export default function BlogArticleClient({ post, relatedPosts, toolSlugs }: Blo
             </div>
           </section>
         </div>
+      </div>
       </article>
     </div>
   )

@@ -27,7 +27,7 @@ const sections: FaqSection[] = [
       },
       {
         q: "Is my data stored?",
-        a: "Only on your device. Some tools (like Notes or Todo List) save data locally using your browser's localStorage. This data never leaves your computer and can be cleared at any time via your browser settings.",
+        a: "Only on your device. Some tools (like Notes or Task Planner) save data locally using your browser's localStorage. This data never leaves your computer and can be cleared at any time via your browser settings.",
       },
       {
         q: "Do I need an account?",

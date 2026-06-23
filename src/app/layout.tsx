@@ -1,6 +1,8 @@
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
+import { Suspense } from "react"
 import "./globals.css"
+import GoogleAnalytics from "@/components/GoogleAnalytics"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 import ToastProvider from "@/components/toast-provider"
@@ -13,9 +15,9 @@ const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"]
 const AD_CLIENT = "ca-pub-2606064008386995"
 
 export const metadata: Metadata = {
-  title: "ToolForge - Smart Utility Tools for Every Task",
-  description: "Privacy-first browser-based tools for productivity, finance, and design",
-  keywords: "tools, utilities, QR code, color picker, notes, todo, password generator, JSON formatter, unit converter",
+  title: "Task Planner | ToolForge",
+  description: "Organize tasks, reminders, calendars, and productivity workflows in a powerful privacy-first planner.",
+  keywords: "tools, utilities, QR code, color picker, notes, task planner, password generator, JSON formatter, unit converter",
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -37,6 +39,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <CookieConsent />
           <ToastProvider />
         </BiblicalThemeProvider>
+        <Suspense fallback={null}>
+          <GoogleAnalytics />
+        </Suspense>
       </body>
     </html>
   )

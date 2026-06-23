@@ -14,6 +14,13 @@ export interface BlogAI {
   }
 }
 
+export interface ImageMeta {
+  imagePrompt: string
+  imageAlt: string
+  imageTitle: string
+  imageKeywords: string
+}
+
 export interface BlogPost {
   slug: string
   title: string
@@ -27,6 +34,10 @@ export interface BlogPost {
   content: string
   readingTime: number
   ai: BlogAI
+  imagePrompt: string
+  imageAlt: string
+  imageTitle: string
+  imageKeywords: string
 }
 
 export interface BlogMeta {
@@ -41,12 +52,32 @@ export interface BlogMeta {
   coverImage: string
   readingTime: number
   ai: BlogAI
+  imagePrompt: string
+  imageAlt: string
+  imageTitle: string
+  imageKeywords: string
 }
+
+export type CoverPattern =
+  | "calendar-grid"
+  | "book-lines"
+  | "dot-grid"
+  | "bar-chart"
+  | "circles"
+  | "checker"
+  | "crosshatch"
+  | "diamond"
+  | "waves"
+  | "stars"
 
 export interface CoverConfig {
   gradient: [string, string]
   icon: string
   label: string
+  pattern: CoverPattern
+  textColor: string
+  badgeClass: string
+  shadowColor: string
 }
 
 export function serializeCover(config: CoverConfig): string {
@@ -54,11 +85,15 @@ export function serializeCover(config: CoverConfig): string {
     g: config.gradient.join(","),
     i: config.icon,
     l: config.label,
+    p: config.pattern,
+    t: config.textColor,
+    b: config.badgeClass,
+    s: config.shadowColor,
   })
 }
 
 export function deserializeCover(value: string): CoverConfig | null {
-  if (!value.startsWith("{")) return null
+  if (!value || !value.startsWith("{")) return null
   try {
     const parsed = JSON.parse(value)
     const gradients = (parsed.g as string).split(",")
@@ -66,37 +101,14 @@ export function deserializeCover(value: string): CoverConfig | null {
       gradient: [gradients[0] || "gray-500", gradients[1] || "blue-600"] as [string, string],
       icon: parsed.i || "📄",
       label: parsed.l || "Guide",
+      pattern: (parsed.p as CoverPattern) || "diamond",
+      textColor: parsed.t || "text-white",
+      badgeClass: parsed.b || "bg-gray-500/20 text-gray-200 border-gray-400/30",
+      shadowColor: parsed.s || "rgba(107,114,128,0.3)",
     }
   } catch {
     return null
   }
-}
-
-export function generateCoverConfig(title: string, style: string): CoverConfig {
-  const normalized = style.toLowerCase()
-
-  if (normalized.includes("cbc") || normalized.includes("education")) {
-    return { gradient: ["green-500", "blue-600"], icon: "📘", label: "CBC Education" }
-  }
-  if (normalized.includes("productivity")) {
-    return { gradient: ["purple-500", "orange-500"], icon: "⚡", label: "Productivity" }
-  }
-  if (normalized.includes("security")) {
-    return { gradient: ["blue-800", "black"], icon: "🔐", label: "Security" }
-  }
-  if (normalized.includes("developer")) {
-    return { gradient: ["gray-700", "blue-600"], icon: "💻", label: "Developer" }
-  }
-  if (normalized.includes("finance")) {
-    return { gradient: ["green-600", "yellow-600"], icon: "💰", label: "Finance" }
-  }
-  if (normalized.includes("design")) {
-    return { gradient: ["pink-500", "purple-500"], icon: "🎨", label: "Design" }
-  }
-  if (normalized.includes("file") || normalized.includes("conversion")) {
-    return { gradient: ["teal-500", "indigo-600"], icon: "📁", label: "File Tools" }
-  }
-  return { gradient: ["gray-500", "blue-500"], icon: "📄", label: "Guide" }
 }
 
 export const blogCategories = [
@@ -107,4 +119,6 @@ export const blogCategories = [
   "Finance",
   "Design",
   "File Conversion",
+  "Technology",
+  "Business",
 ]

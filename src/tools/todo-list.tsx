@@ -20,11 +20,11 @@ import TaskCard from "./todo/TaskCard"
 import TaskForm from "./todo/TaskForm"
 import TaskDashboard from "./todo/TaskDashboard"
 import TaskCalendar from "./todo/TaskCalendar"
-import TaskPlanner from "./todo/TaskPlanner"
+import TaskPlannerTab from "./todo/TaskPlanner"
 import FocusMode from "./todo/FocusMode"
 import ReminderSystem from "./todo/ReminderSystem"
 
-export default function TodoList() {
+export default function TaskPlanner() {
   // Store subscriptions
   const todos = useTodoStore((s) => s.todos)
   const ui = useTodoStore((s) => s.ui)
@@ -249,7 +249,7 @@ export default function TodoList() {
       {ui.view === "dashboard" && <TaskDashboard />}
       {ui.view === "calendar" && <TaskCalendar />}
 
-      {ui.view === "planner" && <TaskPlanner />}
+      {ui.view === "planner" && <TaskPlannerTab />}
 
       {ui.view === "tasks" && (
         <div className="space-y-3 animate-in fade-in duration-300">

@@ -275,7 +275,7 @@ export default function HomePage() {
             { slug: "habit-tracker", name: "Habit Tracker", emoji: "🎯", desc: "Build streaks and track daily habits" },
             { slug: "day-planner", name: "Day Planner", emoji: "📅", desc: "Plan your day hour by hour" },
             { slug: "kanban", name: "Kanban Board", emoji: "📋", desc: "Organize with drag-and-drop boards" },
-            { slug: "revision-planner", name: "CBC Revision Planner", emoji: "📚", desc: "Plan skill-based practice and revision" },
+            { slug: "revision-planner", name: "CBC Learning & Revision Planner", emoji: "📚", desc: "Plan skill-based practice and revision with curriculum-aligned tools" },
           ].map((tool) => (
             <Link
               key={tool.slug}

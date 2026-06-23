@@ -10,7 +10,7 @@ export interface Tool {
 
 export const tools: Tool[] = [
   // 1. PRODUCTIVITY (HIGHEST PRIORITY)
-  { slug: "todo", name: "Todo List", description: "Manage tasks with priorities and categories", icon: "CheckSquare", category: "Productivity", badge: "Free" },
+  { slug: "planner", name: "Task Planner", description: "Organize tasks, reminders, calendars, and productivity workflows in a powerful privacy-first planner.", icon: "CheckSquare", category: "Productivity", badge: "Free" },
   { slug: "pomodoro", name: "Pomodoro Timer", description: "Stay focused with customizable timers", icon: "Timer", category: "Productivity", badge: "Free" },
   { slug: "notes", name: "Notes App", description: "Write and organize notes with local storage", icon: "StickyNote", category: "Productivity", badge: "Free" },
   { slug: "day-planner", name: "Day Planner", description: "Plan your day hour by hour", icon: "Calendar", category: "Productivity", badge: "Free" },
@@ -20,7 +20,7 @@ export const tools: Tool[] = [
 
   // 2. EDUCATION & CBC TOOLS (HIGH PRIORITY NICHE)
   { slug: "grade-calculator", name: "CBC Grade Calculator", description: "Calculate scores and competency levels (EE/ME/AE/BE) per KICD", icon: "Percent", category: "Education & CBC Tools", badge: "Free" },
-  { slug: "revision-planner", name: "CBC Revision Planner", description: "Plan skill-based practice, projects, and competency reinforcement", icon: "CalendarDays", category: "Education & CBC Tools", badge: "Free" },
+  { slug: "revision-planner", name: "CBC Learning & Revision Planner", description: "Plan skill-based practice, projects, and competency reinforcement with structured curriculum mapping", icon: "CalendarDays", category: "Education & CBC Tools", badge: "Free" },
   { slug: "lesson-plan-generator", name: "CBC Lesson Planner", description: "Generate full KICD-compliant lesson plans with competencies and PCIs", icon: "BookOpen", category: "Education & CBC Tools", badge: "Free" },
   { slug: "exam-generator", name: "CBC Assessment Tool", description: "Generate performance-based assessments — projects, tasks, observations", icon: "FileSpreadsheet", category: "Education & CBC Tools", badge: "Free" },
   { slug: "teacher-comment-generator", name: "CBC Teacher Comment Generator", description: "Generate competency-based feedback aligned to CBC levels", icon: "MessageSquare", category: "Education & CBC Tools", badge: "Free" },
@@ -57,6 +57,7 @@ export const tools: Tool[] = [
   { slug: "lorem-ipsum", name: "Lorem Ipsum Generator", description: "Generate placeholder text for your designs", icon: "TextQuote", category: "Design & Creative", badge: "Free" },
   { slug: "favicon-generator", name: "Favicon Generator", description: "Generate favicons from text or emoji", icon: "Image", category: "Design & Creative", badge: "Free" },
   { slug: "image-placeholder", name: "Image Placeholder", description: "Create custom sized placeholder images", icon: "Frame", category: "Design & Creative", badge: "Free" },
+  { slug: "design-cards-studio", name: "Design Cards Studio", description: "Create business cards, wedding invites, event cards, social media posts, and certificates", icon: "CreditCard", category: "Design & Creative", badge: "Free" },
 
   // 8. FINANCE TOOLS (LOW PRIORITY / OCCASIONAL USE)
   { slug: "currency-converter", name: "Currency Converter", description: "Convert between world currencies (manual rates)", icon: "DollarSign", category: "Finance Tools", badge: "Fast" },

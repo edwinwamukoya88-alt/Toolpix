@@ -10,7 +10,7 @@ export const AI_LINK_GRAPH: AILinkEntry[] = [
     weight: 0.9,
     tools: [
       { name: "Pomodoro Timer", url: "/tools/pomodoro" },
-      { name: "Todo List", url: "/tools/todo" },
+      { name: "Task Planner", url: "/tools/planner" },
       { name: "Notes App", url: "/tools/notes" },
       { name: "Kanban Board", url: "/tools/kanban" },
       { name: "Habit Tracker", url: "/tools/habit-tracker" },
@@ -21,7 +21,7 @@ export const AI_LINK_GRAPH: AILinkEntry[] = [
     weight: 0.85,
     tools: [
       { name: "Notes App", url: "/tools/notes" },
-      { name: "CBC Revision Planner", url: "/tools/revision-planner" },
+      { name: "CBC Learning & Revision Planner", url: "/tools/revision-planner" },
       { name: "Pomodoro Timer", url: "/tools/pomodoro" },
       { name: "CBC Grade Calculator", url: "/tools/grade-calculator" },
     ],
@@ -40,7 +40,7 @@ export const AI_LINK_GRAPH: AILinkEntry[] = [
     keyword: "study",
     weight: 0.8,
     tools: [
-      { name: "CBC Revision Planner", url: "/tools/revision-planner" },
+      { name: "CBC Learning & Revision Planner", url: "/tools/revision-planner" },
       { name: "Notes App", url: "/tools/notes" },
       { name: "Pomodoro Timer", url: "/tools/pomodoro" },
     ],
@@ -51,7 +51,7 @@ export const AI_LINK_GRAPH: AILinkEntry[] = [
     tools: [
       { name: "Pomodoro Timer", url: "/tools/pomodoro" },
       { name: "Day Planner", url: "/tools/day-planner" },
-      { name: "Todo List", url: "/tools/todo" },
+      { name: "Task Planner", url: "/tools/planner" },
     ],
   },
   {
@@ -76,7 +76,7 @@ export const AI_LINK_GRAPH: AILinkEntry[] = [
     weight: 0.7,
     tools: [
       { name: "Notes App", url: "/tools/notes" },
-      { name: "Todo List", url: "/tools/todo" },
+      { name: "Task Planner", url: "/tools/planner" },
     ],
   },
   {
@@ -92,7 +92,7 @@ export const AI_LINK_GRAPH: AILinkEntry[] = [
     weight: 0.7,
     tools: [
       { name: "Habit Tracker", url: "/tools/habit-tracker" },
-      { name: "Todo List", url: "/tools/todo" },
+      { name: "Task Planner", url: "/tools/planner" },
     ],
   },
   {

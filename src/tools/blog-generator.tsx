@@ -9,7 +9,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { toast } from "sonner"
 import BlogCoverImage from "@/components/blog/blog-cover-image"
-import { generateCoverConfig, serializeCover } from "@/lib/blog-types"
+import { serializeCover } from "@/lib/blog-types"
+import { generateCoverConfig } from "@/lib/blog-cover-generator"
 import { calculateAIVisibilityScore, aiImprovementTips } from "@/lib/ai-score"
 import { getAIBadge, formatAIScore } from "@/lib/ai-badge"
 import { countInternalLinks } from "@/lib/ai-links"
@@ -49,14 +50,14 @@ const categoryToolMap: Record<string, ToolEntry[]> = {
   "CBC Education": [
     { name: "CBC Grade Calculator", url: "/tools/grade-calculator" },
     { name: "CBC Lesson Planner", url: "/tools/lesson-plan-generator" },
-    { name: "CBC Revision Planner", url: "/tools/revision-planner" },
+    { name: "CBC Learning & Revision Planner", url: "/tools/revision-planner" },
     { name: "CBC Assessment Tool", url: "/tools/exam-generator" },
     { name: "CBC Teacher Comment Generator", url: "/tools/teacher-comment-generator" },
     { name: "CBC Scheme of Work Generator", url: "/tools/scheme-of-work-generator" },
   ],
   Productivity: [
     { name: "Pomodoro Timer", url: "/tools/pomodoro" },
-    { name: "Todo List", url: "/tools/todo" },
+    { name: "Task Planner", url: "/tools/planner" },
     { name: "Notes App", url: "/tools/notes" },
     { name: "Kanban Board", url: "/tools/kanban" },
     { name: "Day Planner", url: "/tools/day-planner" },
@@ -97,7 +98,7 @@ const categoryToolMap: Record<string, ToolEntry[]> = {
     { name: "File Compressor UI", url: "/tools/file-compressor" },
   ],
   General: [
-    { name: "Todo List", url: "/tools/todo" },
+    { name: "Task Planner", url: "/tools/planner" },
     { name: "Notes App", url: "/tools/notes" },
     { name: "Pomodoro Timer", url: "/tools/pomodoro" },
     { name: "Password Generator", url: "/tools/password-generator" },
@@ -111,7 +112,7 @@ const smartKeywordMap: [RegExp, ToolEntry[]][] = [
     { name: "CBC Lesson Planner", url: "/tools/lesson-plan-generator" },
     { name: "CBC Scheme of Work Generator", url: "/tools/scheme-of-work-generator" },
   ]],
-  [/revis(e|ion)|study/i, [{ name: "CBC Revision Planner", url: "/tools/revision-planner" }]],
+  [/revis(e|ion)|study/i, [{ name: "CBC Learning & Revision Planner", url: "/tools/revision-planner" }]],
   [/assess|exam|test|quiz/i, [{ name: "CBC Assessment Tool", url: "/tools/exam-generator" }]],
   [/comment|feedback|report/i, [{ name: "CBC Teacher Comment Generator", url: "/tools/teacher-comment-generator" }]],
   [/pdf|document|convert/i, [
@@ -136,7 +137,7 @@ const smartKeywordMap: [RegExp, ToolEntry[]][] = [
   [/currency|money|exchange/i, [{ name: "Currency Converter", url: "/tools/currency-converter" }]],
   [/expense|budget|spend/i, [{ name: "Expense Tracker", url: "/tools/expense-tracker" }]],
   [/pomodoro|timer|focus/i, [{ name: "Pomodoro Timer", url: "/tools/pomodoro" }]],
-  [/todo|task|checklist/i, [{ name: "Todo List", url: "/tools/todo" }]],
+  [/todo|task|checklist/i, [{ name: "Task Planner", url: "/tools/planner" }]],
   [/note|journal|diary/i, [{ name: "Notes App", url: "/tools/notes" }]],
   [/kanban|board|column/i, [{ name: "Kanban Board", url: "/tools/kanban" }]],
   [/favicon/i, [{ name: "Favicon Generator", url: "/tools/favicon-generator" }]],
@@ -197,7 +198,7 @@ function getSmartTools(title: string): ToolEntry[] {
   }
 
   if (matched.size === 0) {
-    return [{ name: "Todo List", url: "/tools/todo" }]
+    return [{ name: "Task Planner", url: "/tools/planner" }]
   }
   return Array.from(matched.values()).slice(0, 5)
 }
@@ -580,7 +581,7 @@ function getToolShortDesc(url: string): string {
   const descs: Record<string, string> = {
     "/tools/grade-calculator": "Calculate scores and competency levels (EE/ME/AE/BE)",
     "/tools/lesson-plan-generator": "Create KICD-compliant lesson plans",
-    "/tools/revision-planner": "Plan and track revision sessions",
+    "/tools/revision-planner": "Plan and track curriculum-aligned revision sessions",
     "/tools/exam-generator": "Generate performance-based assessments",
     "/tools/teacher-comment-generator": "Write competency-based report comments",
     "/tools/scheme-of-work-generator": "Create termly schemes of work",

@@ -8,7 +8,7 @@ export default function BlogCard({ post }: { post: BlogMeta }) {
   return (
     <Link
       href={`/blog/${post.slug}`}
-      className="group relative flex flex-col rounded-xl border bg-background/40 overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/5 hover:border-primary/30"
+      className="group relative flex flex-col rounded-xl border bg-background/40 overflow-hidden transition-all duration-500 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-primary/10 hover:border-primary/40"
     >
       <BlogCoverImage coverImage={post.coverImage} title={post.title} size="card" />
       <div className="flex flex-col gap-2 p-5 flex-1">

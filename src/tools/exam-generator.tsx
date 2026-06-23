@@ -1,11 +1,13 @@
 "use client"
 
 import { useState, useCallback, useMemo } from "react"
-import { ClipboardCheck, Copy, Printer, FileDown, RefreshCw } from "lucide-react"
+import { ClipboardCheck, Copy, Printer, FileDown, RefreshCw, GraduationCap, BookOpen, BarChart3, ListChecks, Brain, Target, Sparkles, CheckCircle2, AlertCircle } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
+import { Badge } from "@/components/ui/badge"
+import { cn } from "@/lib/utils"
 import { toast } from "sonner"
 import { trackToolUse, trackDownload } from "@/lib/analytics"
 
@@ -120,12 +122,83 @@ const taskBanks: Record<string, Record<TaskType, { title: string; description: s
 const learningAreas = ["Science and Technology", "Mathematics", "English", "Kiswahili", "Social Studies"]
 const grades = ["Grade 1", "Grade 2", "Grade 3", "Grade 4", "Grade 5", "Grade 6", "Grade 7", "Grade 8", "Grade 9"]
 
+const taskIntentLabels: Record<string, string> = {
+  project: "Knowledge-Based Task / Practical Application Task",
+  practical: "Practical Application Task",
+  observation: "Observation Task",
+  "problem-solving": "Knowledge-Based Task / Practical Application Task",
+  "group-work": "Collaborative Task",
+}
+
+const competencyMappingPerTask: Record<string, { competency: string; level: "High" | "Medium" | "Low" }[]> = {
+  project: [
+    { competency: "Creativity & Imagination", level: "High" },
+    { competency: "Critical Thinking & Problem Solving", level: "High" },
+    { competency: "Communication & Collaboration", level: "Medium" },
+  ],
+  practical: [
+    { competency: "Self-Efficacy", level: "High" },
+    { competency: "Digital Literacy", level: "Medium" },
+    { competency: "Critical Thinking & Problem Solving", level: "Medium" },
+  ],
+  observation: [
+    { competency: "Learning to Learn", level: "High" },
+    { competency: "Communication & Collaboration", level: "Medium" },
+    { competency: "Critical Thinking & Problem Solving", level: "Low" },
+  ],
+  "problem-solving": [
+    { competency: "Critical Thinking & Problem Solving", level: "High" },
+    { competency: "Creativity & Imagination", level: "High" },
+    { competency: "Self-Efficacy", level: "Medium" },
+  ],
+  "group-work": [
+    { competency: "Communication & Collaboration", level: "High" },
+    { competency: "Citizenship", level: "High" },
+    { competency: "Creativity & Imagination", level: "Medium" },
+  ],
+}
+
+const rubricLevels = [
+  {
+    code: "EE",
+    label: "Exceeds Expectation",
+    description: "Demonstrates exceptional understanding; exceeds grade-level expectations with independence and creativity.",
+  },
+  {
+    code: "ME",
+    label: "Meets Expectation",
+    description: "Demonstrates adequate understanding; meets grade-level expectations with minimal support.",
+  },
+  {
+    code: "AE",
+    label: "Approaching Expectation",
+    description: "Demonstrates partial understanding; requires guidance to meet grade-level expectations.",
+  },
+  {
+    code: "BE",
+    label: "Below Expectation",
+    description: "Demonstrates limited understanding; requires significant intervention and scaffolded support.",
+  },
+]
+
+const assessmentTypeSummaryLabels: Record<string, { icon: string; label: string }> = {
+  project: { icon: "📐", label: "Project-Based Assessment" },
+  practical: { icon: "🔬", label: "Practical Activity Assessment" },
+  observation: { icon: "👁", label: "Observation-Based Assessment" },
+  "problem-solving": { icon: "🧩", label: "Problem-Solving Assessment" },
+  "group-work": { icon: "👥", label: "Collaborative Group Assessment" },
+}
+
 export default function CBCAssessmentTool() {
   const [grade, setGrade] = useState("Grade 4")
   const [learningArea, setLearningArea] = useState("Science and Technology")
   const [numTasks, setNumTasks] = useState("4")
   const [generated, setGenerated] = useState(false)
   const [tasks, setTasks] = useState<{ type: TaskType; task: { title: string; description: string; materials?: string; criteria: string[] } }[]>([])
+  const [blueprintData, setBlueprintData] = useState<{
+    typeDistribution: Record<string, number>
+    competencyFocus: { name: string; percentage: number }[]
+  } | null>(null)
 
   const taskTypes: TaskType[] = ["project", "practical", "observation", "problem-solving", "group-work"]
 
@@ -160,7 +233,24 @@ export default function CBCAssessmentTool() {
     const shuffled = shuffle(allTasks)
     const selected = shuffled.slice(0, count)
 
-    setTasks(selected.map((s) => ({ type: s.type, task: s.task })))
+    const chosen = selected.map((s) => ({ type: s.type, task: s.task }))
+    setTasks(chosen)
+
+    const dist: Record<string, number> = {}
+    chosen.forEach((t) => { dist[t.type] = (dist[t.type] || 0) + 1 })
+    const allComp = new Map<string, number>()
+    chosen.forEach((t) => {
+      (competencyMappingPerTask[t.type] || []).forEach((c) => {
+        const weight = c.level === "High" ? 3 : c.level === "Medium" ? 2 : 1
+        allComp.set(c.competency, (allComp.get(c.competency) || 0) + weight)
+      })
+    })
+    const totalWeight = [...allComp.values()].reduce((a, b) => a + b, 0) || 1
+    const competencyFocus = [...allComp.entries()]
+      .map(([name, weight]) => ({ name, percentage: Math.round((weight / totalWeight) * 100) }))
+      .sort((a, b) => b.percentage - a.percentage)
+
+    setBlueprintData({ typeDistribution: dist, competencyFocus })
     setGenerated(true)
     trackToolUse("exam-generator", "generate")
     toast.success("CBC performance assessment generated")
@@ -174,36 +264,67 @@ export default function CBCAssessmentTool() {
     "group-work": "Group Work Assignment",
   }
 
-  const typeColors: Record<TaskType, string> = {
-    "project": "border-blue-500/30 bg-blue-500/10",
-    "practical": "border-green-500/30 bg-green-500/10",
-    "observation": "border-amber-500/30 bg-amber-500/10",
-    "problem-solving": "border-purple-500/30 bg-purple-500/10",
-    "group-work": "border-rose-500/30 bg-rose-500/10",
-  }
-
   const handleCopy = useCallback(() => {
     const lines = [
-      "CBC PERFORMANCE-BASED ASSESSMENT",
-      "=".repeat(50),
+      "=".repeat(65),
+      "REPUBLIC OF KENYA",
+      "MINISTRY OF EDUCATION",
+      "KENYA INSTITUTE OF CURRICULUM DEVELOPMENT",
+      "COMPETENCY-BASED CURRICULUM",
+      "PERFORMANCE-BASED ASSESSMENT DOCUMENT",
+      "=".repeat(65),
+      "",
       `Learning Area: ${learningArea}`,
       `Grade: ${grade}`,
-      `Total Tasks: ${tasks.length}`,
+      `Number of Tasks: ${tasks.length}`,
+      "",
+      "--- ASSESSMENT BLUEPRINT ---",
+      "",
+      "Assessment Type Distribution:",
+      ...Object.entries(blueprintData?.typeDistribution || {}).map(([type, count]) =>
+        `  ${typeLabels[type as TaskType]}: ${count} task(s) (${Math.round((count / tasks.length) * 100)}%)`
+      ),
+      "",
+      "Competency Focus Distribution:",
+      ...(blueprintData?.competencyFocus || []).map((c) =>
+        `  ${c.name}: ${c.percentage}% focus`
+      ),
+      "",
+      "=".repeat(65),
+      "ASSESSMENT TASKS",
+      "=".repeat(65),
       "",
       ...tasks.map((t, i) => [
-        `Task ${i + 1}: ${typeLabels[t.type]}`,
-        `Title: ${t.task.title}`,
-        `Description: ${t.task.description}`,
-        ...(t.task.materials ? [`Materials: ${t.task.materials}`] : []),
+        `TASK ${i + 1}: ${t.task.title}`,
+        `Type: ${typeLabels[t.type]}`,
+        `Intent: ${taskIntentLabels[t.type] || "General Assessment Task"}`,
+        "",
+        "Description:",
+        `  ${t.task.description}`,
+        ...(t.task.materials ? ["", "Materials:", ...t.task.materials.split(",").map((m) => `  • ${m.trim()}`)] : []),
+        "",
         "Assessment Criteria:",
-        ...t.task.criteria.map((c) => `   • ${c}`),
+        ...t.task.criteria.map((c) => `  • ${c}`),
+        "",
+        "Competency Mapping:",
+        ...(competencyMappingPerTask[t.type] || []).map((cm) =>
+          `  • ${cm.competency} (${cm.level})`
+        ),
+        "",
+        "Performance Rubric:",
+        ...rubricLevels.map((r) =>
+          `  ${r.code} (${r.label}): ${r.description}`
+        ),
         "",
       ]).flat(),
+      "=".repeat(65),
+      "END OF ASSESSMENT DOCUMENT",
+      "=".repeat(65),
     ]
     navigator.clipboard.writeText(lines.join("\n"))
     trackToolUse("exam-generator", "copy")
-    toast.success("Assessment copied")
-  }, [learningArea, grade, tasks])
+    toast.success("Assessment copied to clipboard")
+  }, [learningArea, grade, tasks, blueprintData])
 
   const handlePrint = useCallback(() => {
     trackToolUse("exam-generator", "print")
@@ -217,55 +338,139 @@ export default function CBCAssessmentTool() {
       let y = 20
       const margin = 20
       const maxWidth = 170
-      const lineHeight = 6
+      const lineHeight = 5
 
-      doc.setFontSize(14)
-      doc.text("CBC PERFORMANCE-BASED ASSESSMENT", margin, y)
-      y += 9
+      const addPageIfNeeded = (limit = 265) => { if (y > limit) { doc.addPage(); y = 20 } }
+
+      // ── Document Header ──
+      doc.setFontSize(9)
+      doc.setFont("helvetica", "normal")
+      doc.text("REPUBLIC OF KENYA — MINISTRY OF EDUCATION", margin, y); y += 4
+      doc.setFont("helvetica", "bold")
+      doc.setFontSize(11)
+      doc.text("KENYA INSTITUTE OF CURRICULUM DEVELOPMENT", margin, y); y += 5
       doc.setFontSize(10)
-      doc.text(`Learning Area: ${learningArea}    Grade: ${grade}    Tasks: ${tasks.length}`, margin, y)
-      y += 10
+      doc.text("PERFORMANCE-BASED ASSESSMENT DOCUMENT", margin, y); y += 8
+      doc.setFont("helvetica", "normal")
+      doc.setFontSize(9)
 
+      // ── Blueprint ──
+      doc.setFont("helvetica", "bold")
+      doc.text("ASSESSMENT BLUEPRINT", margin, y); y += 5
+      doc.setFont("helvetica", "normal")
+      doc.text(`Learning Area: ${learningArea}    Grade: ${grade}    Number of Tasks: ${tasks.length}`, margin, y); y += 5
+      doc.text("Assessment Type Distribution:", margin, y); y += 4
+      doc.setFontSize(8)
+      Object.entries(blueprintData?.typeDistribution || {}).forEach(([type, count]) => {
+        addPageIfNeeded()
+        doc.text(`  ${typeLabels[type as TaskType]}: ${count} task(s) (${Math.round((count / tasks.length) * 100)}%)`, margin, y)
+        y += 4
+      })
+      y += 2
+      doc.setFontSize(9)
+      doc.setFont("helvetica", "bold")
+      doc.text("Competency Focus Distribution:", margin, y); y += 4
+      doc.setFont("helvetica", "normal")
+      doc.setFontSize(8)
+      ;(blueprintData?.competencyFocus || []).forEach((c) => {
+        addPageIfNeeded()
+        doc.text(`  ${c.name}: ${c.percentage}%`, margin, y)
+        y += 4
+      })
+      y += 4
+
+      // ── Tasks ──
       tasks.forEach((t, i) => {
-        if (y > 260) { doc.addPage(); y = 20 }
+        addPageIfNeeded(250)
         doc.setFont("helvetica", "bold")
-        doc.setFontSize(11)
-        doc.text(`Task ${i + 1}: ${typeLabels[t.type]}`, margin, y)
-        y += 7
-        doc.setFont("helvetica", "normal")
         doc.setFontSize(10)
-        doc.text(`Title: ${t.task.title}`, margin, y)
-        y += 6
+        doc.text(`TASK ${i + 1}: ${t.task.title}`, margin, y); y += 5
+        doc.setFont("helvetica", "normal")
+        doc.setFontSize(8)
+        doc.text(`Type: ${typeLabels[t.type]}`, margin, y); y += 4
+        doc.text(`Intent: ${taskIntentLabels[t.type] || "General Assessment Task"}`, margin, y); y += 5
+
+        // Description
+        doc.setFont("helvetica", "bold")
+        doc.setFontSize(9)
+        doc.text("Description:", margin, y); y += 4
+        doc.setFont("helvetica", "normal")
+        doc.setFontSize(8)
         const descLines = doc.splitTextToSize(t.task.description, maxWidth)
         descLines.forEach((l: string) => {
-          if (y > 270) { doc.addPage(); y = 20 }
-          doc.text(l, margin, y)
-          y += lineHeight
+          addPageIfNeeded()
+          doc.text(l, margin + 3, y); y += lineHeight
         })
-        y += 2
+        y += 1
+
+        // Materials
         if (t.task.materials) {
-          doc.text(`Materials: ${t.task.materials}`, margin, y)
-          y += 6
+          addPageIfNeeded()
+          doc.setFont("helvetica", "bold")
+          doc.setFontSize(9)
+          doc.text("Materials:", margin, y); y += 4
+          doc.setFont("helvetica", "normal")
+          doc.setFontSize(8)
+          t.task.materials.split(",").forEach((m) => {
+            addPageIfNeeded()
+            doc.text(`  • ${m.trim()}`, margin, y); y += lineHeight
+          })
+          y += 1
         }
+
+        // Assessment Criteria
+        addPageIfNeeded()
         doc.setFont("helvetica", "bold")
-        doc.text("Assessment Criteria:", margin, y)
-        y += 5
+        doc.setFontSize(9)
+        doc.text("Assessment Criteria:", margin, y); y += 4
         doc.setFont("helvetica", "normal")
+        doc.setFontSize(8)
         t.task.criteria.forEach((c) => {
-          if (y > 275) { doc.addPage(); y = 20 }
-          doc.text(`   • ${c}`, margin, y)
-          y += lineHeight
+          addPageIfNeeded()
+          doc.text(`  • ${c}`, margin, y); y += lineHeight
         })
-        y += 5
+        y += 1
+
+        // Competency Mapping
+        addPageIfNeeded()
+        doc.setFont("helvetica", "bold")
+        doc.setFontSize(9)
+        doc.text("Competency Mapping:", margin, y); y += 4
+        doc.setFont("helvetica", "normal")
+        doc.setFontSize(8)
+        ;(competencyMappingPerTask[t.type] || []).forEach((cm) => {
+          addPageIfNeeded()
+          doc.text(`  • ${cm.competency} (${cm.level})`, margin, y); y += lineHeight
+        })
+        y += 1
+
+        // Rubric
+        addPageIfNeeded()
+        doc.setFont("helvetica", "bold")
+        doc.setFontSize(9)
+        doc.text("Performance Rubric:", margin, y); y += 4
+        doc.setFont("helvetica", "normal")
+        doc.setFontSize(8)
+        rubricLevels.forEach((r) => {
+          addPageIfNeeded()
+          const rubricText = `${r.code} (${r.label}): ${r.description}`
+          const rLines = doc.splitTextToSize(rubricText, maxWidth - 5)
+          rLines.forEach((l: string) => {
+            addPageIfNeeded()
+            doc.text(l, margin + 3, y); y += lineHeight
+          })
+        })
+        y += 3
       })
 
+      doc.text("— END OF ASSESSMENT DOCUMENT —", margin, y)
       doc.save("cbc-assessment.pdf")
       trackDownload("exam-generator", "pdf")
       toast.success("PDF downloaded")
     } catch {
       toast.error("Failed to generate PDF")
     }
-  }, [learningArea, grade, tasks])
+  }, [learningArea, grade, tasks, blueprintData])
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">
@@ -303,80 +508,283 @@ export default function CBCAssessmentTool() {
         </CardContent>
       </Card>
 
-      {generated && (
+      {generated && blueprintData && (
         <>
-          <Card className="border-primary/30">
-            <CardContent className="p-5 space-y-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="font-semibold">Performance-Based Assessment</h3>
-                  <p className="text-xs text-muted-foreground">
-                    {learningArea} &middot; Grade {grade} &middot; {tasks.length} task{tasks.length !== 1 ? "s" : ""}
-                  </p>
+          {/* ── KICD DOCUMENT ── */}
+          <div className="border border-border/60 rounded-xl overflow-hidden bg-card shadow-sm">
+            {/* Document Header */}
+            <div className="bg-gradient-to-b from-primary/5 via-primary/[0.03] to-background border-b border-border/40 px-6 py-6 text-center">
+              <div className="text-[10px] font-medium text-muted-foreground uppercase tracking-[0.15em] mb-2">
+                Republic of Kenya — Ministry of Education
+              </div>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold mb-2">
+                <GraduationCap className="size-3.5" /> KICD Competency-Based Curriculum
+              </div>
+              <h3 className="text-lg font-bold tracking-tight">PERFORMANCE-BASED ASSESSMENT DOCUMENT</h3>
+              <p className="text-xs text-muted-foreground mt-0.5">Kenya Institute of Curriculum Development</p>
+            </div>
+
+            <div className="divide-y divide-border/40">
+              {/* ── ASSESSMENT BLUEPRINT ── */}
+              <div className="px-6 py-5">
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="size-6 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <BarChart3 className="size-3.5 text-primary" />
+                  </div>
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-primary">Assessment Blueprint</h4>
                 </div>
-                <div className="flex gap-2">
-                  <Button variant="outline" size="xs" onClick={generate}>
-                    <RefreshCw className="h-3.5 w-3.5" /> Regenerate
-                  </Button>
-                  <Button variant="outline" size="xs" onClick={handleCopy}>
-                    <Copy className="h-3.5 w-3.5" /> Copy
-                  </Button>
-                  <Button variant="outline" size="xs" onClick={handlePDF}>
-                    <FileDown className="h-3.5 w-3.5" /> PDF
-                  </Button>
-                  <Button variant="outline" size="xs" onClick={handlePrint}>
-                    <Printer className="h-3.5 w-3.5" /> Print
-                  </Button>
+
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                  <div className="rounded-lg border bg-muted/10 p-3">
+                    <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Learning Area</span>
+                    <p className="text-sm font-semibold mt-0.5">{learningArea}</p>
+                  </div>
+                  <div className="rounded-lg border bg-muted/10 p-3">
+                    <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Grade</span>
+                    <p className="text-sm font-semibold mt-0.5">{grade}</p>
+                  </div>
+                  <div className="rounded-lg border bg-muted/10 p-3">
+                    <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Number of Tasks</span>
+                    <p className="text-sm font-semibold mt-0.5">{tasks.length}</p>
+                  </div>
+                  <div className="rounded-lg border bg-muted/10 p-3">
+                    <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Document Type</span>
+                    <p className="text-sm font-semibold mt-0.5">Performance Assessment</p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Assessment Type Distribution */}
+                  <div className="rounded-lg border bg-muted/10 p-4">
+                    <h5 className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-3 flex items-center gap-1.5">
+                      <ListChecks className="size-3" /> Assessment Type Summary
+                    </h5>
+                    <div className="space-y-2">
+                      {Object.entries(blueprintData.typeDistribution).map(([type, count]) => {
+                        const pct = Math.round((count / tasks.length) * 100)
+                        return (
+                          <div key={type} className="flex items-center gap-3">
+                            <span className="text-xs w-6 text-center font-medium">{pct}%</span>
+                            <div className="flex-1 h-4 rounded-full bg-muted-foreground/10 overflow-hidden">
+                              <div
+                                className={cn(
+                                  "h-full rounded-full transition-all",
+                                  type === "project" && "bg-blue-500",
+                                  type === "practical" && "bg-green-500",
+                                  type === "observation" && "bg-amber-500",
+                                  type === "problem-solving" && "bg-purple-500",
+                                  type === "group-work" && "bg-rose-500",
+                                )}
+                                style={{ width: `${pct}%` }}
+                              />
+                            </div>
+                            <span className="text-[10px] text-muted-foreground w-28 text-right">
+                              {typeLabels[type as TaskType]}
+                            </span>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Competency Focus Distribution */}
+                  <div className="rounded-lg border bg-muted/10 p-4">
+                    <h5 className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-3 flex items-center gap-1.5">
+                      <Brain className="size-3" /> Competency Focus Distribution
+                    </h5>
+                    <div className="space-y-2">
+                      {blueprintData.competencyFocus.map((comp) => (
+                        <div key={comp.name} className="flex items-center gap-3">
+                          <span className="text-[10px] text-muted-foreground w-32 text-right">{comp.name}</span>
+                          <div className="flex-1 h-4 rounded-full bg-muted-foreground/10 overflow-hidden">
+                            <div
+                              className="h-full rounded-full bg-primary/60 transition-all"
+                              style={{ width: `${comp.percentage}%` }}
+                            />
+                          </div>
+                          <span className="text-xs font-medium w-10 text-right">{comp.percentage}%</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              <Separator />
+              {/* ── ASSESSMENT TASKS ── */}
+              <div className="px-6 py-5">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-2">
+                    <div className="size-6 rounded-lg bg-primary/10 flex items-center justify-center">
+                      <BookOpen className="size-3.5 text-primary" />
+                    </div>
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-primary">Assessment Tasks</h4>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button variant="outline" size="xs" onClick={generate}>
+                      <RefreshCw className="h-3.5 w-3.5" /> Regenerate
+                    </Button>
+                    <Button variant="outline" size="xs" onClick={handleCopy}>
+                      <Copy className="h-3.5 w-3.5" /> Copy
+                    </Button>
+                    <Button variant="outline" size="xs" onClick={handlePDF}>
+                      <FileDown className="h-3.5 w-3.5" /> PDF
+                    </Button>
+                    <Button variant="outline" size="xs" onClick={handlePrint}>
+                      <Printer className="h-3.5 w-3.5" /> Print
+                    </Button>
+                  </div>
+                </div>
 
-              <div className="space-y-4">
-                {tasks.map((t, i) => (
-                  <Card key={i} className={`border ${typeColors[t.type]}`}>
-                    <CardContent className="p-4 space-y-2">
-                      <div className="flex items-center justify-between">
-                        <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${typeColors[t.type]}`}>
-                          {typeLabels[t.type]}
-                        </span>
-                        <span className="text-[10px] text-muted-foreground">Task {i + 1}</span>
-                      </div>
-                      <h4 className="font-semibold text-sm">{t.task.title}</h4>
-                      <p className="text-xs text-muted-foreground leading-relaxed">{t.task.description}</p>
-                      {t.task.materials && (
-                        <p className="text-[10px] text-muted-foreground/70">
-                          <span className="font-medium">Materials:</span> {t.task.materials}
-                        </p>
-                      )}
-                      <div>
-                        <p className="text-[10px] font-medium text-muted-foreground mb-1">Assessment Criteria:</p>
-                        <ul className="list-disc list-inside text-[10px] text-muted-foreground space-y-0.5">
-                          {t.task.criteria.map((c, ci) => (
-                            <li key={ci}>{c}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+                <div className="space-y-5">
+                  {tasks.map((t, i) => {
+                    const compList = competencyMappingPerTask[t.type] || []
+                    return (
+                      <div key={i} className="rounded-xl border overflow-hidden">
+                        {/* Task Header */}
+                        <div className={cn(
+                          "px-5 py-3 border-b flex items-center justify-between",
+                          t.type === "project" && "bg-blue-500/5 border-blue-200/30 dark:border-blue-800/30",
+                          t.type === "practical" && "bg-green-500/5 border-green-200/30 dark:border-green-800/30",
+                          t.type === "observation" && "bg-amber-500/5 border-amber-200/30 dark:border-amber-800/30",
+                          t.type === "problem-solving" && "bg-purple-500/5 border-purple-200/30 dark:border-purple-800/30",
+                          t.type === "group-work" && "bg-rose-500/5 border-rose-200/30 dark:border-rose-800/30",
+                        )}>
+                          <div className="flex items-center gap-3">
+                            <div className={cn(
+                              "size-8 rounded-lg flex items-center justify-center text-sm font-bold",
+                              t.type === "project" && "bg-blue-500/10 text-blue-600 dark:text-blue-400",
+                              t.type === "practical" && "bg-green-500/10 text-green-600 dark:text-green-400",
+                              t.type === "observation" && "bg-amber-500/10 text-amber-600 dark:text-amber-400",
+                              t.type === "problem-solving" && "bg-purple-500/10 text-purple-600 dark:text-purple-400",
+                              t.type === "group-work" && "bg-rose-500/10 text-rose-600 dark:text-rose-400",
+                            )}>
+                              {i + 1}
+                            </div>
+                            <div>
+                              <h5 className="text-sm font-bold">TASK {i + 1}: {t.task.title}</h5>
+                              <div className="flex items-center gap-2 mt-0.5">
+                                <Badge variant="secondary" className="text-[9px] px-1.5 py-0">
+                                  {typeLabels[t.type]}
+                                </Badge>
+                                <Badge variant="outline" className="text-[9px] px-1.5 py-0 text-muted-foreground">
+                                  {taskIntentLabels[t.type] || "Assessment Task"}
+                                </Badge>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
 
-          <Card>
-            <CardContent className="p-5 space-y-3">
-              <h3 className="font-semibold text-sm">CBC Competency Mapping</h3>
-              <Separator />
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-muted-foreground">
-                <div className="flex items-center gap-2"><div className="h-2 w-2 rounded-full bg-blue-500" /> Projects — Creativity, Critical Thinking</div>
-                <div className="flex items-center gap-2"><div className="h-2 w-2 rounded-full bg-green-500" /> Practical — Self-Efficacy, Digital Literacy</div>
-                <div className="flex items-center gap-2"><div className="h-2 w-2 rounded-full bg-amber-500" /> Observation — Learning to Learn, Communication</div>
-                <div className="flex items-center gap-2"><div className="h-2 w-2 rounded-full bg-purple-500" /> Problem-Solving — Critical Thinking, Creativity</div>
-                <div className="flex items-center gap-2"><div className="h-2 w-2 rounded-full bg-rose-500" /> Group Work — Collaboration, Citizenship</div>
+                        {/* Task Body */}
+                        <div className="p-5 space-y-4">
+                          {/* Description */}
+                          <div className="flex items-start gap-3">
+                            <Sparkles className="size-4 text-muted-foreground mt-0.5 flex-shrink-0" />
+                            <div className="flex-1">
+                              <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block mb-1">Description</span>
+                              <p className="text-sm leading-relaxed text-foreground/90">{t.task.description}</p>
+                            </div>
+                          </div>
+
+                          {/* Materials */}
+                          {t.task.materials && (
+                            <div className="flex items-start gap-3">
+                              <ListChecks className="size-4 text-muted-foreground mt-0.5 flex-shrink-0" />
+                              <div className="flex-1">
+                                <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block mb-1">Materials</span>
+                                <ul className="space-y-0.5">
+                                  {t.task.materials.split(",").map((m, mi) => (
+                                    <li key={mi} className="text-xs text-muted-foreground flex items-start gap-1.5">
+                                      <span className="size-1 rounded-full bg-muted-foreground/40 mt-1.5 flex-shrink-0" />
+                                      {m.trim()}
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Assessment Criteria */}
+                          <div className="flex items-start gap-3">
+                            <Target className="size-4 text-muted-foreground mt-0.5 flex-shrink-0" />
+                            <div className="flex-1">
+                              <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block mb-1">Assessment Criteria</span>
+                              <ul className="space-y-0.5">
+                                {t.task.criteria.map((c, ci) => (
+                                  <li key={ci} className="text-xs text-muted-foreground flex items-start gap-1.5">
+                                    <CheckCircle2 className="size-3 text-green-500 mt-0.5 flex-shrink-0" />
+                                    {c}
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          </div>
+
+                          {/* Competency Mapping */}
+                          <div className="flex items-start gap-3">
+                            <Brain className="size-4 text-muted-foreground mt-0.5 flex-shrink-0" />
+                            <div className="flex-1">
+                              <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block mb-1">Competency Mapping</span>
+                              <div className="flex flex-wrap gap-2">
+                                {compList.map((cm, ci) => (
+                                  <Badge key={ci} variant="outline" className={cn(
+                                    "text-[10px] gap-1",
+                                    cm.level === "High" && "border-green-500/30 text-green-600 dark:text-green-400 bg-green-500/5",
+                                    cm.level === "Medium" && "border-amber-500/30 text-amber-600 dark:text-amber-400 bg-amber-500/5",
+                                    cm.level === "Low" && "border-muted-foreground/30 text-muted-foreground",
+                                  )}>
+                                    {cm.competency} <span className="font-medium">({cm.level})</span>
+                                  </Badge>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Performance Rubric */}
+                          <div className="flex items-start gap-3">
+                            <BarChart3 className="size-4 text-muted-foreground mt-0.5 flex-shrink-0" />
+                            <div className="flex-1">
+                              <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block mb-1">Performance Rubric</span>
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                {rubricLevels.map((r, ri) => (
+                                  <div key={ri} className={cn(
+                                    "rounded-lg border p-2.5",
+                                    r.code === "EE" && "border-green-300/40 dark:border-green-700/40 bg-green-500/[0.03]",
+                                    r.code === "ME" && "border-blue-300/40 dark:border-blue-700/40 bg-blue-500/[0.03]",
+                                    r.code === "AE" && "border-amber-300/40 dark:border-amber-700/40 bg-amber-500/[0.03]",
+                                    r.code === "BE" && "border-red-300/40 dark:border-red-700/40 bg-red-500/[0.03]",
+                                  )}>
+                                    <div className="flex items-center gap-1.5 mb-0.5">
+                                      <span className={cn(
+                                        "text-[10px] font-bold px-1.5 py-0.5 rounded",
+                                        r.code === "EE" && "bg-green-500/10 text-green-600 dark:text-green-400",
+                                        r.code === "ME" && "bg-blue-500/10 text-blue-600 dark:text-blue-400",
+                                        r.code === "AE" && "bg-amber-500/10 text-amber-600 dark:text-amber-400",
+                                        r.code === "BE" && "bg-red-500/10 text-red-600 dark:text-red-400",
+                                      )}>
+                                        {r.code}
+                                      </span>
+                                      <span className="text-[10px] font-semibold text-foreground/80">{r.label}</span>
+                                    </div>
+                                    <p className="text-[9px] leading-relaxed text-muted-foreground">{r.description}</p>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
               </div>
-            </CardContent>
-          </Card>
+
+              {/* Footer */}
+              <div className="px-6 py-4 bg-muted/10 flex items-center justify-between text-[10px] text-muted-foreground">
+                <span>KICD Competency-Based Curriculum — Performance Assessment</span>
+                <span>Generated with ToolForge</span>
+              </div>
+            </div>
+          </div>
         </>
       )}
     </div>

@@ -8,9 +8,9 @@ export default function FeaturedPost({ post }: { post: BlogMeta }) {
   return (
     <Link
       href={`/blog/${post.slug}`}
-      className="group relative flex flex-col md:flex-row rounded-2xl border overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 hover:border-primary/30"
+      className="group relative flex flex-col md:flex-row rounded-2xl border overflow-hidden transition-all duration-500 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-primary/10 hover:border-primary/40"
     >
-      <div className="relative h-56 md:h-auto md:w-1/2 overflow-hidden">
+      <div className="relative md:w-1/2 overflow-hidden" style={{ aspectRatio: "16/9" }}>
         <BlogCoverImage coverImage={post.coverImage} title={post.title} size="featured" className="h-full w-full rounded-none" />
         <div className="absolute inset-0 bg-gradient-to-r from-background/40 to-transparent hidden md:block pointer-events-none" />
         <div className="absolute inset-0 bg-gradient-to-t from-background/60 to-transparent md:hidden pointer-events-none" />
