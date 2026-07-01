@@ -1,6 +1,5 @@
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
-import { Suspense } from "react"
 import "./globals.css"
 import GoogleAnalytics from "@/components/GoogleAnalytics"
 import Header from "@/components/header"
@@ -18,6 +17,9 @@ export const metadata: Metadata = {
   title: "Task Planner | ToolForge",
   description: "Organize tasks, reminders, calendars, and productivity workflows in a powerful privacy-first planner.",
   keywords: "tools, utilities, QR code, color picker, notes, task planner, password generator, JSON formatter, unit converter",
+  verification: {
+    google: "Yf_ARcBmjbT5feBZyLpphBnqruYoo4mEscLeFeteMrM",
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -39,9 +41,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <CookieConsent />
           <ToastProvider />
         </BiblicalThemeProvider>
-        <Suspense fallback={null}>
-          <GoogleAnalytics />
-        </Suspense>
+        <GoogleAnalytics />
       </body>
     </html>
   )

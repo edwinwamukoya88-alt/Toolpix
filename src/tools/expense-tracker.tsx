@@ -8,7 +8,8 @@ import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { toast } from "sonner"
 import { useLocalStorage } from "@/hooks/use-local-storage"
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts"
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Cell } from "recharts"
+import ChartContainer from "@/components/chart-container"
 
 type Category = "Food" | "Transport" | "Bills" | "Shopping" | "Other"
 
@@ -162,7 +163,7 @@ export default function ExpenseTracker() {
               <BarChart3 className="h-4 w-4 text-muted-foreground" />
               <h3 className="text-xs font-semibold text-muted-foreground">Category Breakdown</h3>
             </div>
-            <ResponsiveContainer width="100%" height={180}>
+            <ChartContainer height={180}>
               <BarChart data={categoryTotals} layout="vertical" margin={{ top: 0, right: 0, left: 0, bottom: 0 }} barCategoryGap={6}>
                 <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" opacity={0.4} horizontal={false} />
                 <XAxis type="number" tick={{ fontSize: 11 }} tickFormatter={(v: number) => `$${v}`} tickLine={false} axisLine={false} />
@@ -177,7 +178,7 @@ export default function ExpenseTracker() {
                   ))}
                 </Bar>
               </BarChart>
-            </ResponsiveContainer>
+            </ChartContainer>
           </CardContent>
         </Card>
       )}

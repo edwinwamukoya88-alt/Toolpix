@@ -1,63 +1,53 @@
 "use client"
 
+import { GoogleAnalytics as NextGoogleAnalytics } from "@next/third-parties/google"
 import { usePathname, useSearchParams } from "next/navigation"
-import Script from "next/script"
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, Suspense } from "react"
+import { GA_MEASUREMENT_ID, pageview, trackEngagement } from "@/lib/ga"
 
-const GA_ID = "G-W75ZWVJVFB"
+function RouteTracker() {
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const startTime = useRef(Date.now())
+  const prevPath = useRef("")
 
-declare global {
-  interface Window {
-    gtag: (...args: unknown[]) => void
-    dataLayer: unknown[]
-  }
+  useEffect(() => {
+    const url = pathname + (searchParams?.toString() ? `?${searchParams.toString()}` : "")
+
+    if (prevPath.current) {
+      const elapsed = Date.now() - startTime.current
+      trackEngagement(elapsed)
+    }
+
+    pageview(url)
+    startTime.current = Date.now()
+    prevPath.current = url
+  }, [pathname, searchParams])
+
+  useEffect(() => {
+    const handleVisibility = () => {
+      if (document.hidden) {
+        const elapsed = Date.now() - startTime.current
+        trackEngagement(elapsed)
+      } else {
+        startTime.current = Date.now()
+      }
+    }
+
+    document.addEventListener("visibilitychange", handleVisibility)
+    return () => document.removeEventListener("visibilitychange", handleVisibility)
+  }, [])
+
+  return null
 }
 
 export default function GoogleAnalytics() {
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
-  const loaded = useRef(false)
-  const pendingUrl = useRef<string | null>(null)
-
-  useEffect(() => {
-    const url =
-      pathname + (searchParams?.toString() ? `?${searchParams.toString()}` : "")
-
-    if (!loaded.current) {
-      pendingUrl.current = url
-      return
-    }
-
-    if (typeof window.gtag !== "function" || !window.dataLayer) return
-    window.gtag("config", GA_ID, { page_path: url })
-  }, [pathname, searchParams])
-
-  const handleLoad = () => {
-    loaded.current = true
-
-    if (typeof window.gtag !== "function" || !window.dataLayer) return
-    window.gtag("js", new Date())
-    window.gtag("config", GA_ID, { send_page_view: false })
-
-    if (pendingUrl.current) {
-      window.gtag("config", GA_ID, { page_path: pendingUrl.current })
-      pendingUrl.current = null
-    }
-  }
-
   return (
     <>
-      <Script
-        src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
-        strategy="afterInteractive"
-        onLoad={handleLoad}
-      />
-      <Script id="google-analytics-init" strategy="afterInteractive">
-        {`window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', '${GA_ID}', { send_page_view: false });`}
-      </Script>
+      <NextGoogleAnalytics gaId={GA_MEASUREMENT_ID} />
+      <Suspense fallback={null}>
+        <RouteTracker />
+      </Suspense>
     </>
   )
 }

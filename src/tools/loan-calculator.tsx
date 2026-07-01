@@ -6,7 +6,8 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { toast } from "sonner"
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts"
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from "recharts"
+import ChartContainer from "@/components/chart-container"
 
 interface AmortizationRow {
   month: number
@@ -320,7 +321,7 @@ export default function LoanCalculator() {
               {tab === "graph" && (
                 <Card className="border">
                   <CardContent className="p-4">
-                    <ResponsiveContainer width="100%" height={320}>
+                    <ChartContainer height={320}>
                       <AreaChart data={chartData} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
                         <defs>
                           <linearGradient id="balanceGrad" x1="0" y1="0" x2="0" y2="1">
@@ -356,7 +357,7 @@ export default function LoanCalculator() {
                         <Area type="monotone" dataKey="cumulativePrincipal" stroke="#22c55e" strokeWidth={1.5} fill="url(#principalGrad)" name="cumulativePrincipal" opacity={0.7} />
                         <Area type="monotone" dataKey="cumulativeInterest" stroke="#ef4444" strokeWidth={1.5} fill="url(#interestGrad)" name="cumulativeInterest" opacity={0.7} />
                       </AreaChart>
-                    </ResponsiveContainer>
+                    </ChartContainer>
                   </CardContent>
                 </Card>
               )}
