@@ -1,5 +1,6 @@
 import NextAuth from "next-auth"
 import Google from "next-auth/providers/google"
+import { isAdmin } from "@/lib/roles"
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -15,11 +16,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         return false
       }
 
-      const authorizedEmail = "edwinwamukoya88@gmail.com"
-
       const email = user.email ?? profile?.email ?? null
 
-      if (email !== authorizedEmail) {
+      if (!isAdmin(email)) {
         return false
       }
 

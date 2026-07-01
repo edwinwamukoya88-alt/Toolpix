@@ -1,6 +1,7 @@
 "use client"
 
 import { AnalyticsProvider, useAnalytics } from "@/contexts/analytics-context"
+import { DashboardOverviewCards } from "@/components/admin/DashboardOverviewCards"
 import { exportData, buildExportTables, type ExportFormat } from "@/lib/export-utils"
 import DashboardNavigation from "@/components/admin/DashboardNavigation"
 import AnalyticsHeader from "@/components/admin/AnalyticsHeader"
@@ -59,7 +60,24 @@ function AdminDashboard() {
 
   return (
     <div className="min-h-screen">
-      <div className="container py-6 md:py-8 space-y-6">
+      <div className="container py-6 md:py-8">
+        <DashboardOverviewCards
+          data={{
+            totalUsers: 0,
+            activeUsers: 0,
+            blogPosts: 13,
+            publishedTools: 39,
+            totalPageViews: 0,
+            sessions: 0,
+            searchClicks: 0,
+            searchImpressions: 0,
+            avgPosition: 0,
+            ctr: 0,
+          }}
+          loading={false}
+        />
+
+        <div className="space-y-6">
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1">
             <AnalyticsHeader
@@ -248,6 +266,7 @@ function AdminDashboard() {
         {activeTab === "insights" && (
           <InsightsTab insightsData={insightsData} loading={loading} />
         )}
+      </div>
       </div>
     </div>
   )

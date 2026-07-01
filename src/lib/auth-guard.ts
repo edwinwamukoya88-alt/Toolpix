@@ -1,8 +1,7 @@
 import { auth } from "@/auth"
 import { redirect } from "next/navigation"
 import { NextResponse } from "next/server"
-
-const AUTHORIZED_EMAIL = "edwinwamukoya88@gmail.com"
+import { isAdmin } from "./roles"
 
 export async function requireAuth() {
   const session = await auth()
@@ -11,8 +10,8 @@ export async function requireAuth() {
     redirect(`/api/auth/signin?callbackUrl=${encodeURIComponent("/admin")}`)
   }
 
-  if (session.user.email !== AUTHORIZED_EMAIL) {
-    redirect("/")
+  if (!isAdmin(session.user.email)) {
+    redirect("/access-denied")
   }
 }
 
@@ -26,7 +25,7 @@ export async function requireApiAuth() {
     )
   }
 
-  if (session.user.email !== AUTHORIZED_EMAIL) {
+  if (!isAdmin(session.user.email)) {
     return NextResponse.json(
       { error: "Forbidden" },
       { status: 403 },
