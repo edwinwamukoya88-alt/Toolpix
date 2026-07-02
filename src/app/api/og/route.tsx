@@ -12,6 +12,13 @@ const categoryColors: Record<string, { bg: string; accent: string }> = {
   Business: { bg: "#312e81", accent: "#d97706" },
   Security: { bg: "#1e293b", accent: "#3b82f6" },
   "File Conversion": { bg: "#0d9488", accent: "#4f46e5" },
+  "Education & CBC Tools": { bg: "#047857", accent: "#2563eb" },
+  "Security & Text": { bg: "#1e293b", accent: "#3b82f6" },
+  "QR & Connectivity": { bg: "#0d9488", accent: "#0891b2" },
+  "Developer Tools": { bg: "#1e293b", accent: "#6366f1" },
+  "Design & Creative": { bg: "#be185d", accent: "#7c3aed" },
+  "Finance Tools": { bg: "#065f46", accent: "#d97706" },
+  Tool: { bg: "#1e40af", accent: "#7c3aed" },
 }
 
 function getCategoryColor(category: string) {
@@ -20,10 +27,12 @@ function getCategoryColor(category: string) {
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
-  const title = searchParams.get("title") || "ToolForge Blog"
-  const category = searchParams.get("category") || "Guide"
+  const title = searchParams.get("title") || "ToolForge"
+  const category = searchParams.get("category") || "Tool"
+  const type = searchParams.get("type") || "blog"
 
   const colors = getCategoryColor(category)
+  const subtitle = type === "tool" ? "ToolForge Tools" : "ToolForge Blog"
 
   return new ImageResponse(
     (
@@ -89,7 +98,7 @@ export async function GET(request: Request) {
             fontSize: "20px",
           }}
         >
-          ToolForge Blog
+          {subtitle}
         </div>
         <div
           style={{

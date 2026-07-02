@@ -63,11 +63,54 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
   const relatedPosts = getRelatedPosts(post.slug, post.category)
   const toolSlugs = getToolSlugsForArticle(post.slug)
 
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.description,
+    author: {
+      "@type": "Person",
+      name: post.author,
+    },
+    datePublished: post.date,
+    dateModified: post.date,
+    image: `https://toolforge.app/api/og?title=${encodeURIComponent(post.title)}&category=${encodeURIComponent(post.category)}`,
+    publisher: {
+      "@type": "Organization",
+      name: "ToolForge",
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `https://toolforge.app/blog/${post.slug}`,
+    },
+    keywords: post.tags.join(", "),
+  }
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://toolforge.app" },
+      { "@type": "ListItem", position: 2, name: "Blog", item: "https://toolforge.app/blog" },
+      { "@type": "ListItem", position: 3, name: post.title, item: `https://toolforge.app/blog/${post.slug}` },
+    ],
+  }
+
   return (
-    <BlogArticleClient
-      post={post}
-      relatedPosts={relatedPosts}
-      toolSlugs={toolSlugs}
-    />
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <BlogArticleClient
+        post={post}
+        relatedPosts={relatedPosts}
+        toolSlugs={toolSlugs}
+      />
+    </>
   )
 }

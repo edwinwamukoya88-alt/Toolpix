@@ -1,6 +1,13 @@
+import type { Metadata } from "next"
 import { auth } from "@/auth"
 import Link from "next/link"
 import { ShieldAlert } from "lucide-react"
+
+export const metadata: Metadata = {
+  title: "Access Denied",
+  description: "You do not have permission to access this admin area.",
+  robots: { index: false, follow: false },
+}
 
 export default async function AccessDeniedPage() {
   const session = await auth()

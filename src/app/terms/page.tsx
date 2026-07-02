@@ -1,6 +1,20 @@
+import type { Metadata } from "next"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
+
+export const metadata: Metadata = {
+  title: "Terms of Service",
+  description: "Terms of service for using ToolForge. By accessing or using ToolForge, you agree to be bound by these terms.",
+  openGraph: {
+    title: "Terms of Service - ToolForge",
+    description: "Terms of service for using the ToolForge privacy-first online tools suite.",
+    url: "https://toolforge.app/terms",
+  },
+  alternates: {
+    canonical: "https://toolforge.app/terms",
+  },
+}
 
 export default function TermsPage() {
   return (

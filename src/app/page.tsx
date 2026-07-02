@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import Link from "next/link"
 import {
   ArrowRight, Palette, QrCode, Zap, Shield, Code, FileUp, DollarSign,
@@ -11,6 +12,23 @@ import { getLatestPosts } from "@/lib/blog"
 import BlogCard from "@/components/blog/blog-card"
 import AdSlot from "@/components/ads/AdSlot"
 import type { LucideIcon } from "lucide-react"
+
+export const metadata: Metadata = {
+  title: "ToolForge — 39+ Free Privacy-First Online Tools",
+  description: "39+ free browser-based tools for teachers, students, developers, creators, and businesses. Privacy-first, no login required, 100% client-side processing.",
+  openGraph: {
+    title: "ToolForge — Free Privacy-First Online Tools",
+    description: "Plan lessons, manage tasks, create content, and boost productivity — all in your browser. No data ever leaves your device.",
+    url: "https://toolforge.app",
+  },
+  twitter: {
+    title: "ToolForge — Free Privacy-First Online Tools",
+    description: "Plan lessons, manage tasks, create content, and boost productivity — all in your browser. No data ever leaves your device.",
+  },
+  alternates: {
+    canonical: "https://toolforge.app",
+  },
+}
 
 const catIconMap: Record<string, LucideIcon> = {
   Productivity: Brain,

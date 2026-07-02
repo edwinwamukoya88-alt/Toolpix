@@ -257,11 +257,47 @@ body {
   border-color: hsl(var(--border) / 0.5) !important;
 }
 
+/* Skip to main content — accessible link */
+.skip-to-main {
+  position: absolute;
+  z-index: 9999;
+  top: -9999px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.75rem 1.5rem;
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  text-decoration: none;
+  opacity: 0;
+  transition: top 0.1s, opacity 0.2s;
+}
+.skip-to-main:focus {
+  top: 0;
+  opacity: 1;
+  outline: none;
+  box-shadow: 0 0 0 3px hsl(var(--ring) / 0.5);
+}
+
+/* Visible focus ring for keyboard navigation */
+*:focus-visible {
+  outline: 2px solid hsl(var(--ring) / 0.6);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Remove focus ring for mouse users (re-applied by :focus-visible) */
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
 /* Subtle transitions for UI polish */
 *,
 *::before,
 *::after {
-  transition-property: background-color, border-color, color, box-shadow;
+  transition-property: background-color, border-color, color, box-shadow, opacity, transform;
   transition-duration: 0.2s;
   transition-timing-function: ease;
 }

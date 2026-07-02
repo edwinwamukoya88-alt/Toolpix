@@ -1,6 +1,21 @@
+import type { Metadata } from "next"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
+
+export const metadata: Metadata = {
+  title: "Privacy Policy",
+  description: "ToolForge does not collect, store, or transmit any personal data. All tools run entirely in your browser. Privacy-first by design.",
+  openGraph: {
+    title: "Privacy Policy - ToolForge",
+    description: "Your privacy matters. ToolForge does not collect, store, or transmit any personal data.",
+    url: "https://toolforge.app/privacy",
+  },
+  alternates: {
+    canonical: "https://toolforge.app/privacy",
+  },
+  robots: { index: true, follow: true },
+}
 
 export default function PrivacyPage() {
   return (
