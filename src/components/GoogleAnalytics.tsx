@@ -8,13 +8,13 @@ import { GA_MEASUREMENT_ID, pageview, trackEngagement } from "@/lib/ga"
 function RouteTracker() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  const startTime = useRef(Date.now())
+  const startTime = useRef<number | null>(null)
   const prevPath = useRef("")
 
   useEffect(() => {
     const url = pathname + (searchParams?.toString() ? `?${searchParams.toString()}` : "")
 
-    if (prevPath.current) {
+    if (prevPath.current && startTime.current !== null) {
       const elapsed = Date.now() - startTime.current
       trackEngagement(elapsed)
     }
@@ -27,8 +27,10 @@ function RouteTracker() {
   useEffect(() => {
     const handleVisibility = () => {
       if (document.hidden) {
-        const elapsed = Date.now() - startTime.current
-        trackEngagement(elapsed)
+        if (startTime.current !== null) {
+          const elapsed = Date.now() - startTime.current
+          trackEngagement(elapsed)
+        }
       } else {
         startTime.current = Date.now()
       }

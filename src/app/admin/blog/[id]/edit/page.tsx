@@ -13,8 +13,9 @@ export default function EditBlogPage() {
   const id = params.id as string
 
   useEffect(() => {
-    const existingDraft = getDraftBySlug(id)
-    setDraft(existingDraft ?? null)
+    getDraftBySlug(id).then((existingDraft) => {
+      setDraft(existingDraft ?? null)
+    })
   }, [id])
 
   if (draft === undefined) {

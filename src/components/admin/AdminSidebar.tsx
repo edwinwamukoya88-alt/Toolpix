@@ -4,12 +4,13 @@ import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import {
-  LayoutDashboard, FileText, Wrench, DollarSign, Users,
+  LayoutDashboard, BarChart3, FileText, Wrench, DollarSign, Users,
   Settings, Sparkles, Activity, Menu, X, ChevronRight,
 } from "lucide-react"
 
 const navItems = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/admin/analytics", label: "Analytics", icon: BarChart3 },
   { href: "/admin/blog", label: "Blog", icon: FileText },
   { href: "/admin/tools", label: "Tools", icon: Wrench },
   { href: "/admin/ads", label: "Advertisements", icon: DollarSign },
@@ -68,7 +69,7 @@ export default function AdminSidebar() {
           {navItems.map((item) => {
             const Icon = item.icon
             const isActive = pathname === item.href ||
-              (item.href !== "/admin" && pathname.startsWith(item.href))
+              (item.href !== "/admin" && pathname.startsWith(item.href + "/"))
             return (
               <Link
                 key={item.href}

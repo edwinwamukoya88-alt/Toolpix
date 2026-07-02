@@ -1,6 +1,7 @@
 "use client"
 
-import { memo, useState, useEffect } from "react"
+import { memo } from "react"
+import { useMounted } from "@/hooks/use-mounted"
 import { motion } from "framer-motion"
 import {
   Zap,
@@ -59,8 +60,7 @@ function calculateDeepWorkToday(analytics: PomodoroAnalytics): string {
 }
 
 function ZenithHero({ gamification, analytics, timerMode = "focus", onOpenSettings, className = "" }: ZenithHeroProps) {
-  const [mounted, setMounted] = useState(false)
-  useEffect(() => { setMounted(true) }, [])
+  const mounted = useMounted()
 
   const xpProgress = gamification.xpToNextLevel > 0
     ? Math.min(100, Math.round(((gamification.xp - gamification.xpInCurrentLevel) / (gamification.xpToNextLevel - gamification.xpInCurrentLevel)) * 100))

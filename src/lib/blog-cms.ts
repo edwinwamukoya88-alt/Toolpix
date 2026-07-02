@@ -1,6 +1,6 @@
 import { blogCategories } from "./blog-types"
 
-const DRAFTS_KEY = "tf_blog_drafts"
+const DRAFTS_API = "/api/admin/blog-drafts"
 
 export interface BlogDraft {
   id: string
@@ -54,33 +54,57 @@ export function calculateReadingTime(content: string): number {
   return Math.max(1, Math.ceil(words / wordsPerMinute))
 }
 
-function loadDrafts(): BlogDraft[] {
-  if (typeof window === "undefined") return []
+function parseDraft(d: any): BlogDraft {
+  return {
+    ...d,
+    tags: typeof d.tags === "string" ? JSON.parse(d.tags) : d.tags ?? [],
+    createdAt: new Date(d.createdAt).getTime(),
+    updatedAt: new Date(d.updatedAt).getTime(),
+    scheduledDate: d.scheduledDate ? new Date(d.scheduledDate).toISOString() : undefined,
+  }
+}
+
+export async function getDrafts(): Promise<BlogDraft[]> {
   try {
-    const raw = localStorage.getItem(DRAFTS_KEY)
-    return raw ? JSON.parse(raw) : []
+    const res = await fetch(DRAFTS_API)
+    if (!res.ok) return []
+    const data = await res.json()
+    return data.map(parseDraft)
   } catch {
+    try {
+      if (typeof window !== "undefined") {
+        const raw = localStorage.getItem("tf_blog_drafts")
+        return raw ? (JSON.parse(raw) as BlogDraft[]).sort((a, b) => b.updatedAt - a.updatedAt) : []
+      }
+    } catch {}
     return []
   }
 }
 
-function saveDrafts(drafts: BlogDraft[]) {
-  localStorage.setItem(DRAFTS_KEY, JSON.stringify(drafts))
+export async function getDraftById(id: string): Promise<BlogDraft | null> {
+  try {
+    const res = await fetch(`${DRAFTS_API}/${encodeURIComponent(id)}`)
+    if (!res.ok) return null
+    const data = await res.json()
+    return parseDraft(data)
+  } catch {
+    try {
+      if (typeof window !== "undefined") {
+        const raw = localStorage.getItem("tf_blog_drafts")
+        const drafts: BlogDraft[] = raw ? JSON.parse(raw) : []
+        return drafts.find((d) => d.id === id) ?? null
+      }
+    } catch {}
+    return null
+  }
 }
 
-export function getDrafts(): BlogDraft[] {
-  return loadDrafts().sort((a, b) => b.updatedAt - a.updatedAt)
+export async function getDraftBySlug(slug: string): Promise<BlogDraft | null> {
+  const drafts = await getDrafts()
+  return drafts.find((d) => d.slug === slug) ?? null
 }
 
-export function getDraftById(id: string): BlogDraft | null {
-  return loadDrafts().find((d) => d.id === id) ?? null
-}
-
-export function getDraftBySlug(slug: string): BlogDraft | null {
-  return loadDrafts().find((d) => d.slug === slug) ?? null
-}
-
-export function createDraft(data: {
+export async function createDraft(data: {
   title: string
   description?: string
   content?: string
@@ -89,9 +113,11 @@ export function createDraft(data: {
   author?: string
   featured?: boolean
   coverImage?: string
-}): BlogDraft {
-  const drafts = loadDrafts()
-  const draft: BlogDraft = {
+  status?: string
+  scheduledDate?: string
+}): Promise<BlogDraft> {
+  const now = Date.now()
+  const draftData = {
     id: generateId(),
     title: data.title,
     slug: slugify(data.title),
@@ -102,45 +128,84 @@ export function createDraft(data: {
     author: data.author ?? "ToolForge Team",
     featured: data.featured ?? false,
     coverImage: data.coverImage ?? "",
-    status: "draft",
-    createdAt: Date.now(),
-    updatedAt: Date.now(),
+    status: (data.status ?? "draft") as BlogDraft["status"],
+    scheduledDate: data.scheduledDate ?? undefined,
+    createdAt: now,
+    updatedAt: now,
   }
-  drafts.push(draft)
-  saveDrafts(drafts)
-  return draft
+
+  try {
+    const res = await fetch(DRAFTS_API, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(draftData),
+    })
+    if (res.ok) {
+      const created = await res.json()
+      return parseDraft(created)
+    }
+  } catch {}
+
+  try {
+    if (typeof window !== "undefined") {
+      const raw = localStorage.getItem("tf_blog_drafts")
+      const drafts: BlogDraft[] = raw ? JSON.parse(raw) : []
+      const draft: BlogDraft = { ...draftData, tags: draftData.tags }
+      drafts.push(draft)
+      localStorage.setItem("tf_blog_drafts", JSON.stringify(drafts))
+      return draft
+    }
+  } catch {}
+
+  return draftData as BlogDraft
 }
 
-export function updateDraft(
+export async function updateDraft(
   id: string,
   data: Partial<Omit<BlogDraft, "id" | "createdAt" | "updatedAt">>,
-): BlogDraft | null {
-  const drafts = loadDrafts()
-  const index = drafts.findIndex((d) => d.id === id)
-  if (index === -1) return null
+): Promise<BlogDraft | null> {
+  try {
+    const res = await fetch(`${DRAFTS_API}/${encodeURIComponent(id)}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    })
+    if (res.ok) return parseDraft(await res.json())
+  } catch {}
 
-  const update: Partial<BlogDraft> = {}
-  if (data.title !== undefined) update.title = data.title
-  if (data.slug !== undefined) update.slug = data.slug
-  if (data.description !== undefined) update.description = data.description
-  if (data.content !== undefined) update.content = data.content
-  if (data.category !== undefined) update.category = data.category
-  if (data.tags !== undefined) update.tags = data.tags
-  if (data.author !== undefined) update.author = data.author
-  if (data.featured !== undefined) update.featured = data.featured
-  if (data.coverImage !== undefined) update.coverImage = data.coverImage
-  if (data.status !== undefined) update.status = data.status
-  if (data.scheduledDate !== undefined) update.scheduledDate = data.scheduledDate
+  try {
+    if (typeof window !== "undefined") {
+      const raw = localStorage.getItem("tf_blog_drafts")
+      const drafts: BlogDraft[] = raw ? JSON.parse(raw) : []
+      const index = drafts.findIndex((d) => d.id === id)
+      if (index === -1) return null
+      drafts[index] = { ...drafts[index], ...data, updatedAt: Date.now() }
+      localStorage.setItem("tf_blog_drafts", JSON.stringify(drafts))
+      return drafts[index]
+    }
+  } catch {}
 
-  drafts[index] = { ...drafts[index], ...update, updatedAt: Date.now() }
-  saveDrafts(drafts)
-  return drafts[index]
+  return null
 }
 
-export function deleteDraft(id: string): boolean {
-  const drafts = loadDrafts()
-  const filtered = drafts.filter((d) => d.id !== id)
-  if (filtered.length === drafts.length) return false
-  saveDrafts(filtered)
-  return true
+export async function deleteDraft(id: string): Promise<boolean> {
+  try {
+    const res = await fetch(`${DRAFTS_API}/${encodeURIComponent(id)}`, {
+      method: "DELETE",
+    })
+    return res.ok
+  } catch {}
+
+  try {
+    if (typeof window !== "undefined") {
+      const raw = localStorage.getItem("tf_blog_drafts")
+      const drafts: BlogDraft[] = raw ? JSON.parse(raw) : []
+      const filtered = drafts.filter((d) => d.id !== id)
+      if (filtered.length === drafts.length) return false
+      localStorage.setItem("tf_blog_drafts", JSON.stringify(filtered))
+      return true
+    }
+  } catch {}
+
+  return false
 }

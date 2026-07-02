@@ -11,7 +11,7 @@ export default function AdminSettingsPage() {
   const [saved, setSaved] = useState(false)
 
   useEffect(() => {
-    setSettings(loadSettings())
+    loadSettings().then(setSettings)
   }, [])
 
   if (!settings) {
@@ -27,9 +27,9 @@ export default function AdminSettingsPage() {
     setSettings((prev) => prev ? { ...prev, [field]: value } : prev)
   }
 
-  function handleSave() {
+  async function handleSave() {
     if (!settings) return
-    saveSettings(settings)
+    await saveSettings(settings)
     setSaved(true)
     setTimeout(() => setSaved(false), 2000)
   }

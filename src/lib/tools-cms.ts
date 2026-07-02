@@ -1,9 +1,14 @@
 import { tools, categories, type Tool } from "./tools-data"
 
-const TOOLS_CONFIG_KEY = "tf_tools_config"
-
-export interface ToolConfig {
+export interface ToolConfigData {
   slug: string
+  enabled: boolean
+  featured: boolean
+  popular: boolean
+  new: boolean
+}
+
+export interface ToolWithConfig extends Tool {
   enabled: boolean
   featured: boolean
   popular: boolean
@@ -12,74 +17,81 @@ export interface ToolConfig {
 
 export { categories, type Tool }
 
-function loadConfig(): ToolConfig[] {
-  if (typeof window === "undefined") return []
+const API = "/api/admin/tools"
+
+async function fetchAll(): Promise<ToolWithConfig[]> {
   try {
-    const raw = localStorage.getItem(TOOLS_CONFIG_KEY)
-    return raw ? JSON.parse(raw) : []
+    const res = await fetch(API)
+    if (!res.ok) return tools.map(t => ({ ...t, enabled: true, featured: false, popular: false, new: false }))
+    const data = await res.json()
+    return data.tools as ToolWithConfig[]
   } catch {
-    return []
+    try {
+      if (typeof window !== "undefined") {
+        const raw = localStorage.getItem("tf_tools_config")
+        const config: ToolConfigData[] = raw ? JSON.parse(raw) : []
+        const configMap = new Map(config.map((c) => [c.slug, c]))
+        return tools.map((tool) => {
+          const cfg = configMap.get(tool.slug)
+          return { ...tool, enabled: cfg?.enabled ?? true, featured: cfg?.featured ?? false, popular: cfg?.popular ?? false, new: cfg?.new ?? false }
+        })
+      }
+    } catch {}
+    return tools.map(t => ({ ...t, enabled: true, featured: false, popular: false, new: false }))
   }
 }
 
-function saveConfig(config: ToolConfig[]) {
-  localStorage.setItem(TOOLS_CONFIG_KEY, JSON.stringify(config))
+export async function getToolsWithConfig(): Promise<ToolWithConfig[]> {
+  return fetchAll()
 }
 
-export function getToolsWithConfig(): (Tool & ToolConfig)[] {
-  const config = loadConfig()
-  return tools.map((tool) => {
-    const cfg = config.find((c) => c.slug === tool.slug)
-    return {
-      ...tool,
-      enabled: cfg?.enabled ?? true,
-      featured: cfg?.featured ?? false,
-      popular: cfg?.popular ?? false,
-      new: cfg?.new ?? false,
-    }
-  })
-}
-
-export function updateToolConfig(
+export async function updateToolConfig(
   slug: string,
-  updates: Partial<Pick<ToolConfig, "enabled" | "featured" | "popular" | "new">>,
-): boolean {
-  const config = loadConfig()
-  const index = config.findIndex((c) => c.slug === slug)
-  if (index >= 0) {
-    config[index] = { ...config[index], ...updates }
-  } else {
-    config.push({ slug, enabled: true, featured: false, popular: false, new: false, ...updates })
+  updates: Partial<Pick<ToolConfigData, "enabled" | "featured" | "popular" | "new">>,
+): Promise<boolean> {
+  try {
+    const res = await fetch(API, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ slug, updates }),
+    })
+    return res.ok
+  } catch {
+    try {
+      if (typeof window !== "undefined") {
+        const raw = localStorage.getItem("tf_tools_config")
+        const config: ToolConfigData[] = raw ? JSON.parse(raw) : []
+        const index = config.findIndex((c) => c.slug === slug)
+        if (index >= 0) {
+          config[index] = { ...config[index], ...updates }
+        } else {
+          config.push({ slug, enabled: true, featured: false, popular: false, new: false, ...updates })
+        }
+        localStorage.setItem("tf_tools_config", JSON.stringify(config))
+      }
+    } catch {}
+    return true
   }
-  saveConfig(config)
-  return true
 }
 
-export function bulkUpdateTools(
+export async function bulkUpdateTools(
   slugs: string[],
-  updates: Partial<Pick<ToolConfig, "enabled" | "featured" | "popular" | "new">>,
-): void {
-  const config = loadConfig()
-  for (const slug of slugs) {
-    const index = config.findIndex((c) => c.slug === slug)
-    if (index >= 0) {
-      config[index] = { ...config[index], ...updates }
-    } else {
-      config.push({ slug, enabled: true, featured: false, popular: false, new: false, ...updates })
+  updates: Partial<Pick<ToolConfigData, "enabled" | "featured" | "popular" | "new">>,
+): Promise<void> {
+  try {
+    await fetch(API, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ slugs, updates }),
+    })
+  } catch {
+    for (const slug of slugs) {
+      await updateToolConfig(slug, updates)
     }
   }
-  saveConfig(config)
 }
 
-export function getToolBySlug(slug: string): (Tool & ToolConfig) | null {
-  const tool = tools.find((t) => t.slug === slug)
-  if (!tool) return null
-  const config = loadConfig().find((c) => c.slug === slug)
-  return {
-    ...tool,
-    enabled: config?.enabled ?? true,
-    featured: config?.featured ?? false,
-    popular: config?.popular ?? false,
-    new: config?.new ?? false,
-  }
+export async function getToolBySlug(slug: string): Promise<ToolWithConfig | null> {
+  const all = await fetchAll()
+  return all.find((t) => t.slug === slug) ?? null
 }

@@ -4,7 +4,7 @@ import { useState, useCallback } from "react"
 import { useRouter } from "next/navigation"
 import {
   Save, Send, Clock, Sparkles, Eye, ArrowLeft,
-  EyeOff, Image, Tag, Hash,
+  Image, Tag, Hash,
 } from "lucide-react"
 import {
   slugify, calculateReadingTime, createDraft, updateDraft,
@@ -46,7 +46,7 @@ export function BlogEditor({ draft }: BlogEditorProps) {
     .map((t) => t.trim())
     .filter(Boolean)
 
-  function handleSave(publishStatus: "draft" | "published") {
+  async function handleSave(publishStatus: "draft" | "published") {
     setSaving(true)
     try {
       const data = {
@@ -63,9 +63,9 @@ export function BlogEditor({ draft }: BlogEditorProps) {
       }
 
       if (isEditing && draft) {
-        updateDraft(draft.id, data)
+        await updateDraft(draft.id, data)
       } else {
-        createDraft(data)
+        await createDraft(data)
       }
 
       router.push("/admin/blog")

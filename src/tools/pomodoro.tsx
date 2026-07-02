@@ -1,6 +1,7 @@
 "use client"
 
-import { useState, useEffect, useRef, useCallback, memo } from "react"
+import { useState, useRef, useCallback, useEffect, memo } from "react"
+import { useMounted } from "@/hooks/use-mounted"
 import { motion, AnimatePresence } from "framer-motion"
 import { generateId } from "@/lib/utils"
 import type { PomodoroSession } from "@/lib/pomodoro-analytics"
@@ -54,22 +55,20 @@ const childVariants = {
 }
 
 function Pomodoro() {
-  const [sessions, setSessions] = useState<PomodoroSession[]>([])
-  const [mounted, setMounted] = useState(false)
+  const [sessions, setSessions] = useState<PomodoroSession[]>(() => {
+    if (typeof window === "undefined") return []
+    return loadSessions()
+  })
+  const mounted = useMounted()
   const [timerMode, setTimerMode] = useState<TimerMode>("focus")
   const [sessionsToday, setSessionsToday] = useState(0)
-  const loaded = useRef(false)
 
   useEffect(() => {
-    if (!loaded.current) {
-      loaded.current = true
-      const saved = loadSessions()
-      setSessions(saved)
+    if (sessions.length > 0) {
       const today = new Date().toISOString().split("T")[0]
-      setSessionsToday(saved.filter(s => s.date === today && s.completed).length)
+      queueMicrotask(() => setSessionsToday(sessions.filter(s => s.date === today && s.completed).length))
     }
-    setMounted(true)
-  }, [])
+  }, [sessions])
 
   const handleSessionComplete = useCallback((duration: number, mode: TimerMode) => {
     const now = Date.now()

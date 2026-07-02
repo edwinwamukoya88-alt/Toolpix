@@ -1,6 +1,7 @@
 "use client"
 
-import { useState, useEffect, useMemo, Suspense, lazy, memo } from "react"
+import { useState, useMemo, Suspense, lazy, memo } from "react"
+import { useMounted } from "@/hooks/use-mounted"
 import { motion, AnimatePresence } from "framer-motion"
 import {
   BarChart3,
@@ -76,11 +77,7 @@ const PERIOD_LABELS: Record<Period, string> = {
 
 function FocusAnalytics({ sessions, className = "", onStartFirstSession }: FocusAnalyticsProps) {
   const [period, setPeriod] = useState<Period>("7days")
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
+  const mounted = useMounted()
 
   const filtered = useMemo(() => filterSessionsByPeriod(sessions, period), [sessions, period])
   const analytics = useMemo(() => computeAnalytics(filtered), [filtered])

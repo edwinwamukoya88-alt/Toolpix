@@ -4,17 +4,17 @@ import { useState, useEffect } from "react"
 import { useParams, useRouter } from "next/navigation"
 import { ArrowLeft, Wrench, Star, TrendingUp, Zap, Eye, EyeOff } from "lucide-react"
 import { AdminBreadcrumbs } from "@/components/admin/AdminBreadcrumbs"
-import { getToolBySlug, updateToolConfig, type Tool } from "@/lib/tools-cms"
+import { getToolBySlug, updateToolConfig, type ToolWithConfig } from "@/lib/tools-cms"
 import { StatusBadge } from "@/components/admin/StatusBadge"
 
 export default function ToolDetailPage() {
   const params = useParams()
   const router = useRouter()
-  const [tool, setTool] = useState<(Tool & { enabled: boolean; featured: boolean; popular: boolean; new: boolean }) | null>(null)
+  const [tool, setTool] = useState<ToolWithConfig | null>(null)
   const slug = params.id as string
 
   useEffect(() => {
-    setTool(getToolBySlug(slug))
+    getToolBySlug(slug).then(setTool)
   }, [slug])
 
   if (!tool) {
@@ -28,10 +28,11 @@ export default function ToolDetailPage() {
     )
   }
 
-  function toggle(field: "enabled" | "featured" | "popular" | "new") {
+  async function toggle(field: "enabled" | "featured" | "popular" | "new") {
     if (!tool) return
-    updateToolConfig(slug, { [field]: !tool[field] })
-    setTool((prev) => prev ? { ...prev, [field]: !prev[field] } : prev)
+    await updateToolConfig(slug, { [field]: !tool[field] })
+    const updated = await getToolBySlug(slug)
+    if (updated) setTool(updated)
   }
 
   return (

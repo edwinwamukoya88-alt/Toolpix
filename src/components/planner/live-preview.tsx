@@ -228,7 +228,7 @@ export function LivePreview({
                 {plan.remarks && (
                   <div>
                     <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-1">Remarks</p>
-                    <p className="text-xs text-muted-foreground italic">"{plan.remarks}"</p>
+                    <p className="text-xs text-muted-foreground italic">&ldquo;{plan.remarks}&rdquo;</p>
                   </div>
                 )}
               </div>
@@ -244,7 +244,7 @@ export function LivePreview({
                   {biblicalVerse.split(" \u2014 ")[0]}
                 </p>
                 <p className="text-xs italic text-amber-700 dark:text-amber-300 leading-relaxed mt-0.5">
-                  "{biblicalVerse.split(" \u2014 ").slice(1).join(" \u2014 ")}"
+                  &ldquo;{biblicalVerse.split(" \u2014 ").slice(1).join(" \u2014 ")}&rdquo;
                 </p>
                 {curriculumConnection && (
                   <p className="text-[11px] text-amber-700/80 dark:text-amber-300/80 mt-1">

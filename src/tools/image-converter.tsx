@@ -451,7 +451,6 @@ export default function ImageConverter() {
   const previewCanvasRef = useRef<HTMLCanvasElement>(null)
   const dropRef = useRef<HTMLDivElement>(null)
   const formatRef = useRef("image/png")
-  const qualityRef = useRef(0.9)
   const originalImageRef = useRef<HTMLImageElement | null>(null)
   const processedCanvasRef = useRef<HTMLCanvasElement | null>(null)
   const cropStartRef = useRef<{ x: number; y: number } | null>(null)
@@ -660,7 +659,6 @@ export default function ImageConverter() {
   }
 
   function handleQualityChange(newQ: number) {
-    qualityRef.current = newQ
     setQuality(newQ)
   }
 
@@ -766,7 +764,7 @@ export default function ImageConverter() {
     img.onload = () => {
       try {
         const fmt = formatRef.current
-        const q = qualityRef.current
+        const q = quality
 
         const canvas = document.createElement("canvas")
         canvas.width = img.naturalWidth

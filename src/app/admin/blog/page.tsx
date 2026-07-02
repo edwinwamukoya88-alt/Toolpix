@@ -30,7 +30,7 @@ export default function AdminBlogPage() {
     async function load() {
       const [published, drafts] = await Promise.all([
         getPublishedPosts(),
-        Promise.resolve(getDrafts()),
+        getDrafts(),
       ])
       const draftItems: BlogListItem[] = drafts.map((d) => ({
         slug: d.slug,
@@ -70,7 +70,7 @@ export default function AdminBlogPage() {
       setLoading(true)
       const [published, drafts] = await Promise.all([
         getPublishedPosts(),
-        Promise.resolve(getDrafts()),
+        getDrafts(),
       ])
       const draftItems: BlogListItem[] = drafts.map((d) => ({
         slug: d.slug,
@@ -93,11 +93,11 @@ export default function AdminBlogPage() {
     reload()
   }, [])
 
-  function handleDelete() {
+  async function handleDelete() {
     if (!deleteTarget) return
-    const draft = getDraftBySlug(deleteTarget.slug)
+    const draft = await getDraftBySlug(deleteTarget.slug)
     if (draft) {
-      deleteDraft(draft.id)
+      await deleteDraft(draft.id)
       refresh()
     }
     setDeleteTarget(null)

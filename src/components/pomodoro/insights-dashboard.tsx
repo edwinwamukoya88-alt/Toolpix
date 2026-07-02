@@ -1,6 +1,7 @@
 "use client"
 
-import { useMemo, useState, useEffect, useCallback, lazy, Suspense } from "react"
+import { useMemo, useState, useCallback, lazy, Suspense } from "react"
+import { useMounted } from "@/hooks/use-mounted"
 import {
   Brain,
   Flame,
@@ -53,11 +54,7 @@ export default function InsightsDashboard({
   onStartSession,
 }: InsightsDashboardProps) {
   const [activeTab, setActiveTab] = useState<DashboardTab>("overview")
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
+  const mounted = useMounted()
 
   const analytics = useMemo(() => computeAnalytics(sessions), [sessions])
   const gamification = useMemo(() => computeGamification(sessions), [sessions])

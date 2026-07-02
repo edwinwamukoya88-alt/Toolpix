@@ -277,8 +277,7 @@ export function AnalyticsProvider({ children }: { children: ReactNode }) {
           threshold: 15,
         }))
       )
-      setAlerts(getAlerts())
-      setActiveAlertCount(getActiveAlertCount())
+      queueMicrotask(() => { setAlerts(getAlerts()); setActiveAlertCount(getActiveAlertCount()) })
     }
   }, [kpiData])
 

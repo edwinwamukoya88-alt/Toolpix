@@ -64,6 +64,13 @@ function EqualizerBars({ active }: { active: boolean }) {
 }
 
 function WaveformVisualizer({ active, color }: { active: boolean; color: string }) {
+  const [phase, setPhase] = useState(0)
+  useEffect(() => {
+    if (!active) return
+    const tid = setInterval(() => setPhase(p => p + 1), 120)
+    return () => clearInterval(tid)
+  }, [active])
+
   return (
     <svg viewBox="0 0 200 40" className="w-full h-8" aria-hidden="true">
       <defs>
@@ -74,7 +81,7 @@ function WaveformVisualizer({ active, color }: { active: boolean; color: string 
         </linearGradient>
       </defs>
       {Array.from({ length: 40 }).map((_, i) => {
-        const h = active ? 8 + Math.sin(i * 0.4 + Date.now() * 0.001) * 12 + Math.sin(i * 0.8) * 4 : 2
+        const h = active ? 8 + Math.sin(i * 0.4 + phase * 0.12) * 12 + Math.sin(i * 0.8) * 4 : 2
         return (
           <motion.rect
             key={i}

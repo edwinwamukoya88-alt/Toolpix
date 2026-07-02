@@ -134,7 +134,7 @@ export function BiblicalReflection({
 
                   <div>
                     <p className="text-[9px] font-semibold uppercase tracking-wider text-amber-600 dark:text-amber-500">Verse</p>
-                    <p className="text-[11px] italic text-amber-800 dark:text-amber-300 leading-relaxed">"{biblicalVerse.split(" — ").slice(1).join(" — ")}"</p>
+                    <p className="text-[11px] italic text-amber-800 dark:text-amber-300 leading-relaxed">&ldquo;{biblicalVerse.split(" — ").slice(1).join(" — ")}&rdquo;</p>
                   </div>
 
                   {curriculumConnection && (

@@ -4,8 +4,8 @@ import { useState, useEffect } from "react"
 import { Plus, Trash2, ToggleLeft, ToggleRight, ExternalLink } from "lucide-react"
 import Link from "next/link"
 
-const STORAGE_KEY = "toolforge_sponsored_ads"
 const SLOTS = ["hero", "mid", "footer"] as const
+const ADS_API = "/api/admin/ads"
 
 interface SponsoredAd {
   id: string
@@ -20,17 +20,35 @@ interface SponsoredAd {
   createdAt: number
 }
 
-function loadAds(): SponsoredAd[] {
+async function loadAds(): Promise<SponsoredAd[]> {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY)
-    return raw ? JSON.parse(raw) : []
+    const res = await fetch(ADS_API)
+    if (!res.ok) return []
+    const data = await res.json()
+    return data.map((a: any) => ({
+      ...a,
+      createdAt: new Date(a.createdAt).getTime(),
+    }))
   } catch {
-    return []
+    try {
+      const raw = localStorage.getItem("toolforge_sponsored_ads")
+      return raw ? JSON.parse(raw) : []
+    } catch {
+      return []
+    }
   }
 }
 
-function saveAds(ads: SponsoredAd[]) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(ads))
+async function saveAds(ads: SponsoredAd[]) {
+  try {
+    for (const ad of ads) {
+      await fetch(`${ADS_API}/${encodeURIComponent(ad.id)}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(ad),
+      })
+    }
+  } catch {}
 }
 
 function generateId(): string {
@@ -47,14 +65,14 @@ export default function AdminAdsPage() {
   const [active, setActive] = useState(true)
 
   useEffect(() => {
-    setAds(loadAds())
+    loadAds().then(setAds)
   }, [])
 
   function refresh() {
-    setAds(loadAds())
+    loadAds().then(setAds)
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!title.trim() || !link.trim()) return
     const newAd: SponsoredAd = {
@@ -69,8 +87,16 @@ export default function AdminAdsPage() {
       impressions: 0,
       createdAt: Date.now(),
     }
-    const updated = [...loadAds(), newAd]
-    saveAds(updated)
+    try {
+      await fetch(ADS_API, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newAd),
+      })
+    } catch {
+      const updated = [...await loadAds(), newAd]
+      localStorage.setItem("toolforge_sponsored_ads", JSON.stringify(updated))
+    }
     setTitle("")
     setDescription("")
     setImage("")
@@ -80,17 +106,35 @@ export default function AdminAdsPage() {
     refresh()
   }
 
-  function toggleAd(id: string) {
-    const updated = loadAds().map((a) =>
-      a.id === id ? { ...a, active: !a.active } : a,
-    )
-    saveAds(updated)
+  async function toggleAd(id: string) {
+    const current = await loadAds()
+    const ad = current.find((a) => a.id === id)
+    if (!ad) return
+    try {
+      await fetch(`${ADS_API}/${encodeURIComponent(id)}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ active: !ad.active }),
+      })
+    } catch {
+      const updated = current.map((a) =>
+        a.id === id ? { ...a, active: !a.active } : a,
+      )
+      localStorage.setItem("toolforge_sponsored_ads", JSON.stringify(updated))
+    }
     refresh()
   }
 
-  function deleteAd(id: string) {
-    const updated = loadAds().filter((a) => a.id !== id)
-    saveAds(updated)
+  async function deleteAd(id: string) {
+    try {
+      await fetch(`${ADS_API}/${encodeURIComponent(id)}`, {
+        method: "DELETE",
+      })
+    } catch {
+      const current = await loadAds()
+      const updated = current.filter((a) => a.id !== id)
+      localStorage.setItem("toolforge_sponsored_ads", JSON.stringify(updated))
+    }
     refresh()
   }
 

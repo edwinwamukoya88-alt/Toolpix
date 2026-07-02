@@ -3,33 +3,27 @@
 import { useState, useEffect, useMemo } from "react"
 import { useRouter } from "next/navigation"
 import {
-  Search, Wrench, Eye, EyeOff, Star, TrendingUp, Zap,
-  ToggleLeft, ToggleRight, Filter,
+  Search, Wrench, Eye, Star, TrendingUp, Zap,
 } from "lucide-react"
 import { PageHeader } from "@/components/admin/PageHeader"
 import { DataTable, type Column } from "@/components/admin/DataTable"
 import { StatusBadge } from "@/components/admin/StatusBadge"
 import { AdminBreadcrumbs } from "@/components/admin/AdminBreadcrumbs"
-import { getToolsWithConfig, updateToolConfig, categories, type Tool } from "@/lib/tools-cms"
-
-interface ToolRow extends Tool {
-  enabled: boolean
-  featured: boolean
-  popular: boolean
-  new: boolean
-}
+import { getToolsWithConfig, updateToolConfig, categories, type ToolWithConfig } from "@/lib/tools-cms"
 
 export default function AdminToolsPage() {
   const router = useRouter()
-  const [tools, setTools] = useState<ToolRow[]>([])
+  const [tools, setTools] = useState<ToolWithConfig[]>([])
   const [search, setSearch] = useState("")
   const [filterCategory, setFilterCategory] = useState("all")
   const [filterStatus, setFilterStatus] = useState("all")
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    setTools(getToolsWithConfig() as ToolRow[])
-    setLoading(false)
+    getToolsWithConfig().then((result) => {
+      setTools(result)
+      setLoading(false)
+    })
   }, [])
 
   const filtered = useMemo(() => {
@@ -45,27 +39,27 @@ export default function AdminToolsPage() {
     })
   }, [tools, search, filterCategory, filterStatus])
 
-  function toggleEnabled(slug: string) {
-    updateToolConfig(slug, { enabled: !tools.find((t) => t.slug === slug)?.enabled })
-    setTools(getToolsWithConfig() as ToolRow[])
+  async function toggleEnabled(slug: string) {
+    await updateToolConfig(slug, { enabled: !tools.find((t) => t.slug === slug)?.enabled })
+    setTools(await getToolsWithConfig())
   }
 
-  function toggleFeatured(slug: string) {
-    updateToolConfig(slug, { featured: !tools.find((t) => t.slug === slug)?.featured })
-    setTools(getToolsWithConfig() as ToolRow[])
+  async function toggleFeatured(slug: string) {
+    await updateToolConfig(slug, { featured: !tools.find((t) => t.slug === slug)?.featured })
+    setTools(await getToolsWithConfig())
   }
 
-  function togglePopular(slug: string) {
-    updateToolConfig(slug, { popular: !tools.find((t) => t.slug === slug)?.popular })
-    setTools(getToolsWithConfig() as ToolRow[])
+  async function togglePopular(slug: string) {
+    await updateToolConfig(slug, { popular: !tools.find((t) => t.slug === slug)?.popular })
+    setTools(await getToolsWithConfig())
   }
 
-  function toggleNew(slug: string) {
-    updateToolConfig(slug, { new: !tools.find((t) => t.slug === slug)?.new })
-    setTools(getToolsWithConfig() as ToolRow[])
+  async function toggleNew(slug: string) {
+    await updateToolConfig(slug, { new: !tools.find((t) => t.slug === slug)?.new })
+    setTools(await getToolsWithConfig())
   }
 
-  const columns: Column<ToolRow>[] = [
+  const columns: Column<ToolWithConfig>[] = [
     {
       key: "name",
       label: "Name",

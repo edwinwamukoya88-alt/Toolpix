@@ -31,11 +31,8 @@ export default function SearchConsoleInsights({
   const [sortKey, setSortKey] = useState<SortKey>("clicks")
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc")
 
-  if (!data || data.length === 0) {
-    return null
-  }
-
   const filtered = useMemo(() => {
+    if (!data || data.length === 0) return []
     let result = [...data]
     if (search) {
       const q = search.toLowerCase()
@@ -50,6 +47,10 @@ export default function SearchConsoleInsights({
     })
     return result
   }, [data, search, sortKey, sortDir])
+
+  if (!data || data.length === 0) {
+    return null
+  }
 
   function handleSort(key: SortKey) {
     if (sortKey === key) setSortDir(d => d === "asc" ? "desc" : "asc")

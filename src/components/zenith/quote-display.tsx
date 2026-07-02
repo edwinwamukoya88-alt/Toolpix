@@ -26,15 +26,14 @@ interface QuoteDisplayProps {
 }
 
 function QuoteDisplay({ className = "", sessionCount = 0 }: QuoteDisplayProps) {
-  const [quoteIndex, setQuoteIndex] = useState(0)
-
-  useEffect(() => {
-    setQuoteIndex(Math.floor(Math.random() * QUOTES.length))
-  }, [])
+  const [quoteIndex, setQuoteIndex] = useState(() => Math.floor(Math.random() * QUOTES.length))
 
   useEffect(() => {
     if (sessionCount > 0) {
-      setQuoteIndex((sessionCount + Math.floor(Date.now() / 86400000)) % QUOTES.length)
+      const id = requestAnimationFrame(() => {
+        setQuoteIndex((sessionCount + Math.floor(Date.now() / 86400000)) % QUOTES.length)
+      })
+      return () => cancelAnimationFrame(id)
     }
   }, [sessionCount])
 

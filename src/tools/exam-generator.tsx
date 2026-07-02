@@ -256,13 +256,13 @@ export default function CBCAssessmentTool() {
     toast.success("CBC performance assessment generated")
   }
 
-  const typeLabels: Record<TaskType, string> = {
+  const typeLabels = useMemo((): Record<TaskType, string> => ({
     "project": "Project",
     "practical": "Practical Activity",
     "observation": "Observation Task",
     "problem-solving": "Problem-Solving Task",
     "group-work": "Group Work Assignment",
-  }
+  }), [])
 
   const handleCopy = useCallback(() => {
     const lines = [
@@ -324,7 +324,7 @@ export default function CBCAssessmentTool() {
     navigator.clipboard.writeText(lines.join("\n"))
     trackToolUse("exam-generator", "copy")
     toast.success("Assessment copied to clipboard")
-  }, [learningArea, grade, tasks, blueprintData])
+  }, [learningArea, grade, tasks, blueprintData, typeLabels])
 
   const handlePrint = useCallback(() => {
     trackToolUse("exam-generator", "print")
@@ -470,7 +470,7 @@ export default function CBCAssessmentTool() {
     } catch {
       toast.error("Failed to generate PDF")
     }
-  }, [learningArea, grade, tasks, blueprintData])
+  }, [learningArea, grade, tasks, blueprintData, typeLabels])
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">

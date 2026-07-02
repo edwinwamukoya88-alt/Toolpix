@@ -241,7 +241,7 @@ export default function AdvertisePage() {
         <div className="max-w-2xl mx-auto space-y-6">
           <div className="text-center space-y-2">
             <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Submit Your Ad</h2>
-            <p className="text-muted-foreground">Fill in the details and we'll review your submission within 24 hours</p>
+            <p className="text-muted-foreground">Fill in the details and we&apos;ll review your submission within 24 hours</p>
           </div>
 
           {submitted ? (
@@ -251,7 +251,7 @@ export default function AdvertisePage() {
               </div>
               <h3 className="text-lg font-semibold">Submission Received!</h3>
               <p className="text-sm text-muted-foreground max-w-sm mx-auto">
-                We'll review your ad and get back to you within 24 hours. You can track your submission status soon.
+                We&apos;ll review your ad and get back to you within 24 hours. You can track your submission status soon.
               </p>
               <Button variant="outline" size="sm" onClick={() => setSubmitted(false)}>
                 Submit Another

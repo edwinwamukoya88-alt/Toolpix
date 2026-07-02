@@ -55,7 +55,7 @@ export default function TaskPlanner() {
   const markAllNotificationsRead = useTodoStore((s) => s.markAllNotificationsRead)
 
   // Computed
-  const filteredTodos = useMemo(() => selectFilteredTodos({ todos, filters, ui }), [todos, filters, ui, analytics])
+  const filteredTodos = useMemo(() => selectFilteredTodos({ todos, filters, ui }), [todos, filters, ui])
 
   const pinnedTodos = useMemo(() => selectPinnedTodos({ todos }), [todos])
   const unreadNotifs = useMemo(() => selectUnreadNotifications({ notificationQueue }), [notificationQueue])

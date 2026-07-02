@@ -199,7 +199,7 @@ function ZenithTimer({ onSessionComplete, onInterruption, onModeChange, classNam
                 ? TIMER_CONFIGS[m].color + " bg-indigo-500/15"
                 : "text-indigo-300/50 hover:text-indigo-200/70"
             )}
-            aria-pressed={mode === m}
+            aria-selected={mode === m}
             role="tab"
           >
             {TIMER_CONFIGS[m].label}

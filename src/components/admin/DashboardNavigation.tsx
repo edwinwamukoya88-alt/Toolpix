@@ -30,7 +30,7 @@ export default function DashboardNavigation({
     if (saved && tabs.some(t => t.id === saved)) {
       onTabChange(saved)
     }
-  }, [])
+  }, [onTabChange])
 
   function handleChange(tab: TabId) {
     onTabChange(tab)

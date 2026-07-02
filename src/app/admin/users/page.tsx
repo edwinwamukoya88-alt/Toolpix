@@ -9,10 +9,10 @@ import { ConfirmDialog } from "@/components/admin/ConfirmDialog"
 import { AdminBreadcrumbs } from "@/components/admin/AdminBreadcrumbs"
 import {
   getAllAdminUsers, inviteAdmin, removeAdmin, updateAdminRole, setAdminStatus,
-  type AdminUserRecord, type Role,
+  type AdminUserRecord,
 } from "@/lib/user-management"
 
-const roleIcons: Record<Role, typeof Shield> = {
+const roleIcons: Record<string, typeof Shield> = {
   admin: ShieldCheck,
   editor: Shield,
   viewer: ShieldAlert,
@@ -24,12 +24,14 @@ export default function AdminUsersPage() {
   const [loading, setLoading] = useState(true)
   const [showInvite, setShowInvite] = useState(false)
   const [inviteEmail, setInviteEmail] = useState("")
-  const [inviteRole, setInviteRole] = useState<Role>("viewer")
+  const [inviteRole, setInviteRole] = useState("viewer")
   const [deleteTarget, setDeleteTarget] = useState<AdminUserRecord | null>(null)
 
   useEffect(() => {
-    setUsers(getAllAdminUsers())
-    setLoading(false)
+    getAllAdminUsers().then((result) => {
+      setUsers(result)
+      setLoading(false)
+    })
   }, [])
 
   const filtered = useMemo(() => {
@@ -39,31 +41,31 @@ export default function AdminUsersPage() {
     )
   }, [users, search])
 
-  function handleInvite(e: React.FormEvent) {
+  async function handleInvite(e: React.FormEvent) {
     e.preventDefault()
     if (!inviteEmail.trim()) return
-    inviteAdmin(inviteEmail.trim(), inviteRole)
-    setUsers(getAllAdminUsers())
+    await inviteAdmin(inviteEmail.trim(), inviteRole)
+    setUsers(await getAllAdminUsers())
     setInviteEmail("")
     setShowInvite(false)
   }
 
-  function handleRemove() {
+  async function handleRemove() {
     if (!deleteTarget) return
-    removeAdmin(deleteTarget.email)
-    setUsers(getAllAdminUsers())
+    await removeAdmin(deleteTarget.email)
+    setUsers(await getAllAdminUsers())
     setDeleteTarget(null)
   }
 
-  function handleRoleChange(email: string, role: Role) {
-    updateAdminRole(email, role)
-    setUsers(getAllAdminUsers())
+  async function handleRoleChange(email: string, role: string) {
+    await updateAdminRole(email, role)
+    setUsers(await getAllAdminUsers())
   }
 
-  function handleStatusToggle(email: string, current: string) {
+  async function handleStatusToggle(email: string, current: string) {
     const newStatus = current === "active" ? "disabled" : "active"
-    setAdminStatus(email, newStatus)
-    setUsers(getAllAdminUsers())
+    await setAdminStatus(email, newStatus)
+    setUsers(await getAllAdminUsers())
   }
 
   const columns: Column<AdminUserRecord>[] = [
@@ -86,20 +88,17 @@ export default function AdminUsersPage() {
       key: "role",
       label: "Role",
       sortable: true,
-      render: (item) => {
-        const Icon = roleIcons[item.role]
-        return (
-          <select
-            value={item.role}
-            onChange={(e) => handleRoleChange(item.email, e.target.value as Role)}
-            className="rounded-lg border border-border/50 bg-background px-2 py-1 text-xs outline-none focus:border-primary/50"
-          >
-            <option value="admin">Admin</option>
-            <option value="editor">Editor</option>
-            <option value="viewer">Viewer</option>
-          </select>
-        )
-      },
+      render: (item) => (
+        <select
+          value={item.role}
+          onChange={(e) => handleRoleChange(item.email, e.target.value)}
+          className="rounded-lg border border-border/50 bg-background px-2 py-1 text-xs outline-none focus:border-primary/50"
+        >
+          <option value="admin">Admin</option>
+          <option value="editor">Editor</option>
+          <option value="viewer">Viewer</option>
+        </select>
+      ),
     },
     {
       key: "status",
@@ -174,7 +173,7 @@ export default function AdminUsersPage() {
               />
               <select
                 value={inviteRole}
-                onChange={(e) => setInviteRole(e.target.value as Role)}
+                onChange={(e) => setInviteRole(e.target.value)}
                 className="rounded-lg border border-border/50 bg-background px-3 py-2 text-sm outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/20"
               >
                 <option value="admin">Admin</option>

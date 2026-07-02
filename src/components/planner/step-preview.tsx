@@ -209,7 +209,7 @@ export function StepPreview({
               <div className="rounded-xl border border-amber-200/30 dark:border-amber-800/30 bg-amber-50/30 dark:bg-amber-950/30 p-3 space-y-1.5">
                 <p className="text-[10px] font-semibold text-amber-600 dark:text-amber-500 font-sans">Scripture</p>
                 <p className="text-xs font-bold text-amber-900 dark:text-amber-200">{biblicalVerse.split(" — ")[0]}</p>
-                <p className="text-xs italic text-amber-800 dark:text-amber-300 leading-relaxed">"{biblicalVerse.split(" — ").slice(1).join(" — ")}"</p>
+                <p className="text-xs italic text-amber-800 dark:text-amber-300 leading-relaxed">&ldquo;{biblicalVerse.split(" — ").slice(1).join(" — ")}&rdquo;</p>
                 {curriculumConnection && (
                   <div className="rounded bg-amber-100/60 dark:bg-amber-900/30 px-2 py-1.5">
                     <p className="text-[8px] font-semibold uppercase tracking-wider text-amber-600 dark:text-amber-500 font-sans">Curriculum Connection</p>

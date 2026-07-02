@@ -29,7 +29,7 @@ export default function TermsPage() {
           <p>The ToolForge name, logo, and code are owned by ToolForge. The tools are provided for use, but you may not copy, redistribute, or reverse engineer the service without permission.</p>
 
           <h2>Limitation of Liability</h2>
-          <p>ToolForge is provided "as is" without any warranty. We are not liable for any damages arising from the use or inability to use the service.</p>
+          <p>ToolForge is provided &ldquo;as is&rdquo; without any warranty. We are not liable for any damages arising from the use or inability to use the service.</p>
 
           <h2>Changes to Terms</h2>
           <p>We reserve the right to update these terms. Continued use after changes constitutes acceptance of the new terms.</p>

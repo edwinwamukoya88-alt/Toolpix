@@ -62,7 +62,7 @@ export default function AdSlot({ type, slot, image, title, description, link, cl
     const candidates = all.filter((a) => a.slot === slot && a.active)
     const picked = pickRandom(candidates)
     if (picked) {
-      setSponsoredAd(picked)
+      queueMicrotask(() => setSponsoredAd(picked))
       if (!impressionTracked.current) {
         impressionTracked.current = true
         const updated = getAds().map((a) =>

@@ -44,3 +44,12 @@ secrets/
 next-env.d.ts
 
 .vercel
+
+/src/generated/prisma
+
+dev.db
+dev.db-journal
+prisma/dev.db
+prisma/dev.db-journal
+*.db
+*.db-journal

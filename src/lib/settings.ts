@@ -1,23 +1,6 @@
-const SETTINGS_KEY = "tf_site_settings"
+import type { SiteSettings } from "./settings-types"
 
-export interface SiteSettings {
-  heroTitle: string
-  heroSubtitle: string
-  ctaPrimary: string
-  ctaPrimaryLink: string
-  ctaSecondary: string
-  ctaSecondaryLink: string
-  defaultTitle: string
-  defaultDescription: string
-  keywords: string
-  ogImage: string
-  logo: string
-  favicon: string
-  twitterUrl: string
-  githubUrl: string
-  linkedinUrl: string
-  footerText: string
-}
+export type { SiteSettings }
 
 const defaultSettings: SiteSettings = {
   heroTitle: "Smart Tools for Productivity & CBC Education",
@@ -38,19 +21,41 @@ const defaultSettings: SiteSettings = {
   footerText: "© 2026 ToolForge. All rights reserved.",
 }
 
-export function loadSettings(): SiteSettings {
-  if (typeof window === "undefined") return defaultSettings
+export async function loadSettings(): Promise<SiteSettings> {
   try {
-    const raw = localStorage.getItem(SETTINGS_KEY)
-    return raw ? { ...defaultSettings, ...JSON.parse(raw) } : defaultSettings
+    const res = await fetch("/api/admin/settings")
+    if (!res.ok) return defaultSettings
+    const data = await res.json()
+    return { ...defaultSettings, ...data }
   } catch {
+    try {
+      if (typeof window !== "undefined") {
+        const raw = localStorage.getItem("tf_site_settings")
+        if (raw) return { ...defaultSettings, ...JSON.parse(raw) }
+      }
+    } catch {}
     return defaultSettings
   }
 }
 
-export function saveSettings(settings: Partial<SiteSettings>): SiteSettings {
-  const current = loadSettings()
-  const updated = { ...current, ...settings }
-  localStorage.setItem(SETTINGS_KEY, JSON.stringify(updated))
-  return updated
+export async function saveSettings(settings: Partial<SiteSettings>): Promise<SiteSettings> {
+  try {
+    const res = await fetch("/api/admin/settings", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(settings),
+    })
+    if (!res.ok) throw new Error("Save failed")
+    return res.json()
+  } catch {
+    try {
+      if (typeof window !== "undefined") {
+        const current = JSON.parse(localStorage.getItem("tf_site_settings") ?? "{}")
+        const updated = { ...current, ...settings }
+        localStorage.setItem("tf_site_settings", JSON.stringify(updated))
+        return updated
+      }
+    } catch {}
+    return { ...defaultSettings, ...settings }
+  }
 }

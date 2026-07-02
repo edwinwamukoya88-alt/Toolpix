@@ -42,7 +42,15 @@ export default function CBCLessonPlanner() {
     thursday: createEmptyPlan(), friday: createEmptyPlan(),
   })
   const [weeklyDay, setWeeklyDay] = useState<DayKey>("monday")
-  const [savedPlans, setSavedPlans] = useState<SavedPlan[]>([])
+  const [savedPlans, setSavedPlans] = useState<SavedPlan[]>(() => {
+    try {
+      if (typeof window === "undefined") return []
+      const stored = localStorage.getItem(STORAGE_KEY)
+      return stored ? JSON.parse(stored) : []
+    } catch {
+      return []
+    }
+  })
   const [saveDialogOpen, setSaveDialogOpen] = useState(false)
   const [loadDialogOpen, setLoadDialogOpen] = useState(false)
   const [planName, setPlanName] = useState("")
@@ -62,11 +70,13 @@ export default function CBCLessonPlanner() {
 
   useEffect(() => {
     trackToolUse("cbc_lesson_planner", "tool_open")
-    try { const stored = localStorage.getItem(STORAGE_KEY); if (stored) setSavedPlans(JSON.parse(stored)) } catch { /* ignore */ }
   }, [])
 
   useEffect(() => {
-    try { const saved = localStorage.getItem("toolforge_teacher_notes"); if (saved) setTeacherPrivateNotes(saved) } catch { /* ignore */ }
+    const id = requestAnimationFrame(() => {
+      try { const saved = localStorage.getItem("toolforge_teacher_notes"); if (saved) setTeacherPrivateNotes(saved) } catch { /* ignore */ }
+    })
+    return () => cancelAnimationFrame(id)
   }, [])
 
   useEffect(() => {
@@ -74,7 +84,6 @@ export default function CBCLessonPlanner() {
   }, [teacherPrivateNotes])
 
   useEffect(() => {
-    setAutoSaveStatus("saving")
     const timer = setTimeout(() => {
       setAutoSaveStatus("saved")
       setLastSaved(new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }))
@@ -673,7 +682,7 @@ export default function CBCLessonPlanner() {
               <div className="border-t-2 border-amber-200/40 pt-3 mt-3">
                 <span className="font-bold text-xs text-amber-700 dark:text-amber-400">Biblical Reflection (Optional):</span>
                 <p className="text-[11px] font-bold text-amber-800 dark:text-amber-300 mt-1">{biblicalVerse.split(" \u2014 ")[0]}</p>
-                <p className="text-muted-foreground text-xs italic">"{biblicalVerse.split(" \u2014 ").slice(1).join(" \u2014 ")}"</p>
+                <p className="text-muted-foreground text-xs italic">&ldquo;{biblicalVerse.split(" \u2014 ").slice(1).join(" \u2014 ")}&rdquo;</p>
                 {curriculumConnection && <p className="text-[10px] text-amber-700/80 dark:text-amber-300/80 mt-1 leading-relaxed"><span className="font-semibold">Curriculum Connection:</span> {curriculumConnection}</p>}
                 {verseExplanation && <p className="text-[10px] text-amber-600/70 dark:text-amber-400/70 italic mt-0.5 leading-relaxed">{verseExplanation}</p>}
                 {teacherReflectionNotes && <p className="text-muted-foreground text-[10px] italic mt-1">\u2014 {teacherReflectionNotes}</p>}
@@ -710,7 +719,7 @@ export default function CBCLessonPlanner() {
                 {p.remarks && <div><span className="font-semibold">Remarks:</span> {p.remarks}</div>}
                 {biblicalVerseEnabled && biblicalVerse && (
                   <div className="text-xs text-amber-700 dark:text-amber-400 mt-1 space-y-0.5">
-                    <p><span className="font-semibold">Biblical Reflection:</span> "{biblicalVerse.split(" \u2014 ")[0]}"</p>
+                    <p><span className="font-semibold">Biblical Reflection:</span> &ldquo;{biblicalVerse.split(" \u2014 ")[0]}&rdquo;</p>
                     {curriculumConnection && <p className="text-[10px] leading-relaxed"><span className="font-semibold">Curriculum Connection:</span> {curriculumConnection}</p>}
                     {verseExplanation && <p className="text-[10px] italic leading-relaxed">{verseExplanation}</p>}
                   </div>

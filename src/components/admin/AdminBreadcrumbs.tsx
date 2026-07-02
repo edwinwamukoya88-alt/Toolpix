@@ -6,6 +6,7 @@ import { ChevronRight, Home } from "lucide-react"
 
 const labelMap: Record<string, string> = {
   admin: "Dashboard",
+  analytics: "Analytics",
   blog: "Blog",
   tools: "Tools",
   ads: "Advertisements",

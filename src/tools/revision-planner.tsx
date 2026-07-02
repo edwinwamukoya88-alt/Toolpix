@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useCallback, useMemo, useRef } from "react"
+import { useState, useCallback, useMemo, useEffect, useRef } from "react"
 import {
   CalendarDays, Copy, Printer, FileDown, Trash2,
   User, GraduationCap, School, Calendar, BookOpen,
@@ -261,7 +261,8 @@ function generateTeacherFeedback(
   strand: string,
   grade: string,
   weakAreasCount: number,
-  competencies: string[]
+  competencies: string[],
+  _version?: number
 ): TeacherFeedback {
   const gradeNum = parseInt(grade?.replace(/\D/g, "")) || 0
   const isLower = grade?.startsWith("PP") || gradeNum <= 3
@@ -427,7 +428,7 @@ export default function CBCLearningRevisionPlanner() {
   const [teacherFeedbackVersion, setTeacherFeedbackVersion] = useState(0)
 
   const numWeeks = Math.max(1, Math.min(12, Number(weeks) || 4))
-  const prevWeekPlanRef = useRef<WeekPlan[]>([])
+  const [prevWeekPlan, setPrevWeekPlan] = useState<WeekPlan[]>([])
 
   const selectedStrands = learningArea ? Object.keys(cbcLearningAreas[learningArea]?.strands || {}) : []
   const selectedSubStrands = learningArea && strand
@@ -450,7 +451,7 @@ export default function CBCLearningRevisionPlanner() {
   const strengthAreas = analysisItems.filter((i) => i.category === "strength")
 
   const teacherFeedback = useMemo(
-    () => generateTeacherFeedback(learningArea, strand, grade, weakAlerts.length, selectedCompetencies),
+    () => generateTeacherFeedback(learningArea, strand, grade, weakAlerts.length, selectedCompetencies, teacherFeedbackVersion),
     [learningArea, strand, grade, weakAlerts.length, selectedCompetencies, teacherFeedbackVersion]
   )
 
@@ -480,7 +481,7 @@ export default function CBCLearningRevisionPlanner() {
       ? selectedCompetencies
       : coreCompetencyOptions
 
-    const isRegen = weakRegenCounter > 0 && prevWeekPlanRef.current.length > 0
+    const isRegen = weakRegenCounter > 0 && prevWeekPlan.length > 0
     const weakWeeks = new Set<number>()
     if (isRegen) {
       weakAlerts.forEach((a) => {
@@ -503,8 +504,8 @@ export default function CBCLearningRevisionPlanner() {
 
       const project = autoGenerate ? pick(projectIdeas) : (projects || projectIdeas[wi % projectIdeas.length])
 
-      if (isRegen && !weakWeeks.has(wi) && prevWeekPlanRef.current[wi]) {
-        return { ...prevWeekPlanRef.current[wi] }
+      if (isRegen && !weakWeeks.has(wi) && prevWeekPlan[wi]) {
+        return { ...prevWeekPlan[wi] }
       }
 
       const weekFocus = weakWeeks.has(wi) ? `${comp} (weak area focus)` : comp
@@ -531,9 +532,15 @@ export default function CBCLearningRevisionPlanner() {
       }
     })
 
-    prevWeekPlanRef.current = newPlan
     return newPlan
-  }, [plannerGenerated, numWeeks, autoGenerate, selectedCompetencies, week1Activities, week2Activities, practiceTasks, projects, assessments, weakRegenCounter, weakAlerts])
+  }, [plannerGenerated, numWeeks, autoGenerate, selectedCompetencies, week1Activities, week2Activities, practiceTasks, projects, assessments, weakRegenCounter, weakAlerts, prevWeekPlan])
+
+  const prevWeekPlanStr = JSON.stringify(weekPlan)
+  useEffect(() => {
+    if (JSON.stringify(prevWeekPlan) !== prevWeekPlanStr) {
+      queueMicrotask(() => setPrevWeekPlan(weekPlan))
+    }
+  }, [prevWeekPlanStr, weekPlan, prevWeekPlan])
 
   const autoFillPlan = useCallback(() => {
     if (!learnerName.trim()) {
