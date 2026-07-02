@@ -2,10 +2,10 @@ import type { Metadata } from "next"
 
 export const metadata: Metadata = {
   title: "All Tools",
-  description: "Browse 39+ free online tools across 8 categories: productivity, education, security, QR, file conversion, developer tools, design, and finance. All privacy-first.",
+  description: "Browse 49+ free online tools across 9 categories: productivity, education, security, QR, file conversion, developer tools, design, finance, and multimedia. All privacy-first.",
   openGraph: {
     title: "Free Online Tools - ToolForge",
-    description: "Browse 39+ free online tools across 8 categories. All privacy-first, no login required.",
+    description: "Browse 49+ free online tools across 9 categories. All privacy-first, no login required.",
     url: "https://smart-tools-kit.vercel.app/tools",
   },
   alternates: {

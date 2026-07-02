@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
-import { Palette, TextQuote, Image, Frame, QrCode, Scan, ImageDown, Link as LinkIcon, StickyNote, CheckSquare, Timer, Calendar, Columns3, Clock, Target, Key, Mail, Eraser, FileCode, Link2, Shuffle, Braces, Regex, Ruler, FileText, File, ImagePlus, FileArchive, Music, DollarSign, TrendingUp, Landmark, Percent, BookOpen, ClipboardList, MessageSquare, CalendarDays, FileSpreadsheet, GraduationCap, Box } from "lucide-react"
+import { Palette, TextQuote, Image, Frame, QrCode, Scan, ImageDown, Link as LinkIcon, StickyNote, CheckSquare, Timer, Calendar, Columns3, Clock, Target, Key, Mail, Eraser, FileCode, Link2, Shuffle, Braces, Regex, Ruler, FileText, File, ImagePlus, FileArchive, Music, DollarSign, TrendingUp, Landmark, Percent, BookOpen, ClipboardList, MessageSquare, CalendarDays, FileSpreadsheet, GraduationCap, Film, Clapperboard, Scissors, Camera, Layers, Crop, Subtitles, Box } from "lucide-react"
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Palette, TextQuote, Image, Frame, QrCode, Scan, ImageDown, Link: LinkIcon,
@@ -9,6 +9,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Key, Mail, Eraser, FileCode, Link2, Shuffle, Braces, Regex, Ruler, FileText,
   File, ImagePlus, FileArchive, Music, DollarSign, TrendingUp, Landmark,
   Percent, BookOpen, ClipboardList, MessageSquare, CalendarDays, FileSpreadsheet,
+  Film, Clapperboard, Scissors, Camera, Layers, Crop, Subtitles,
 }
 
 interface ToolCardProps {

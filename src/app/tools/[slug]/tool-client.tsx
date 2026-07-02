@@ -53,6 +53,18 @@ const toolComponents: Record<string, React.ComponentType> = {
   "revision-planner": dynamic(() => import("@/tools/revision-planner")),
   "exam-generator": dynamic(() => import("@/tools/exam-generator")),
   "blog-generator": dynamic(() => import("@/tools/blog-generator")),
+
+  // Multimedia Tools
+  "video-compressor": dynamic(() => import("@/tools/video-compressor")),
+  "video-converter": dynamic(() => import("@/tools/video-converter")),
+  "video-trimmer": dynamic(() => import("@/tools/video-trimmer")),
+  "extract-audio": dynamic(() => import("@/tools/extract-audio")),
+  "video-to-gif": dynamic(() => import("@/tools/video-to-gif")),
+  "screen-recorder": dynamic(() => import("@/tools/screen-recorder")),
+  "merge-videos": dynamic(() => import("@/tools/merge-videos")),
+  "video-resizer": dynamic(() => import("@/tools/video-resizer")),
+  "subtitle-burner": dynamic(() => import("@/tools/subtitle-burner")),
+  "video-thumbnail-generator": dynamic(() => import("@/tools/video-thumbnail-generator")),
 }
 
 export default function ToolPageClient({ slug, tool }: { slug: string; tool: Tool }) {

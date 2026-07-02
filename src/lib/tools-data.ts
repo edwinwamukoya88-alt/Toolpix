@@ -65,6 +65,18 @@ export const tools: Tool[] = [
   { slug: "profit-calculator", name: "Profit Calculator", description: "Calculate profit margins and ROI", icon: "TrendingUp", category: "Finance Tools", badge: "Free" },
   { slug: "expense-tracker", name: "Expense Tracker", description: "Track and analyze your monthly spending", icon: "Wallet", category: "Finance Tools", badge: "Free" },
   { slug: "blog-generator", name: "Blog Generator", description: "Generate SEO-optimized MDX blog posts instantly from a title", icon: "FileText", category: "Productivity", badge: "Free" },
+
+  // 9. MULTIMEDIA TOOLS
+  { slug: "video-compressor", name: "Video Compressor", description: "Compress MP4, MOV, and WebM videos with quality presets and resolution options.", icon: "Film", category: "Multimedia", badge: "Free" },
+  { slug: "video-converter", name: "Video Converter", description: "Convert videos between MP4, MOV, AVI, MKV, and WebM formats.", icon: "Clapperboard", category: "Multimedia", badge: "Free" },
+  { slug: "video-trimmer", name: "Video Trimmer", description: "Trim and cut your videos with a timeline and frame preview.", icon: "Scissors", category: "Multimedia", badge: "Free" },
+  { slug: "extract-audio", name: "Extract Audio", description: "Extract MP3, WAV, or AAC audio from any video file.", icon: "Music", category: "Multimedia", badge: "Free" },
+  { slug: "video-to-gif", name: "Video to GIF", description: "Convert video clips into optimized animated GIFs with custom FPS and size.", icon: "Image", category: "Multimedia", badge: "Free" },
+  { slug: "screen-recorder", name: "Screen Recorder", description: "Record your screen, window, or browser tab with optional microphone audio.", icon: "Camera", category: "Multimedia", badge: "Free" },
+  { slug: "merge-videos", name: "Merge Videos", description: "Join multiple video files together in your chosen order and export as MP4.", icon: "Layers", category: "Multimedia", badge: "Free" },
+  { slug: "video-resizer", name: "Resize & Crop Video", description: "Resize and crop videos to popular aspect ratios like 1080p, 720p, Instagram, TikTok.", icon: "Crop", category: "Multimedia", badge: "Free" },
+  { slug: "subtitle-burner", name: "Subtitle Burner", description: "Burn SRT or VTT subtitles permanently into your video with custom styling.", icon: "Subtitles", category: "Multimedia", badge: "Free" },
+  { slug: "video-thumbnail-generator", name: "Thumbnail Generator", description: "Capture any frame from a video and export as PNG, JPEG, or WebP.", icon: "ImagePlus", category: "Multimedia", badge: "Free" },
 ]
 
 export const categories = [
@@ -76,6 +88,7 @@ export const categories = [
   "Developer Tools",
   "Design & Creative",
   "Finance Tools",
+  "Multimedia",
 ]
 
 export const categoryIcons: Record<string, string> = {
@@ -87,4 +100,5 @@ export const categoryIcons: Record<string, string> = {
   "Developer Tools": "Code",
   "Design & Creative": "Palette",
   "Finance Tools": "DollarSign",
+  Multimedia: "Film",
 }

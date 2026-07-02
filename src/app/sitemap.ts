@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next"
 import { getAllPosts } from "@/lib/blog"
+import { tools } from "@/lib/tools-data"
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const posts = getAllPosts()
@@ -9,6 +10,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified: new Date(post.date),
     changeFrequency: "monthly" as const,
     priority: 0.7,
+  }))
+
+  const toolEntries: MetadataRoute.Sitemap = tools.map((tool) => ({
+    url: `https://smart-tools-kit.vercel.app/tools/${tool.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "weekly" as const,
+    priority: 0.8,
   }))
 
   return [
@@ -31,6 +39,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     ...blogEntries,
+    ...toolEntries,
     {
       url: "https://smart-tools-kit.vercel.app/about",
       lastModified: new Date(),
