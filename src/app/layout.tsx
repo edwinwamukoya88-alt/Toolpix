@@ -20,7 +20,7 @@ const geistMono = Geist_Mono({
 })
 
 const AD_CLIENT = "ca-pub-2606064008386995"
-const SITE_URL = "https://toolforge.app"
+const SITE_URL = "https://smart-tools-kit.vercel.app"
 
 export const viewport: Viewport = {
   themeColor: "#0a0a0a",

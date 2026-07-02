@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Blog - ToolForge",
     description: "Guides on CBC education, productivity, privacy, and more.",
-    url: "https://toolforge.app/blog",
+    url: "https://smart-tools-kit.vercel.app/blog",
     siteName: "ToolForge",
     type: "website",
   },
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     description: "Guides on CBC education, productivity, privacy, and more.",
   },
   alternates: {
-    canonical: "https://toolforge.app/blog",
+    canonical: "https://smart-tools-kit.vercel.app/blog",
   },
 }
 

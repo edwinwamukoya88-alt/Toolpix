@@ -708,7 +708,7 @@ export default function CBCLearningRevisionPlanner() {
       ...(assessments ? [`• Assessments: ${assessments}`] : ["• Weekly mini assessments and reflection"]),
       "",
       "=".repeat(60),
-      "Generated with ToolForge — toolforge.app",
+      "Generated with ToolForge — smart-tools-kit.vercel.app",
     ]
     navigator.clipboard.writeText(lines.join("\n"))
     trackToolUse("revision-planner", "copy")

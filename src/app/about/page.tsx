@@ -9,10 +9,10 @@ export const metadata: Metadata = {
   openGraph: {
     title: "About ToolForge",
     description: "Privacy-first browser tools for productivity, finance, design, and education. No login required.",
-    url: "https://toolforge.app/about",
+    url: "https://smart-tools-kit.vercel.app/about",
   },
   alternates: {
-    canonical: "https://toolforge.app/about",
+    canonical: "https://smart-tools-kit.vercel.app/about",
   },
 }
 

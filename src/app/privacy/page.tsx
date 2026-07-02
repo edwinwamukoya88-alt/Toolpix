@@ -9,10 +9,10 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Privacy Policy - ToolForge",
     description: "Your privacy matters. ToolForge does not collect, store, or transmit any personal data.",
-    url: "https://toolforge.app/privacy",
+    url: "https://smart-tools-kit.vercel.app/privacy",
   },
   alternates: {
-    canonical: "https://toolforge.app/privacy",
+    canonical: "https://smart-tools-kit.vercel.app/privacy",
   },
   robots: { index: true, follow: true },
 }

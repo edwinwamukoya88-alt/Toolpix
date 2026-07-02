@@ -19,14 +19,14 @@ export const metadata: Metadata = {
   openGraph: {
     title: "ToolForge — Free Privacy-First Online Tools",
     description: "Plan lessons, manage tasks, create content, and boost productivity — all in your browser. No data ever leaves your device.",
-    url: "https://toolforge.app",
+    url: "https://smart-tools-kit.vercel.app",
   },
   twitter: {
     title: "ToolForge — Free Privacy-First Online Tools",
     description: "Plan lessons, manage tasks, create content, and boost productivity — all in your browser. No data ever leaves your device.",
   },
   alternates: {
-    canonical: "https://toolforge.app",
+    canonical: "https://smart-tools-kit.vercel.app",
   },
 }
 

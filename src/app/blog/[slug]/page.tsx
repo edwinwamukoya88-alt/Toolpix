@@ -13,7 +13,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const post = getBlogBySlug(slug)
   if (!post) return {}
 
-  const ogImageUrl = `https://toolforge.app/api/og?title=${encodeURIComponent(post.title)}&category=${encodeURIComponent(post.category)}`
+  const ogImageUrl = `https://smart-tools-kit.vercel.app/api/og?title=${encodeURIComponent(post.title)}&category=${encodeURIComponent(post.category)}`
 
   return {
     title: `${post.title} - ToolForge Blog`,
@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     openGraph: {
       title: post.title,
       description: post.description,
-      url: `https://toolforge.app/blog/${post.slug}`,
+      url: `https://smart-tools-kit.vercel.app/blog/${post.slug}`,
       siteName: "ToolForge",
       type: "article",
       publishedTime: post.date,
@@ -45,7 +45,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       images: [ogImageUrl],
     },
     alternates: {
-      canonical: `https://toolforge.app/blog/${post.slug}`,
+      canonical: `https://smart-tools-kit.vercel.app/blog/${post.slug}`,
     },
     other: {
       "image-prompt": post.imagePrompt,
@@ -74,14 +74,14 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
     },
     datePublished: post.date,
     dateModified: post.date,
-    image: `https://toolforge.app/api/og?title=${encodeURIComponent(post.title)}&category=${encodeURIComponent(post.category)}`,
+    image: `https://smart-tools-kit.vercel.app/api/og?title=${encodeURIComponent(post.title)}&category=${encodeURIComponent(post.category)}`,
     publisher: {
       "@type": "Organization",
       name: "ToolForge",
     },
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `https://toolforge.app/blog/${post.slug}`,
+      "@id": `https://smart-tools-kit.vercel.app/blog/${post.slug}`,
     },
     keywords: post.tags.join(", "),
   }
@@ -90,9 +90,9 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: "https://toolforge.app" },
-      { "@type": "ListItem", position: 2, name: "Blog", item: "https://toolforge.app/blog" },
-      { "@type": "ListItem", position: 3, name: post.title, item: `https://toolforge.app/blog/${post.slug}` },
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://smart-tools-kit.vercel.app" },
+      { "@type": "ListItem", position: 2, name: "Blog", item: "https://smart-tools-kit.vercel.app/blog" },
+      { "@type": "ListItem", position: 3, name: post.title, item: `https://smart-tools-kit.vercel.app/blog/${post.slug}` },
     ],
   }
 

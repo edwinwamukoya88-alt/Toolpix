@@ -9,10 +9,10 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Terms of Service - ToolForge",
     description: "Terms of service for using the ToolForge privacy-first online tools suite.",
-    url: "https://toolforge.app/terms",
+    url: "https://smart-tools-kit.vercel.app/terms",
   },
   alternates: {
-    canonical: "https://toolforge.app/terms",
+    canonical: "https://smart-tools-kit.vercel.app/terms",
   },
 }
 

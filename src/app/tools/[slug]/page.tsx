@@ -16,14 +16,14 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const resolvedSlug = slugAliases[slug] || slug
   const tool = tools.find((t) => t.slug === resolvedSlug)
   if (!tool) return {}
-  const ogImageUrl = `https://toolforge.app/api/og?title=${encodeURIComponent(tool.name)}&category=${encodeURIComponent(tool.category)}&type=tool`
+  const ogImageUrl = `https://smart-tools-kit.vercel.app/api/og?title=${encodeURIComponent(tool.name)}&category=${encodeURIComponent(tool.category)}&type=tool`
   return {
     title: tool.name,
     description: tool.description,
     openGraph: {
       title: `${tool.name} - ToolForge`,
       description: tool.description,
-      url: `https://toolforge.app/tools/${tool.slug}`,
+      url: `https://smart-tools-kit.vercel.app/tools/${tool.slug}`,
       images: [{ url: ogImageUrl, width: 1200, height: 630, alt: tool.name }],
     },
     twitter: {
@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       images: [ogImageUrl],
     },
     alternates: {
-      canonical: `https://toolforge.app/tools/${tool.slug}`,
+      canonical: `https://smart-tools-kit.vercel.app/tools/${tool.slug}`,
     },
   }
 }
@@ -48,9 +48,9 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: "https://toolforge.app" },
-      { "@type": "ListItem", position: 2, name: "Tools", item: "https://toolforge.app/tools" },
-      { "@type": "ListItem", position: 3, name: tool.name, item: `https://toolforge.app/tools/${tool.slug}` },
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://smart-tools-kit.vercel.app" },
+      { "@type": "ListItem", position: 2, name: "Tools", item: "https://smart-tools-kit.vercel.app/tools" },
+      { "@type": "ListItem", position: 3, name: tool.name, item: `https://smart-tools-kit.vercel.app/tools/${tool.slug}` },
     ],
   }
 

@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/admin/", "/api/", "/access-denied/"],
       },
     ],
-    sitemap: "https://toolforge.app/sitemap.xml",
+    sitemap: "https://smart-tools-kit.vercel.app/sitemap.xml",
   }
 }

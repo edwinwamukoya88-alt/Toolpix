@@ -6,10 +6,10 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Free Online Tools - ToolForge",
     description: "Browse 39+ free online tools across 8 categories. All privacy-first, no login required.",
-    url: "https://toolforge.app/tools",
+    url: "https://smart-tools-kit.vercel.app/tools",
   },
   alternates: {
-    canonical: "https://toolforge.app/tools",
+    canonical: "https://smart-tools-kit.vercel.app/tools",
   },
 }
 

@@ -6,10 +6,10 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Advertise With ToolForge",
     description: "Reach thousands of users using privacy-first productivity tools. Transparent pricing with full performance tracking.",
-    url: "https://toolforge.app/advertise",
+    url: "https://smart-tools-kit.vercel.app/advertise",
   },
   alternates: {
-    canonical: "https://toolforge.app/advertise",
+    canonical: "https://smart-tools-kit.vercel.app/advertise",
   },
 }
 
