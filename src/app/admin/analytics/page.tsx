@@ -42,8 +42,8 @@ function AnalyticsDashboard() {
   const {
     loading, error, refresh, kpiData, trafficData, acquisitionData, toolPerfData,
     categoryPerfData, funnelData, liveActivity, seoMetrics, seoTrend, seoLandingPages,
-    seoQueries, blogPerfData, trendingData, searchConsoleData, heatmapData,
-    activityData, insightsData, alerts, activeAlertCount, dismissAlert, dismissAllAlerts,
+    seoQueries, blogPerfData, trendingData, searchConsoleData, scKpiData, scTrafficData,
+    heatmapData, activityData, insightsData, alerts, activeAlertCount, dismissAlert, dismissAllAlerts,
     sources, state,
   } = useAnalytics()
 
@@ -57,6 +57,7 @@ function AnalyticsDashboard() {
   }, [kpiData, toolPerfData, blogPerfData])
 
   const ga4Available = sources.ga4.status === "available"
+  const isScTraffic = !ga4Available && scTrafficData !== null && scTrafficData.length > 0
 
   return (
     <div className="min-h-screen">
@@ -198,6 +199,7 @@ function AnalyticsDashboard() {
           seoLandingPages={seoLandingPages}
           seoQueries={seoQueries}
           searchConsoleData={searchConsoleData}
+          scKpiData={scKpiData}
           toolPerfData={toolPerfData}
           blogPerfData={blogPerfData}
           heatmapData={heatmapData}
@@ -217,6 +219,7 @@ function AnalyticsDashboard() {
             funnelData={funnelData}
             loading={loading}
             source={sources.ga4}
+            searchConsole={isScTraffic}
           />
         )}
         {activeTab === "traffic" && (
@@ -226,6 +229,7 @@ function AnalyticsDashboard() {
             categoryPerfData={categoryPerfData}
             loading={loading}
             source={sources.ga4}
+            searchConsole={isScTraffic}
           />
         )}
         {activeTab === "tools" && (
@@ -297,10 +301,10 @@ function DataSourceBadge({ label, status, active, onClick }: { label: string; st
   )
 }
 
-function SourcePanel({ activeSource, kpiData, trafficData, acquisitionData, seoMetrics, seoTrend, seoLandingPages, seoQueries, searchConsoleData, toolPerfData, blogPerfData, heatmapData, activityData, liveActivity, loading, funnelData, sources }: {
+function SourcePanel({ activeSource, kpiData, trafficData, acquisitionData, seoMetrics, seoTrend, seoLandingPages, seoQueries, searchConsoleData, scKpiData, toolPerfData, blogPerfData, heatmapData, activityData, liveActivity, loading, funnelData, sources }: {
   activeSource: ActiveSource;
   kpiData: any; trafficData: any; acquisitionData: any;
-  seoMetrics: any; seoTrend: any; seoLandingPages: any; seoQueries: any; searchConsoleData: any;
+  seoMetrics: any; seoTrend: any; seoLandingPages: any; seoQueries: any; searchConsoleData: any; scKpiData: any;
   toolPerfData: any; blogPerfData: any; heatmapData: any; activityData: any;
   liveActivity: any; loading: boolean; funnelData: any; sources: any;
 }) {
@@ -318,10 +322,10 @@ function SourcePanel({ activeSource, kpiData, trafficData, acquisitionData, seoM
       {activeSource === "searchConsole" && (
         <div className="space-y-4">
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-            <MetricCard icon={MousePointerClick} label="Clicks" value={searchConsoleData?.reduce?.((s: number, r: any) => s + (r.clicks ?? 0), 0)?.toLocaleString() ?? "—"} status={sources.searchConsole.status} />
-            <MetricCard icon={Eye} label="Impressions" value={searchConsoleData?.reduce?.((s: number, r: any) => s + (r.impressions ?? 0), 0)?.toLocaleString() ?? "—"} status={sources.searchConsole.status} />
-            <MetricCard icon={ArrowUp} label="CTR" value={searchConsoleData?.[0]?.ctr ? `${(searchConsoleData[0].ctr * 100).toFixed(1)}%` : "—"} status={sources.searchConsole.status} />
-            <MetricCard icon={Hash} label="Avg Position" value={searchConsoleData?.[0]?.position?.toFixed(1) ?? "—"} status={sources.searchConsole.status} />
+            <MetricCard icon={MousePointerClick} label="Clicks" value={scKpiData?.[0]?.value ?? "—"} status={sources.searchConsole.status} />
+            <MetricCard icon={Eye} label="Impressions" value={scKpiData?.[1]?.value ?? "—"} status={sources.searchConsole.status} />
+            <MetricCard icon={ArrowUp} label="CTR" value={scKpiData?.[2]?.value ?? "—"} status={sources.searchConsole.status} />
+            <MetricCard icon={Hash} label="Avg Position" value={scKpiData?.[3]?.value ?? "—"} status={sources.searchConsole.status} />
             <MetricCard icon={BarChart3} label="Top Queries" value={seoQueries?.length ? `${seoQueries.length}` : "—"} status={sources.searchConsole.status} />
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
@@ -449,9 +453,9 @@ function NoDataMessage() {
 /* ─── Tab Panels ─────────────────────────────────── */
 
 function OverviewTab({
-  kpiData, trafficData, acquisitionData, trendingData, funnelData, loading, source,
+  kpiData, trafficData, acquisitionData, trendingData, funnelData, loading, source, searchConsole,
 }: {
-  kpiData: any; trafficData: any; acquisitionData: any; trendingData: any; funnelData: any; loading: boolean; source: SourceInfo
+  kpiData: any; trafficData: any; acquisitionData: any; trendingData: any; funnelData: any; loading: boolean; source: SourceInfo; searchConsole?: boolean
 }) {
   if (loading) return <LoadingSkeletons overview />
 
@@ -460,7 +464,7 @@ function OverviewTab({
   const hasAcq = acquisitionData && acquisitionData.length > 0
 
   if (!hasKpi && !hasTraffic && !hasAcq) {
-    return <EmptySection icon={BarChart3} title="No Analytics Data" message="Google Analytics 4 data is unavailable. Check credentials or come back later." source={source} />
+    return <EmptySection icon={BarChart3} title="No Analytics Data" message={searchConsole ? "Search Console data is unavailable. Configure Search Console to see organic traffic metrics." : "Google Analytics 4 data is unavailable. Check credentials or come back later."} source={source} />
   }
 
   return (
@@ -472,8 +476,8 @@ function OverviewTab({
         }
       </div>
       <div className="relative">
-        {hasTraffic ? <TrafficChart data={trafficData} /> : <EmptySection icon={Activity} title="No Traffic Data" message="Traffic data from GA4 is not available." />}
-        <DataSourceIndicator source="GA4" status={source.status} lastUpdated={source.lastUpdated} error={source.error} />
+        {hasTraffic ? <TrafficChart data={trafficData} searchConsole={searchConsole} /> : <EmptySection icon={Activity} title="No Traffic Data" message={searchConsole ? "Search Console daily data is not available." : "Traffic data from GA4 is not available."} />}
+        <DataSourceIndicator source={searchConsole ? "Search Console" : "GA4"} status={source.status} lastUpdated={source.lastUpdated} error={source.error} />
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {hasAcq ? <AcquisitionDonut data={acquisitionData} /> : <EmptySection icon={Users} title="No Acquisition Data" message="Acquisition source data from GA4 is not available." />}
@@ -485,9 +489,9 @@ function OverviewTab({
 }
 
 function TrafficTab({
-  trafficData, acquisitionData, categoryPerfData, loading, source,
+  trafficData, acquisitionData, categoryPerfData, loading, source, searchConsole,
 }: {
-  trafficData: any; acquisitionData: any; categoryPerfData: any; loading: boolean; source: SourceInfo
+  trafficData: any; acquisitionData: any; categoryPerfData: any; loading: boolean; source: SourceInfo; searchConsole?: boolean
 }) {
   if (loading) return <LoadingSkeletons />
 
@@ -495,13 +499,13 @@ function TrafficTab({
   const hasAcq = acquisitionData && acquisitionData.length > 0
 
   if (!hasTraffic && !hasAcq) {
-    return <EmptySection icon={Activity} title="No Traffic Data" message="Traffic and acquisition data from GA4 is not available." source={source} />
+    return <EmptySection icon={Activity} title="No Traffic Data" message={searchConsole ? "Search Console daily data is not available." : "Traffic and acquisition data from GA4 is not available."} source={source} />
   }
 
   return (
     <div className="space-y-6">
-      {hasTraffic ? <TrafficChart data={trafficData} /> : <EmptySection icon={Activity} title="No Traffic Data" message="Traffic data from GA4 is not available." />}
-      <DataSourceIndicator source="GA4" status={source.status} lastUpdated={source.lastUpdated} error={source.error} />
+      {hasTraffic ? <TrafficChart data={trafficData} searchConsole={searchConsole} /> : <EmptySection icon={Activity} title="No Traffic Data" message={searchConsole ? "Search Console daily data is not available." : "Traffic data from GA4 is not available."} />}
+      <DataSourceIndicator source={searchConsole ? "Search Console" : "GA4"} status={source.status} lastUpdated={source.lastUpdated} error={source.error} />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {hasAcq ? <AcquisitionDonut data={acquisitionData} /> : <EmptySection icon={Users} title="No Acquisition Data" message="Acquisition source data from GA4 is not available." />}
         {categoryPerfData && categoryPerfData.length > 0 ? <CategoryBarChart data={categoryPerfData} /> : <EmptySection icon={BarChart3} title="No Category Data" message="Category performance data is not available." />}

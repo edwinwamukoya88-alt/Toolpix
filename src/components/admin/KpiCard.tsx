@@ -1,8 +1,8 @@
-import { TrendingUp, TrendingDown, Users, Activity, Eye, Wrench, HeartHandshake, BarChart3, type LucideIcon } from "lucide-react"
+import { TrendingUp, TrendingDown, Users, Activity, Eye, Wrench, HeartHandshake, BarChart3, MousePointerClick, type LucideIcon } from "lucide-react"
 import type { KpiData } from "@/lib/analytics-utils"
 
 const iconMap: Record<string, LucideIcon> = {
-  Users, Activity, Eye, Wrench, HeartHandshake, TrendingUp, BarChart3,
+  Users, Activity, Eye, Wrench, HeartHandshake, TrendingUp, BarChart3, MousePointerClick,
 }
 
 const gradientMap: Record<string, string> = {
@@ -12,6 +12,10 @@ const gradientMap: Record<string, string> = {
   "Tool Launches": "from-emerald-500/20 to-emerald-600/5",
   "Engagement Rate": "from-amber-500/20 to-amber-600/5",
   "Conversion Rate": "from-red-500/20 to-red-600/5",
+  Clicks: "from-blue-500/20 to-blue-600/5",
+  Impressions: "from-cyan-500/20 to-cyan-600/5",
+  CTR: "from-emerald-500/20 to-emerald-600/5",
+  "Avg Position": "from-amber-500/20 to-amber-600/5",
 }
 
 const accentMap: Record<string, string> = {
@@ -21,6 +25,10 @@ const accentMap: Record<string, string> = {
   "Tool Launches": "bg-emerald-500",
   "Engagement Rate": "bg-amber-500",
   "Conversion Rate": "bg-red-500",
+  Clicks: "bg-blue-500",
+  Impressions: "bg-cyan-500",
+  CTR: "bg-emerald-500",
+  "Avg Position": "bg-amber-500",
 }
 
 function MiniSparkline({ data, color }: { data: number[]; color: string }) {

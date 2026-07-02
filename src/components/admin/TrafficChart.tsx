@@ -9,10 +9,15 @@ import type { TrafficPoint } from "@/lib/analytics-utils"
 const periods = ["24 Hours", "7 Days", "30 Days", "90 Days"] as const
 const periodKeys: ("24h" | "7d" | "30d" | "90d")[] = ["24h", "7d", "30d", "90d"]
 
-const seriesConfig = [
+const ga4SeriesConfig = [
   { key: "users", label: "Users", color: "#3b82f6" },
   { key: "sessions", label: "Sessions", color: "#8b5cf6" },
   { key: "pageViews", label: "Page Views", color: "#06b6d4" },
+]
+
+const scSeriesConfig = [
+  { key: "users", label: "Clicks", color: "#3b82f6" },
+  { key: "pageViews", label: "Impressions", color: "#06b6d4" },
 ]
 
 function CustomTooltip({ active, payload, label }: any) {
@@ -34,13 +39,17 @@ function CustomTooltip({ active, payload, label }: any) {
 export default function TrafficChart({
   data,
   loading,
+  searchConsole,
 }: {
   data: TrafficPoint[]
   loading?: boolean
+  searchConsole?: boolean
 }) {
+  const seriesConfig = searchConsole ? scSeriesConfig : ga4SeriesConfig
+  const defaultSeries = new Set(seriesConfig.map(s => s.key))
   const [mounted, setMounted] = useState(false)
   const [activePeriod, setActivePeriod] = useState<"24h" | "7d" | "30d" | "90d">("7d")
-  const [visibleSeries, setVisibleSeries] = useState<Set<string>>(new Set(["users", "sessions", "pageViews"]))
+  const [visibleSeries, setVisibleSeries] = useState<Set<string>>(defaultSeries)
 
   const toggleSeries = (key: string) => {
     setVisibleSeries(prev => {

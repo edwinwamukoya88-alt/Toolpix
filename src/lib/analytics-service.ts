@@ -694,6 +694,128 @@ export async function getTrendingContent(): Promise<{ data: TrendingItem[] | nul
   }
 }
 
+export async function getSearchConsoleKpis(range: DateRange = "last7"): Promise<{ data: KpiData[] | null; source: SourceInfo }> {
+  try {
+    const dateData = await fetchSearchConsole(["date"], range)
+
+    if (dateData?.data?.rows?.length > 0) {
+      const rows = dateData.data.rows as any[]
+      const totalClicks = rows.reduce((s: number, r: any) => s + (r.clicks ?? 0), 0)
+      const totalImpressions = rows.reduce((s: number, r: any) => s + (r.impressions ?? 0), 0)
+      const weightedPosition = rows.reduce((s: number, r: any) => s + (r.position ?? 0) * (r.impressions ?? 0), 0)
+      const avgPosition = totalImpressions > 0 ? weightedPosition / totalImpressions : 0
+      const avgCtr = totalImpressions > 0 ? (totalClicks / totalImpressions) * 100 : 0
+
+      let prevClicks = 0; let prevImpressions = 0; let prevWeightedPos = 0
+      try {
+        const prevData = await fetchSearchConsole(["date"], { startDate: getPreviousRange(range).startDate, endDate: getPreviousRange(range).endDate } as any)
+        if (prevData?.data?.rows?.length > 0) {
+          const pr = prevData.data.rows as any[]
+          prevClicks = pr.reduce((s: number, r: any) => s + (r.clicks ?? 0), 0)
+          prevImpressions = pr.reduce((s: number, r: any) => s + (r.impressions ?? 0), 0)
+          prevWeightedPos = pr.reduce((s: number, r: any) => s + (r.position ?? 0) * (r.impressions ?? 0), 0)
+        }
+      } catch {}
+
+      const clickChange = prevClicks > 0 ? Math.round(((totalClicks - prevClicks) / prevClicks) * 100) : 0
+      const impChange = prevImpressions > 0 ? Math.round(((totalImpressions - prevImpressions) / prevImpressions) * 100) : 0
+      const ctrChange = prevImpressions > 0 && prevClicks > 0 && avgCtr > 0
+        ? Math.round(((avgCtr - ((prevClicks / prevImpressions) * 100)) / ((prevClicks / prevImpressions) * 100)) * 100)
+        : 0
+      const posChange = avgPosition > 0 && prevImpressions > 0
+        ? Math.round(((avgPosition - (prevWeightedPos / prevImpressions)) / (prevWeightedPos / prevImpressions)) * 100)
+        : 0
+
+      const kpis: KpiData[] = [
+        {
+          label: "Clicks",
+          value: totalClicks >= 1000 ? (totalClicks / 1000).toFixed(1).replace(/\.0$/, "") + "k" : totalClicks.toLocaleString(),
+          change: Math.abs(clickChange),
+          direction: clickChange >= 0 ? "up" : "down",
+          icon: "MousePointerClick",
+          sparkline: rows.map((r: any) => r.clicks ?? 0),
+        },
+        {
+          label: "Impressions",
+          value: totalImpressions >= 1000 ? (totalImpressions / 1000).toFixed(1).replace(/\.0$/, "") + "k" : totalImpressions.toLocaleString(),
+          change: Math.abs(impChange),
+          direction: impChange >= 0 ? "up" : "down",
+          icon: "Eye",
+          sparkline: rows.map((r: any) => r.impressions ?? 0),
+        },
+        {
+          label: "CTR",
+          value: `${avgCtr.toFixed(1)}%`,
+          change: Math.abs(ctrChange),
+          direction: ctrChange >= 0 ? "up" : "down",
+          icon: "TrendingUp",
+          sparkline: [],
+        },
+        {
+          label: "Avg Position",
+          value: avgPosition.toFixed(1),
+          change: Math.abs(posChange),
+          direction: posChange >= 0 ? "down" : "up",
+          icon: "BarChart3",
+          sparkline: [],
+        },
+      ]
+
+      return {
+        data: kpis,
+        source: { status: "available", lastUpdated: Date.now(), error: null },
+      }
+    }
+
+    return {
+      data: null,
+      source: { status: "available", lastUpdated: Date.now(), error: null },
+    }
+  } catch (e) {
+    console.error("[analytics] getSearchConsoleKpis failed:", e)
+    return {
+      data: null,
+      source: { status: "error", lastUpdated: null, error: e instanceof Error ? e.message : String(e) },
+    }
+  }
+}
+
+export async function getSearchConsoleTrafficData(range: DateRange = "last7"): Promise<{ data: TrafficPoint[] | null; source: SourceInfo }> {
+  try {
+    const dateData = await fetchSearchConsole(["date"], range)
+
+    if (dateData?.data?.rows?.length > 0) {
+      const data: TrafficPoint[] = dateData.data.rows.map((r: any) => {
+        const raw = r.keys?.[0] ?? ""
+        const [year, month, day] = raw.split("-")
+        const dateStr = new Date(`${year}-${month}-${day}`).toLocaleDateString("en-US", { month: "short", day: "numeric" })
+        return {
+          date: dateStr,
+          users: r.clicks ?? 0,
+          sessions: 0,
+          pageViews: r.impressions ?? 0,
+        }
+      })
+
+      return {
+        data,
+        source: { status: "available", lastUpdated: Date.now(), error: null },
+      }
+    }
+
+    return {
+      data: null,
+      source: { status: "available", lastUpdated: Date.now(), error: null },
+    }
+  } catch (e) {
+    console.error("[analytics] getSearchConsoleTrafficData failed:", e)
+    return {
+      data: null,
+      source: { status: "error", lastUpdated: null, error: e instanceof Error ? e.message : String(e) },
+    }
+  }
+}
+
 export async function getSearchConsoleData(range: DateRange = "last7"): Promise<{ data: SearchConsoleRow[] | null; source: SourceInfo }> {
   try {
     const queryData = await fetchSearchConsole(["query"], range)

@@ -12,6 +12,8 @@ import {
   getSEOData,
   getBlogPerformance,
   getTrendingContent,
+  getSearchConsoleKpis,
+  getSearchConsoleTrafficData,
   getSearchConsoleData,
   getHeatmapData,
   getRecentActivity,
@@ -68,6 +70,8 @@ export interface AnalyticsContextValue {
   blogPerfData: BlogPerformanceRow[] | null
   trendingData: TrendingItem[] | null
   searchConsoleData: SearchConsoleRow[] | null
+  scKpiData: KpiData[] | null
+  scTrafficData: TrafficPoint[] | null
   heatmapData: HeatmapData[] | null
   activityData: ActivityEvent[] | null
   insightsData: AIInsight[] | null
@@ -121,6 +125,8 @@ export function AnalyticsProvider({ children }: { children: ReactNode }) {
 
   const [kpiData, setKpiData] = useState<KpiData[] | null>(null)
   const [trafficData, setTrafficData] = useState<TrafficPoint[] | null>(null)
+  const [scKpiData, setScKpiData] = useState<KpiData[] | null>(null)
+  const [scTrafficData, setScTrafficData] = useState<TrafficPoint[] | null>(null)
   const [acquisitionData, setAcquisitionData] = useState<AcquisitionSource[] | null>(null)
   const [toolPerfData, setToolPerfData] = useState<ToolPerformanceRow[] | null>(null)
   const [categoryPerfData, setCategoryPerfData] = useState<CategoryPerformance[] | null>(null)
@@ -162,6 +168,8 @@ export function AnalyticsProvider({ children }: { children: ReactNode }) {
         blog,
         trending,
         sc,
+        scKpis,
+        scTraffic,
         heatmap,
         activity,
         insights,
@@ -176,13 +184,17 @@ export function AnalyticsProvider({ children }: { children: ReactNode }) {
         getBlogPerformance(range),
         getTrendingContent(),
         getSearchConsoleData(range),
+        getSearchConsoleKpis(range),
+        getSearchConsoleTrafficData(range),
         getHeatmapData(),
         getRecentActivity(),
         getAIInsights(range),
       ])
 
-      setKpiData(kpi.data)
-      setTrafficData(traffic.data)
+      setKpiData(kpi.data ?? scKpis.data)
+      setTrafficData(traffic.data ?? scTraffic.data)
+      setScKpiData(scKpis.data)
+      setScTrafficData(scTraffic.data)
       setAcquisitionData(acq.data)
       setToolPerfData(tools.data)
       setCategoryPerfData(cats.data)
@@ -285,7 +297,7 @@ export function AnalyticsProvider({ children }: { children: ReactNode }) {
     loading, error, dateRange, setDateRange, refresh, comparePrevious, setComparePrevious,
     kpiData, trafficData, acquisitionData, toolPerfData, categoryPerfData, funnelData,
     liveActivity, seoMetrics, seoTrend, seoLandingPages, seoQueries,
-    blogPerfData, trendingData, searchConsoleData, heatmapData, activityData, insightsData,
+    blogPerfData, trendingData, searchConsoleData, scKpiData, scTrafficData, heatmapData, activityData, insightsData,
     sources,
     alerts, activeAlertCount, dismissAlert, dismissAllAlerts: () => { dismissAll(); setAlerts([]); setActiveAlertCount(0) },
     state,
