@@ -6,6 +6,7 @@ import Header from "@/components/header"
 import Footer from "@/components/footer"
 import ToastProvider from "@/components/toast-provider"
 import CookieConsent from "@/components/ads/cookie-consent"
+import AdSenseLoader from "@/components/ads/adsense-loader"
 import { BiblicalThemeProvider } from "@/contexts/biblical-theme-context"
 
 const geistSans = Geist({
@@ -97,11 +98,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <script
-          async
-          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${AD_CLIENT}`}
-          crossOrigin="anonymous"
-        />
       </head>
       <body className="min-h-screen flex flex-col antialiased">
         <a href="#main-content" className="skip-to-main">
@@ -116,6 +112,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <CookieConsent />
           <ToastProvider />
         </BiblicalThemeProvider>
+        <AdSenseLoader />
         <GoogleAnalytics />
       </body>
     </html>

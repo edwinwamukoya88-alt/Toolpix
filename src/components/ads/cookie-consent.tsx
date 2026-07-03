@@ -1,14 +1,17 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Cookie, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 export default function CookieConsent() {
-  const [show, setShow] = useState(() => {
-    if (typeof window === "undefined") return false
-    return localStorage.getItem("toolpix_ad_consent") === null
-  })
+  const [show, setShow] = useState(false)
+
+  useEffect(() => {
+    if (localStorage.getItem("toolpix_ad_consent") === null) {
+      setShow(true)
+    }
+  }, [])
 
   function accept(consent: boolean) {
     localStorage.setItem("toolpix_ad_consent", consent ? "true" : "false")
