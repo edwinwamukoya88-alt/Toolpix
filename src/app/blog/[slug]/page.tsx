@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { getBlogBySlug, getAllBlogs, getBlogSlugs, getRelatedPosts, getToolSlugsForArticle } from "@/lib/blog"
+import { getBlogCoverUrl } from "@/lib/blog-og-config"
 import BlogArticleClient from "./blog-article-client"
 
 export async function generateStaticParams() {
@@ -13,7 +14,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const post = getBlogBySlug(slug)
   if (!post) return {}
 
-  const ogImageUrl = `https://smart-tools-kit.vercel.app/api/og?title=${encodeURIComponent(post.title)}&category=${encodeURIComponent(post.category)}`
+  const ogImageUrl = getBlogCoverUrl(post.title, post.category)
+  const canonicalUrl = `https://smart-tools-kit.vercel.app/blog/${post.slug}`
 
   return {
     title: `${post.title} - ToolForge Blog`,
@@ -23,7 +25,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     openGraph: {
       title: post.title,
       description: post.description,
-      url: `https://smart-tools-kit.vercel.app/blog/${post.slug}`,
+      url: canonicalUrl,
       siteName: "ToolForge",
       type: "article",
       publishedTime: post.date,
@@ -34,7 +36,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
           url: ogImageUrl,
           width: 1200,
           height: 630,
-          alt: post.imageAlt,
+          alt: post.imageAlt || `${post.title} - ToolForge Blog`,
         },
       ],
     },
@@ -45,7 +47,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       images: [ogImageUrl],
     },
     alternates: {
-      canonical: `https://smart-tools-kit.vercel.app/blog/${post.slug}`,
+      canonical: canonicalUrl,
     },
     other: {
       "image-prompt": post.imagePrompt,
@@ -62,6 +64,8 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
 
   const relatedPosts = getRelatedPosts(post.slug, post.category)
   const toolSlugs = getToolSlugsForArticle(post.slug)
+  const ogImageUrl = getBlogCoverUrl(post.title, post.category)
+  const canonicalUrl = `https://smart-tools-kit.vercel.app/blog/${post.slug}`
 
   const articleJsonLd = {
     "@context": "https://schema.org",
@@ -74,14 +78,14 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
     },
     datePublished: post.date,
     dateModified: post.date,
-    image: `https://smart-tools-kit.vercel.app/api/og?title=${encodeURIComponent(post.title)}&category=${encodeURIComponent(post.category)}`,
+    image: ogImageUrl,
     publisher: {
       "@type": "Organization",
       name: "ToolForge",
     },
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `https://smart-tools-kit.vercel.app/blog/${post.slug}`,
+      "@id": canonicalUrl,
     },
     keywords: post.tags.join(", "),
   }
@@ -92,7 +96,7 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: "https://smart-tools-kit.vercel.app" },
       { "@type": "ListItem", position: 2, name: "Blog", item: "https://smart-tools-kit.vercel.app/blog" },
-      { "@type": "ListItem", position: 3, name: post.title, item: `https://smart-tools-kit.vercel.app/blog/${post.slug}` },
+      { "@type": "ListItem", position: 3, name: post.title, item: canonicalUrl },
     ],
   }
 

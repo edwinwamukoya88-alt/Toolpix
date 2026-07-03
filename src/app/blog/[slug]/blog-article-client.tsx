@@ -1,16 +1,16 @@
 "use client"
 
 import Link from "next/link"
-import { Calendar, Clock, User, ArrowLeft, ChevronRight } from "lucide-react"
+import { ChevronRight } from "lucide-react"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import type { BlogPost, BlogMeta } from "@/lib/blog-types"
-import BlogCoverImage from "@/components/blog/blog-cover-image"
+import ArticleHero from "@/components/blog/article-hero"
+import CategoryBadge from "@/components/blog/category-badge"
 import TableOfContents from "@/components/blog/table-of-contents"
 import ShareButtons from "@/components/blog/share-buttons"
 import RelatedArticles from "@/components/blog/related-articles"
 import RelatedTools from "@/components/blog/related-tools"
-import { formatDate } from "@/lib/utils"
 
 interface BlogArticleClientProps {
   post: BlogPost
@@ -22,40 +22,15 @@ export default function BlogArticleClient({ post, relatedPosts, toolSlugs }: Blo
   return (
     <div className="min-h-screen">
       <article>
-        <div className="relative">
-          <BlogCoverImage coverImage={post.coverImage} title={post.title} size="article" className="rounded-none" />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
-          <div className="absolute bottom-0 left-0 right-0 container pb-8 md:pb-12">
-            <Link
-              href="/blog"
-              className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors mb-4"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              Back to Blog
-            </Link>
-            <div className="max-w-3xl">
-              <div className="flex flex-wrap items-center gap-3 text-xs md:text-sm text-muted-foreground mb-3">
-                <span className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-[10px] md:text-xs font-medium bg-background/60 backdrop-blur-sm">
-                  {post.category}
-                </span>
-                <span className="flex items-center gap-1">
-                  <Calendar className="h-3.5 w-3.5" />
-                  {formatDate(post.date, "long")}
-                </span>
-                <span className="flex items-center gap-1">
-                  <Clock className="h-3.5 w-3.5" />
-                  {post.readingTime} min read
-                </span>
-                <span className="flex items-center gap-1">
-                  <User className="h-3.5 w-3.5" />
-                  {post.author}
-                </span>
-              </div>
-              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight">{post.title}</h1>
-              <p className="text-sm md:text-base text-muted-foreground mt-2 max-w-2xl">{post.description}</p>
-            </div>
-          </div>
-        </div>
+        <ArticleHero
+          title={post.title}
+          description={post.description}
+          coverImage={post.coverImage}
+          category={post.category}
+          author={post.author}
+          date={post.date}
+          readingTime={post.readingTime}
+        />
 
         <div className="container py-8 md:py-10">
           <div className="max-w-3xl mx-auto">
@@ -120,12 +95,7 @@ export default function BlogArticleClient({ post, relatedPosts, toolSlugs }: Blo
           {post.tags.length > 0 && (
             <div className="flex flex-wrap gap-2 mt-8 pt-8 border-t">
               {post.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="inline-flex items-center rounded-full border bg-background/40 px-3 py-1 text-xs text-muted-foreground"
-                >
-                  {tag}
-                </span>
+                <CategoryBadge key={tag} category={tag} className="!text-xs" />
               ))}
             </div>
           )}
