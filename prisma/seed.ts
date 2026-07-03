@@ -44,7 +44,7 @@ async function main() {
     "pdf-converter", "image-converter", "document-converter", "audio-converter", "file-compressor",
     "json-formatter", "regex-tester", "markdown-preview", "unit-converter",
     "color-picker", "lorem-ipsum", "favicon-generator", "image-placeholder", "design-cards-studio",
-    "currency-converter", "loan-calculator", "profit-calculator", "expense-tracker", "blog-generator",
+    "currency-converter", "loan-calculator", "profit-calculator", "blog-generator",
   ]
   for (const slug of toolSlugs) {
     const existing = await prisma.toolConfig.findUnique({ where: { slug } })

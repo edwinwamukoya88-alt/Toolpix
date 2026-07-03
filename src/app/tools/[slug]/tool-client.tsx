@@ -52,7 +52,6 @@ const toolComponents: Record<string, React.ComponentType> = {
   "savings-goal-calculator": dynamic(() => import("@/tools/savings-goal-calculator")),
   "retirement-calculator": dynamic(() => import("@/tools/retirement-calculator")),
   "bmi-calculator": dynamic(() => import("@/tools/bmi-calculator")),
-  "expense-tracker": dynamic(() => import("@/tools/expense-tracker")),
   "grade-calculator": dynamic(() => import("@/tools/grade-calculator")),
   "lesson-plan-generator": dynamic(() => import("@/tools/lesson-plan-generator")),
   "scheme-of-work-generator": dynamic(() => import("@/tools/scheme-of-work-generator")),

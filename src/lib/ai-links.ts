@@ -146,7 +146,6 @@ export const AI_LINK_GRAPH: AILinkEntry[] = [
     tools: [
       { name: "Loan / EMI Calculator", url: "/tools/loan-calculator" },
       { name: "Profit Calculator", url: "/tools/profit-calculator" },
-      { name: "Expense Tracker", url: "/tools/expense-tracker" },
     ],
   },
 ]

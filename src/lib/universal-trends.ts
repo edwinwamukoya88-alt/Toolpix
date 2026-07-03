@@ -56,11 +56,6 @@ const TREND_POOLS: Record<string, TrendItem[]> = {
     { title: "Creating consistent brand visuals with free tools", description: "Build a cohesive brand identity using color palettes, placeholders, and favicon generators.", category: "Design & Creative", type: "blog", relatedTools: ["color-picker", "favicon-generator", "lorem-ipsum"] },
     { title: "How to pick the perfect color palette", description: "Use color theory and digital tools to create harmonious palettes for any project.", category: "Design & Creative", type: "tool-guide", relatedTools: ["color-picker", "image-placeholder"] },
   ],
-  "Finance Tools": [
-    { title: "Simple budgeting system for beginners", description: "Track income and expenses with a straightforward budgeting approach anyone can follow.", category: "Finance Tools", type: "blog", relatedTools: ["expense-tracker", "profit-calculator", "loan-calculator"] },
-    { title: "How to compare loan options effectively", description: "Use EMI calculators and total-cost analysis to choose the right loan for your needs.", category: "Finance Tools", type: "blog", relatedTools: ["loan-calculator", "profit-calculator", "currency-converter"] },
-    { title: "Track business profitability with simple tools", description: "Monitor margins, ROI, and costs using browser-based calculation tools.", category: "Finance Tools", type: "tool-guide", relatedTools: ["profit-calculator", "expense-tracker", "currency-converter"] },
-  ],
   "File Conversion": [
     { title: "Ultimate guide to file format compatibility", description: "Know when to use PDF, DOCX, PNG, JPEG, and MP3 for maximum compatibility.", category: "File Conversion", type: "blog", relatedTools: ["pdf-converter", "image-converter", "document-converter"] },
     { title: "Batch convert documents without uploading", description: "Process multiple files at once using privacy-first local conversion tools.", category: "File Conversion", type: "tool-guide", relatedTools: ["document-converter", "image-converter", "file-compressor"] },

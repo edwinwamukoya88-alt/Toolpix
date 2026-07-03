@@ -70,7 +70,6 @@ export const tools: Tool[] = [
   { slug: "savings-goal-calculator", name: "Savings Goal Calculator", description: "Plan how long it takes to reach your savings target", icon: "Target", category: "Essential Calculators", badge: "Free" },
   { slug: "retirement-calculator", name: "Retirement Calculator", description: "Plan your retirement savings and estimate monthly retirement income", icon: "Heart", category: "Essential Calculators", badge: "Free" },
   { slug: "bmi-calculator", name: "BMI Calculator", description: "Calculate your BMI, WHO category, and healthy weight range", icon: "Weight", category: "Essential Calculators", badge: "Fast" },
-  { slug: "expense-tracker", name: "Expense Tracker", description: "Track and analyze your monthly spending", icon: "Wallet", category: "Finance Tools", badge: "Free" },
   { slug: "blog-generator", name: "Blog Generator", description: "Generate SEO-optimized MDX blog posts instantly from a title", icon: "FileText", category: "Productivity", badge: "Free" },
 
   // 9. NETWORK MONITORING TOOLS
@@ -102,7 +101,6 @@ export const categories = [
   "Developer Tools",
   "Design & Creative",
   "Essential Calculators",
-  "Finance Tools",
   "Network Monitoring",
   "Multimedia",
 ]
@@ -116,7 +114,6 @@ export const categoryIcons: Record<string, string> = {
   "Developer Tools": "Code",
   "Design & Creative": "Palette",
   "Essential Calculators": "Calculator",
-  "Finance Tools": "DollarSign",
   "Network Monitoring": "Activity",
   Multimedia: "Film",
 }

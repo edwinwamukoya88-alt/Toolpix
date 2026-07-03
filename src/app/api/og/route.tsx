@@ -17,7 +17,6 @@ const categoryColors: Record<string, { bg: string; accent: string }> = {
   "QR & Connectivity": { bg: "#0d9488", accent: "#0891b2" },
   "Developer Tools": { bg: "#1e293b", accent: "#6366f1" },
   "Design & Creative": { bg: "#be185d", accent: "#7c3aed" },
-  "Finance Tools": { bg: "#065f46", accent: "#d97706" },
   Tool: { bg: "#1e40af", accent: "#7c3aed" },
 }
 

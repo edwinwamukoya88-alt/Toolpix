@@ -148,11 +148,10 @@ Tools (40+)
 │   ├── Favicon Generator
 │   ├── Image Placeholder Generator
 │   └── Design Cards Studio
-└── Finance Tools (4)
+└── Finance Tools
     ├── Currency Converter
     ├── Loan Calculator
-    ├── Profit Calculator
-    └── Expense Tracker
+    └── Profit Calculator
 ```
 
 ---

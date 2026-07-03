@@ -459,7 +459,6 @@ export function generateTrendingContent(): TrendingItem[] {
     { title: "Productivity", subtitle: "45.2% of total usage", growth: 62 },
     { title: "Education & CBC Tools", subtitle: "22.8% of total usage", growth: 45 },
     { title: "QR & Connectivity", subtitle: "12.1% of total usage", growth: 28 },
-    { title: "Finance Tools", subtitle: "8.5% of total usage", growth: 15 },
   ].map(item => ({ ...item, type: "category" as const }))
 
   return [...blogItems, ...toolItems, ...categoryItems].sort((a, b) => b.growth - a.growth)

@@ -246,15 +246,6 @@ const toolComponents: Record<string, ComponentType> = {
 
 ---
 
-## Finance Tools (4 tools)
-
-| Slug | Name | Description |
-|------|------|-------------|
-| `currency-converter` | Currency Converter | Convert between world currencies (manual rates) |
-| `loan-calculator` | Loan Calculator | Calculate loan payments and EMI schedules |
-| `profit-calculator` | Profit Calculator | Calculate profit margins and ROI |
-| `expense-tracker` | Expense Tracker | Track and analyze your monthly spending |
-
 ---
 
 ## Tool Subsystems
@@ -333,4 +324,4 @@ A full-featured productivity system with 8 sub-components and Zustand state mana
 | 38 | Finance | currency-converter | Currency Converter | `currency-converter.tsx` |
 | 39 | Finance | loan-calculator | Loan Calculator | `loan-calculator.tsx` |
 | 40 | Finance | profit-calculator | Profit Calculator | `profit-calculator.tsx` |
-| 41 | Finance | expense-tracker | Expense Tracker | `expense-tracker.tsx` |
+

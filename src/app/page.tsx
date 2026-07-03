@@ -3,7 +3,7 @@ import Link from "next/link"
 import {
   ArrowRight, Palette, QrCode, Zap, Shield, Code, FileUp, DollarSign,
   Sparkles, Lock, Zap as ZapIcon, Activity, Globe, Eye, Users,
-  LayoutGrid, Brain, GraduationCap, Shield as ShieldIcon, Wifi, FileSymlink, Terminal, PenTool, TrendingUp, CheckCircle,
+  LayoutGrid, Brain, GraduationCap, Shield as ShieldIcon, Wifi, FileSymlink, Terminal, PenTool, CheckCircle,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import ToolCard from "@/components/tool-card"
@@ -14,8 +14,8 @@ import AdSlot from "@/components/ads/AdSlot"
 import type { LucideIcon } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "ToolForge — 44+ Free Privacy-First Online Tools",
-  description: "44+ free browser-based tools for teachers, students, developers, creators, and businesses. Privacy-first, no login required, 100% client-side processing.",
+  title: "ToolForge — 43+ Free Privacy-First Online Tools",
+  description: "43+ free browser-based tools for teachers, students, developers, creators, and businesses. Privacy-first, no login required, 100% client-side processing.",
   openGraph: {
     title: "ToolForge — Free Privacy-First Online Tools",
     description: "Plan lessons, manage tasks, create content, and boost productivity — all in your browser. No data ever leaves your device.",
@@ -38,7 +38,6 @@ const catIconMap: Record<string, LucideIcon> = {
   "File Conversion": FileSymlink,
   "Developer Tools": Terminal,
   "Design & Creative": PenTool,
-  "Finance Tools": TrendingUp,
   "Network Monitoring": Activity,
 }
 
@@ -50,7 +49,6 @@ const catDescriptions: Record<string, string> = {
   "File Conversion": "Transform files between formats",
   "Developer Tools": "Format, validate, and convert code",
   "Design & Creative": "Generate colors, favicons, and images",
-  "Finance Tools": "Calculate, convert, and track finances",
   "Network Monitoring": "Test speed, lookup IPs, ping hosts, and analyze DNS records",
 }
 
@@ -85,7 +83,7 @@ export default function HomePage() {
             {/* Top badge */}
             <div className="inline-flex items-center gap-1.5 rounded-full border px-4 py-1.5 text-xs font-medium text-muted-foreground bg-background/50 backdrop-blur-sm">
               <Sparkles className="h-3.5 w-3.5 text-primary" />
-              Privacy-first &middot; No login required &middot; 44+ tools
+              Privacy-first &middot; No login required &middot; 43+ tools
             </div>
 
             {/* Headline */}
@@ -148,7 +146,7 @@ export default function HomePage() {
             {/* Trust stats */}
             <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-2 pt-4">
               {[
-                { value: "44+", label: "Free Tools" },
+                { value: "43+", label: "Free Tools" },
                 { value: "100%", label: "Privacy-First" },
                 { value: "0", label: "Login Required" },
               ].map((stat) => (
@@ -381,7 +379,7 @@ export default function HomePage() {
             <div className="pt-4">
               <Link href="/tools">
                 <Button size="lg">
-                  Browse All 44+ Tools <ArrowRight className="h-4 w-4 ml-1" />
+                  Browse All 43+ Tools <ArrowRight className="h-4 w-4 ml-1" />
                 </Button>
               </Link>
             </div>
@@ -398,7 +396,7 @@ export default function HomePage() {
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              { value: "44+ Free Tools", icon: LayoutGrid },
+              { value: "43+ Free Tools", icon: LayoutGrid },
               { value: "100% Privacy-First", icon: Shield },
               { value: "No Login Required", icon: Lock },
               { value: "Client-Side Processing", icon: Globe },

@@ -82,7 +82,6 @@ const categoryToolMap: Record<string, ToolEntry[]> = {
     { name: "Loan / EMI Calculator", url: "/tools/loan-calculator" },
     { name: "Profit Calculator", url: "/tools/profit-calculator" },
     { name: "Currency Converter", url: "/tools/currency-converter" },
-    { name: "Expense Tracker", url: "/tools/expense-tracker" },
   ],
   Design: [
     { name: "Color Picker Pro", url: "/tools/color-picker" },
@@ -135,7 +134,6 @@ const smartKeywordMap: [RegExp, ToolEntry[]][] = [
   [/loan|emi|mortgage/i, [{ name: "Loan / EMI Calculator", url: "/tools/loan-calculator" }]],
   [/profit|margin|roi/i, [{ name: "Profit Calculator", url: "/tools/profit-calculator" }]],
   [/currency|money|exchange/i, [{ name: "Currency Converter", url: "/tools/currency-converter" }]],
-  [/expense|budget|spend/i, [{ name: "Expense Tracker", url: "/tools/expense-tracker" }]],
   [/pomodoro|timer|focus/i, [{ name: "Pomodoro Timer", url: "/tools/pomodoro" }]],
   [/todo|task|checklist/i, [{ name: "Task Planner", url: "/tools/planner" }]],
   [/note|journal|diary/i, [{ name: "Notes App", url: "/tools/notes" }]],
@@ -616,7 +614,6 @@ function getToolShortDesc(url: string): string {
     "/tools/loan-calculator": "Calculate loan payments and EMI schedules",
     "/tools/profit-calculator": "Calculate profit margins and ROI",
     "/tools/currency-converter": "Convert between world currencies",
-    "/tools/expense-tracker": "Track and analyze monthly spending",
   }
   return descs[url] || "Free privacy-first browser tool"
 }

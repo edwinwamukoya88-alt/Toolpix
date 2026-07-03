@@ -301,7 +301,6 @@ smart tools kit/
 │       ├── currency-converter.tsx     # Currency Converter
 │       ├── loan-calculator.tsx        # Loan Calculator
 │       ├── profit-calculator.tsx      # Profit Calculator
-│       ├── expense-tracker.tsx        # Expense Tracker
 │       ├── blog-generator.tsx         # Blog Generator
 │       │
 │       ├── design-cards-studio/        # Design Cards Studio
