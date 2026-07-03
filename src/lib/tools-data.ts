@@ -59,10 +59,17 @@ export const tools: Tool[] = [
   { slug: "image-placeholder", name: "Image Placeholder", description: "Create custom sized placeholder images", icon: "Frame", category: "Design & Creative", badge: "Free" },
   { slug: "design-cards-studio", name: "Design Cards Studio", description: "Create business cards, wedding invites, event cards, social media posts, and certificates", icon: "CreditCard", category: "Design & Creative", badge: "Free" },
 
-  // 8. FINANCE TOOLS (LOW PRIORITY / OCCASIONAL USE)
-  { slug: "currency-converter", name: "Currency Converter", description: "Convert between world currencies (manual rates)", icon: "DollarSign", category: "Finance Tools", badge: "Fast" },
-  { slug: "loan-calculator", name: "Loan / EMI Calculator", description: "Calculate loan payments and EMI schedules", icon: "Landmark", category: "Finance Tools", badge: "Free" },
-  { slug: "profit-calculator", name: "Profit Calculator", description: "Calculate profit margins and ROI", icon: "TrendingUp", category: "Finance Tools", badge: "Free" },
+  // 8. ESSENTIAL CALCULATORS
+  { slug: "currency-converter", name: "Currency Converter", description: "Convert between world currencies with live rates and conversion history", icon: "DollarSign", category: "Essential Calculators", badge: "Fast" },
+  { slug: "loan-calculator", name: "Loan / EMI Calculator", description: "Calculate loan payments, EMI, and full amortization schedule", icon: "Landmark", category: "Essential Calculators", badge: "Free" },
+  { slug: "compound-interest", name: "Compound Interest Calculator", description: "See how your money grows with compound interest over time", icon: "TrendingUp", category: "Essential Calculators", badge: "Free" },
+  { slug: "mortgage-calculator", name: "Mortgage Calculator", description: "Estimate monthly mortgage payments including taxes and insurance", icon: "Home", category: "Essential Calculators", badge: "Free" },
+  { slug: "investment-calculator", name: "Investment Calculator", description: "Project investment growth with regular contributions over time", icon: "BarChart3", category: "Essential Calculators", badge: "Free" },
+  { slug: "profit-calculator", name: "Profit Calculator", description: "Analyze profit margins, markup, ROI, and break-even estimates", icon: "TrendingUp", category: "Essential Calculators", badge: "Free" },
+  { slug: "income-tax-calculator", name: "Income Tax Calculator", description: "Estimate your tax payable, effective rate, and take-home pay", icon: "Receipt", category: "Essential Calculators", badge: "Free" },
+  { slug: "savings-goal-calculator", name: "Savings Goal Calculator", description: "Plan how long it takes to reach your savings target", icon: "Target", category: "Essential Calculators", badge: "Free" },
+  { slug: "retirement-calculator", name: "Retirement Calculator", description: "Plan your retirement savings and estimate monthly retirement income", icon: "Heart", category: "Essential Calculators", badge: "Free" },
+  { slug: "bmi-calculator", name: "BMI Calculator", description: "Calculate your BMI, WHO category, and healthy weight range", icon: "Weight", category: "Essential Calculators", badge: "Fast" },
   { slug: "expense-tracker", name: "Expense Tracker", description: "Track and analyze your monthly spending", icon: "Wallet", category: "Finance Tools", badge: "Free" },
   { slug: "blog-generator", name: "Blog Generator", description: "Generate SEO-optimized MDX blog posts instantly from a title", icon: "FileText", category: "Productivity", badge: "Free" },
 
@@ -87,6 +94,7 @@ export const categories = [
   "File Conversion",
   "Developer Tools",
   "Design & Creative",
+  "Essential Calculators",
   "Finance Tools",
   "Multimedia",
 ]
@@ -99,6 +107,7 @@ export const categoryIcons: Record<string, string> = {
   "File Conversion": "FileUp",
   "Developer Tools": "Code",
   "Design & Creative": "Palette",
+  "Essential Calculators": "Calculator",
   "Finance Tools": "DollarSign",
   Multimedia: "Film",
 }
