@@ -61,6 +61,13 @@ const toolComponents: Record<string, React.ComponentType> = {
   "exam-generator": dynamic(() => import("@/tools/exam-generator")),
   "blog-generator": dynamic(() => import("@/tools/blog-generator")),
 
+  // Network Monitoring Tools
+  "speed-test": dynamic(() => import("@/tools/speed-test")),
+  "whats-my-ip": dynamic(() => import("@/tools/whats-my-ip")),
+  "ip-location": dynamic(() => import("@/tools/ip-location")),
+  "ping-test": dynamic(() => import("@/tools/ping-test")),
+  "dns-lookup": dynamic(() => import("@/tools/dns-lookup")),
+
   // Multimedia Tools
   "video-compressor": dynamic(() => import("@/tools/video-compressor")),
   "video-converter": dynamic(() => import("@/tools/video-converter")),

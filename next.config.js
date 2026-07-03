@@ -2,7 +2,7 @@ const ContentSecurityPolicy = `
   default-src 'self';
   script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://pagead2.googlesyndication.com https://www.googletagmanager.com https://*.google-analytics.com;
   style-src 'self' 'unsafe-inline';
-  img-src 'self' data: blob: https://*.google-analytics.com https://*.googlesyndication.com https://*.g.doubleclick.net https://*.google.com https://*.googleapis.com https://*.gstatic.com https://*.googleusercontent.com;
+  img-src 'self' data: blob: https://*.google-analytics.com https://*.googlesyndication.com https://*.g.doubleclick.net https://*.google.com https://*.googleapis.com https://*.gstatic.com https://*.googleusercontent.com https://flagcdn.com https://*.tile.openstreetmap.org;
   font-src 'self' data:;
   connect-src 'self' blob: https://*.google-analytics.com https://*.googlesyndication.com https://analytics.google.com https://*.g.doubleclick.net;
   frame-src 'self' https://*.googlesyndication.com https://*.google.com;

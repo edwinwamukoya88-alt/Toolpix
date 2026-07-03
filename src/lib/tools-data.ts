@@ -73,7 +73,14 @@ export const tools: Tool[] = [
   { slug: "expense-tracker", name: "Expense Tracker", description: "Track and analyze your monthly spending", icon: "Wallet", category: "Finance Tools", badge: "Free" },
   { slug: "blog-generator", name: "Blog Generator", description: "Generate SEO-optimized MDX blog posts instantly from a title", icon: "FileText", category: "Productivity", badge: "Free" },
 
-  // 9. MULTIMEDIA TOOLS
+  // 9. NETWORK MONITORING TOOLS
+  { slug: "speed-test", name: "Internet Speed Test", description: "Test download speed, upload speed, ping, and jitter with an animated speed gauge and detailed charts.", icon: "Gauge", category: "Network Monitoring", badge: "Free" },
+  { slug: "whats-my-ip", name: "What's My IP", description: "Discover your public IPv4, IPv6, ISP, location, browser info, and more with one click.", icon: "Globe", category: "Network Monitoring", badge: "Free" },
+  { slug: "ip-location", name: "IP Location Lookup", description: "Look up any IP address to find its country, city, region, ISP, and interactive map location.", icon: "MapPin", category: "Network Monitoring", badge: "Free" },
+  { slug: "ping-test", name: "Ping Test", description: "Ping any domain or IP address to measure latency, packet loss, and network reliability.", icon: "Activity", category: "Network Monitoring", badge: "Free" },
+  { slug: "dns-lookup", name: "DNS Lookup", description: "Look up DNS records including A, AAAA, MX, TXT, NS, CNAME, SOA, and PTR records.", icon: "Server", category: "Network Monitoring", badge: "Free" },
+
+  // 10. MULTIMEDIA TOOLS
   { slug: "video-compressor", name: "Video Compressor", description: "Compress MP4, MOV, and WebM videos with quality presets and resolution options.", icon: "Film", category: "Multimedia", badge: "Free" },
   { slug: "video-converter", name: "Video Converter", description: "Convert videos between MP4, MOV, AVI, MKV, and WebM formats.", icon: "Clapperboard", category: "Multimedia", badge: "Free" },
   { slug: "video-trimmer", name: "Video Trimmer", description: "Trim and cut your videos with a timeline and frame preview.", icon: "Scissors", category: "Multimedia", badge: "Free" },
@@ -96,6 +103,7 @@ export const categories = [
   "Design & Creative",
   "Essential Calculators",
   "Finance Tools",
+  "Network Monitoring",
   "Multimedia",
 ]
 
@@ -109,5 +117,6 @@ export const categoryIcons: Record<string, string> = {
   "Design & Creative": "Palette",
   "Essential Calculators": "Calculator",
   "Finance Tools": "DollarSign",
+  "Network Monitoring": "Activity",
   Multimedia: "Film",
 }

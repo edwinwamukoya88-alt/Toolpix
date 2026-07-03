@@ -14,8 +14,8 @@ import AdSlot from "@/components/ads/AdSlot"
 import type { LucideIcon } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "ToolForge — 39+ Free Privacy-First Online Tools",
-  description: "39+ free browser-based tools for teachers, students, developers, creators, and businesses. Privacy-first, no login required, 100% client-side processing.",
+  title: "ToolForge — 44+ Free Privacy-First Online Tools",
+  description: "44+ free browser-based tools for teachers, students, developers, creators, and businesses. Privacy-first, no login required, 100% client-side processing.",
   openGraph: {
     title: "ToolForge — Free Privacy-First Online Tools",
     description: "Plan lessons, manage tasks, create content, and boost productivity — all in your browser. No data ever leaves your device.",
@@ -39,6 +39,7 @@ const catIconMap: Record<string, LucideIcon> = {
   "Developer Tools": Terminal,
   "Design & Creative": PenTool,
   "Finance Tools": TrendingUp,
+  "Network Monitoring": Activity,
 }
 
 const catDescriptions: Record<string, string> = {
@@ -50,6 +51,7 @@ const catDescriptions: Record<string, string> = {
   "Developer Tools": "Format, validate, and convert code",
   "Design & Creative": "Generate colors, favicons, and images",
   "Finance Tools": "Calculate, convert, and track finances",
+  "Network Monitoring": "Test speed, lookup IPs, ping hosts, and analyze DNS records",
 }
 
 export default function HomePage() {
@@ -83,7 +85,7 @@ export default function HomePage() {
             {/* Top badge */}
             <div className="inline-flex items-center gap-1.5 rounded-full border px-4 py-1.5 text-xs font-medium text-muted-foreground bg-background/50 backdrop-blur-sm">
               <Sparkles className="h-3.5 w-3.5 text-primary" />
-              Privacy-first &middot; No login required &middot; 39+ tools
+              Privacy-first &middot; No login required &middot; 44+ tools
             </div>
 
             {/* Headline */}
@@ -134,13 +136,19 @@ export default function HomePage() {
                 >
                   📝 Lesson Planner
                 </Link>
+                <Link
+                  href="/tools/speed-test"
+                  className="inline-flex items-center gap-1.5 rounded-full border bg-background/60 backdrop-blur-sm px-3.5 py-1.5 text-sm font-medium hover:bg-primary/10 hover:text-primary hover:border-primary/30 transition-all"
+                >
+                  ⚡ Speed Test
+                </Link>
               </div>
             </div>
 
             {/* Trust stats */}
             <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-2 pt-4">
               {[
-                { value: "39+", label: "Free Tools" },
+                { value: "44+", label: "Free Tools" },
                 { value: "100%", label: "Privacy-First" },
                 { value: "0", label: "Login Required" },
               ].map((stat) => (
@@ -294,6 +302,10 @@ export default function HomePage() {
             { slug: "day-planner", name: "Day Planner", emoji: "📅", desc: "Plan your day hour by hour" },
             { slug: "kanban", name: "Kanban Board", emoji: "📋", desc: "Organize with drag-and-drop boards" },
             { slug: "revision-planner", name: "CBC Learning & Revision Planner", emoji: "📚", desc: "Plan skill-based practice and revision with curriculum-aligned tools" },
+            { slug: "speed-test", name: "Internet Speed Test", emoji: "⚡", desc: "Test download, upload, ping, and jitter" },
+            { slug: "whats-my-ip", name: "What's My IP", emoji: "🌐", desc: "View your public IP and network info" },
+            { slug: "dns-lookup", name: "DNS Lookup", emoji: "🔍", desc: "Look up A, MX, TXT, and other DNS records" },
+            { slug: "ping-test", name: "Ping Test", emoji: "📡", desc: "Measure latency and packet loss" },
           ].map((tool) => (
             <Link
               key={tool.slug}
@@ -369,7 +381,7 @@ export default function HomePage() {
             <div className="pt-4">
               <Link href="/tools">
                 <Button size="lg">
-                  Browse All 39+ Tools <ArrowRight className="h-4 w-4 ml-1" />
+                  Browse All 44+ Tools <ArrowRight className="h-4 w-4 ml-1" />
                 </Button>
               </Link>
             </div>
@@ -386,7 +398,7 @@ export default function HomePage() {
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              { value: "39+ Free Tools", icon: LayoutGrid },
+              { value: "44+ Free Tools", icon: LayoutGrid },
               { value: "100% Privacy-First", icon: Shield },
               { value: "No Login Required", icon: Lock },
               { value: "Client-Side Processing", icon: Globe },
