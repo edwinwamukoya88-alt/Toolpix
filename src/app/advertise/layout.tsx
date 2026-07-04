@@ -1,11 +1,13 @@
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Advertise",
-  description: "Reach thousands of users on ToolForge. Choose from Budget, Standard, or Premium ad placements with full performance tracking.",
+  title: "Advertise With ToolForge — Reach Productivity-Focused Users",
+  description:
+    "Advertise to teachers, students, developers, and creators using privacy-first browser tools. Premium sponsorships, featured placements, and sponsored content.",
   openGraph: {
     title: "Advertise With ToolForge",
-    description: "Reach thousands of users using privacy-first productivity tools. Transparent pricing with full performance tracking.",
+    description:
+      "Reach thousands of users using privacy-first productivity tools. Premium brand placements that respect user privacy.",
     url: "https://smart-tools-kit.vercel.app/advertise",
   },
   alternates: {
@@ -13,6 +15,10 @@ export const metadata: Metadata = {
   },
 }
 
-export default function AdvertiseLayout({ children }: { children: React.ReactNode }) {
+export default function AdvertiseLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   return children
 }

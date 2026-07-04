@@ -170,14 +170,17 @@ export default function AdSlot({ type, slot, image, title, description, link, cl
 
   return (
     <div className={`flex justify-center my-6 ${className}`}>
-      <ins
-        className="adsbygoogle"
-        style={{ display: "block" }}
-        data-ad-client={AD_CLIENT}
-        data-ad-slot={slot}
-        data-ad-format="auto"
-        data-full-width-responsive="true"
-      />
+      <div className="relative w-full max-w-[728px]">
+        <span className="absolute top-1.5 left-2 z-10 text-[10px] font-medium text-muted-foreground/40 uppercase tracking-wider">Sponsored</span>
+        <ins
+          className="adsbygoogle"
+          style={{ display: "block" }}
+          data-ad-client={AD_CLIENT}
+          data-ad-slot={slot}
+          data-ad-format="auto"
+          data-full-width-responsive="true"
+        />
+      </div>
     </div>
   )
 }
