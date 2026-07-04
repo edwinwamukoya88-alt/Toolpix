@@ -114,9 +114,9 @@ export const AI_LINK_GRAPH: AILinkEntry[] = [
     keyword: "convert",
     weight: 0.6,
     tools: [
-      { name: "PDF Converter UI", url: "/tools/pdf-converter" },
-      { name: "Image Converter UI", url: "/tools/image-converter" },
-      { name: "Document Converter UI", url: "/tools/document-converter" },
+      { name: "PDF Converter", url: "/tools/pdf-converter" },
+      { name: "Image Converter", url: "/tools/image-converter" },
+      { name: "Document Converter", url: "/tools/document-converter" },
     ],
   },
   {

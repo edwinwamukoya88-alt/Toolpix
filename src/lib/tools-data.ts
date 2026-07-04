@@ -47,11 +47,11 @@ export const tools: Tool[] = [
   { slug: "protect-pdf", name: "Protect PDF", description: "Encrypt PDFs with a password to prevent unauthorized access and restrict printing or copying", icon: "Lock", category: "File Conversion", badge: "Secure" },
   { slug: "unlock-pdf", name: "Unlock PDF", description: "Remove password protection from PDFs that you are authorized to unlock", icon: "Unlock", category: "File Conversion", badge: "Secure" },
   { slug: "sign-pdf", name: "Sign PDF", description: "Digitally sign PDFs using typed text, uploaded signatures, or freehand drawing", icon: "Pen", category: "File Conversion", badge: "Secure" },
-  { slug: "pdf-converter", name: "PDF Converter UI", description: "Convert files to and from PDF format", icon: "File", category: "File Conversion", badge: "Secure" },
-  { slug: "image-converter", name: "Image Converter UI", description: "Convert images between popular formats", icon: "ImagePlus", category: "File Conversion", badge: "Secure" },
-  { slug: "document-converter", name: "Document Converter UI", description: "Convert documents between formats", icon: "FileText", category: "File Conversion", badge: "Secure" },
-  { slug: "audio-converter", name: "Audio Converter UI", description: "Convert audio files between formats", icon: "Music", category: "File Conversion", badge: "Secure" },
-  { slug: "file-compressor", name: "File Compressor UI", description: "Compress and archive files", icon: "FileArchive", category: "File Conversion", badge: "Free" },
+  { slug: "pdf-converter", name: "PDF Converter", description: "Convert files to and from PDF format", icon: "File", category: "File Conversion", badge: "Secure" },
+  { slug: "image-converter", name: "Image Converter", description: "Convert images between popular formats", icon: "ImagePlus", category: "File Conversion", badge: "Secure" },
+  { slug: "document-converter", name: "Document Converter", description: "Convert documents between formats", icon: "FileText", category: "File Conversion", badge: "Secure" },
+  { slug: "audio-converter", name: "Audio Converter", description: "Convert audio files between formats", icon: "Music", category: "File Conversion", badge: "Secure" },
+  { slug: "file-compressor", name: "File Compressor", description: "Compress and archive files", icon: "FileArchive", category: "File Conversion", badge: "Free" },
 
   // 6. DEVELOPER TOOLS
   { slug: "json-formatter", name: "JSON Formatter & Validator", description: "Format, validate, and beautify JSON", icon: "Braces", category: "Developer Tools", badge: "Fast" },

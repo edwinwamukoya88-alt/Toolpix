@@ -90,11 +90,11 @@ const categoryToolMap: Record<string, ToolEntry[]> = {
     { name: "Lorem Ipsum Generator", url: "/tools/lorem-ipsum" },
   ],
   "File Conversion": [
-    { name: "PDF Converter UI", url: "/tools/pdf-converter" },
-    { name: "Image Converter UI", url: "/tools/image-converter" },
-    { name: "Document Converter UI", url: "/tools/document-converter" },
-    { name: "Audio Converter UI", url: "/tools/audio-converter" },
-    { name: "File Compressor UI", url: "/tools/file-compressor" },
+    { name: "PDF Converter", url: "/tools/pdf-converter" },
+    { name: "Image Converter", url: "/tools/image-converter" },
+    { name: "Document Converter", url: "/tools/document-converter" },
+    { name: "Audio Converter", url: "/tools/audio-converter" },
+    { name: "File Compressor", url: "/tools/file-compressor" },
   ],
   General: [
     { name: "Task Planner", url: "/tools/planner" },
@@ -115,8 +115,8 @@ const smartKeywordMap: [RegExp, ToolEntry[]][] = [
   [/assess|exam|test|quiz/i, [{ name: "CBC Assessment Tool", url: "/tools/exam-generator" }]],
   [/comment|feedback|report/i, [{ name: "CBC Teacher Comment Generator", url: "/tools/teacher-comment-generator" }]],
   [/pdf|document|convert/i, [
-    { name: "PDF Converter UI", url: "/tools/pdf-converter" },
-    { name: "Document Converter UI", url: "/tools/document-converter" },
+    { name: "PDF Converter", url: "/tools/pdf-converter" },
+    { name: "Document Converter", url: "/tools/document-converter" },
   ]],
   [/qr/i, [
     { name: "QR Code Generator", url: "/tools/qr-generator" },
@@ -125,7 +125,7 @@ const smartKeywordMap: [RegExp, ToolEntry[]][] = [
   [/password|secure|encrypt/i, [{ name: "Password Generator", url: "/tools/password-generator" }]],
   [/color|colour|palette|pick/i, [{ name: "Color Picker Pro", url: "/tools/color-picker" }]],
   [/image|photo|picture/i, [
-    { name: "Image Converter UI", url: "/tools/image-converter" },
+    { name: "Image Converter", url: "/tools/image-converter" },
     { name: "Image Placeholder", url: "/tools/image-placeholder" },
   ]],
   [/json|format/i, [{ name: "JSON Formatter & Validator", url: "/tools/json-formatter" }]],
@@ -144,8 +144,8 @@ const smartKeywordMap: [RegExp, ToolEntry[]][] = [
     { name: "Image Placeholder", url: "/tools/image-placeholder" },
     { name: "Lorem Ipsum Generator", url: "/tools/lorem-ipsum" },
   ]],
-  [/compress|zip|archive/i, [{ name: "File Compressor UI", url: "/tools/file-compressor" }]],
-  [/audio|sound|music/i, [{ name: "Audio Converter UI", url: "/tools/audio-converter" }]],
+  [/compress|zip|archive/i, [{ name: "File Compressor", url: "/tools/file-compressor" }]],
+  [/audio|sound|music/i, [{ name: "Audio Converter", url: "/tools/audio-converter" }]],
   [/schedule|plan.*day|daily/i, [{ name: "Day Planner", url: "/tools/day-planner" }]],
   [/markdown|md/i, [{ name: "Markdown Preview", url: "/tools/markdown-preview" }]],
   [/random|uuid/i, [{ name: "Random Generator", url: "/tools/random-generator" }]],
