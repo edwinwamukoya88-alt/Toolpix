@@ -10,6 +10,7 @@ export interface Tool {
 
 export const tools: Tool[] = [
   // 1. PRODUCTIVITY (HIGHEST PRIORITY)
+  { slug: "ai-workspace", name: "AI Workspace", description: "Write, create, and generate with AI-powered tools — humanizer, detector, CBC lesson plans, card designer, and more in one workspace.", icon: "Sparkles", category: "Productivity", badge: "New" },
   { slug: "planner", name: "Task Planner", description: "Organize tasks, reminders, calendars, and productivity workflows in a powerful privacy-first planner.", icon: "CheckSquare", category: "Productivity", badge: "Free" },
   { slug: "pomodoro", name: "Pomodoro Timer", description: "Stay focused with customizable timers", icon: "Timer", category: "Productivity", badge: "Free" },
   { slug: "notes", name: "Notes App", description: "Write and organize notes with local storage", icon: "StickyNote", category: "Productivity", badge: "Free" },
@@ -100,6 +101,7 @@ export const tools: Tool[] = [
 ]
 
 export const categories = [
+  "AI Workspace",
   "Productivity",
   "Education & CBC Tools",
   "Security & Text",
@@ -113,6 +115,7 @@ export const categories = [
 ]
 
 export const categoryIcons: Record<string, string> = {
+  "AI Workspace": "Sparkles",
   Productivity: "Zap",
   "Education & CBC Tools": "GraduationCap",
   "Security & Text": "Shield",

@@ -17,8 +17,8 @@ import type { LucideIcon } from "lucide-react"
 import AdvertiseCTA from "@/components/home/advertise-cta"
 
 export const metadata: Metadata = {
-  title: "ToolForge — 43+ Free Privacy-First Online Tools",
-  description: "43+ free browser-based tools for teachers, students, developers, creators, and businesses. Privacy-first, no login required, 100% client-side processing.",
+  title: "ToolForge — 44+ Free Privacy-First Online Tools",
+  description: "44+ free browser-based tools for teachers, students, developers, creators, and businesses. Privacy-first, no login required, 100% client-side processing.",
   openGraph: {
     title: "ToolForge — Free Privacy-First Online Tools",
     description: "Plan lessons, manage tasks, create content, and boost productivity — all in your browser. No data ever leaves your device.",
@@ -34,6 +34,7 @@ export const metadata: Metadata = {
 }
 
 const catIconMap: Record<string, LucideIcon> = {
+  "AI Workspace": Sparkles,
   Productivity: Brain,
   "Education & CBC Tools": GraduationCap,
   "Security & Text": Shield,
@@ -47,6 +48,7 @@ const catIconMap: Record<string, LucideIcon> = {
 }
 
 const catDescriptions: Record<string, string> = {
+  "AI Workspace": "All-in-one AI writing, education (CBC), and design workspace",
   Productivity: "Organize tasks, notes, and time with daily planners and trackers",
   "Education & CBC Tools": "Tools for teachers, students, and CBC curriculum planning",
   "Security & Text": "Encrypt, encode, and clean text securely",
@@ -60,6 +62,7 @@ const catDescriptions: Record<string, string> = {
 }
 
 const categoryGradients: Record<string, string> = {
+  "AI Workspace": "from-primary/20 via-purple-500/10 to-transparent",
   Productivity: "from-blue-500/10 via-cyan-500/5 to-transparent",
   "Education & CBC Tools": "from-emerald-500/10 via-teal-500/5 to-transparent",
   "Security & Text": "from-purple-500/10 via-pink-500/5 to-transparent",
@@ -73,6 +76,7 @@ const categoryGradients: Record<string, string> = {
 }
 
 const categoryIconColors: Record<string, string> = {
+  "AI Workspace": "text-primary",
   Productivity: "text-blue-400",
   "Education & CBC Tools": "text-emerald-400",
   "Security & Text": "text-purple-400",
@@ -129,11 +133,11 @@ export default function HomePage() {
           <div className="max-w-4xl mx-auto text-center space-y-8">
             <div className="inline-flex items-center gap-1.5 rounded-full border px-4 py-1.5 text-xs font-medium text-muted-foreground bg-background/50 backdrop-blur-sm">
               <Sparkles className="h-3.5 w-3.5 text-primary" />
-              Privacy-first &middot; No login required &middot; 43+ tools
+              Privacy-first &middot; No login required &middot; 44+ tools
             </div>
 
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.05]">
-              43+ Free Browser Tools for{" "}
+              44+ Free Browser Tools for{" "}
               <span className="text-primary">Teachers, Students, Developers &amp; Businesses</span>
             </h1>
 
@@ -180,7 +184,7 @@ export default function HomePage() {
             <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
               <div className="inline-flex items-center gap-2 rounded-2xl border bg-background/40 backdrop-blur-sm px-5 py-2.5">
                 <Star className="h-4 w-4 text-primary" />
-                <span className="text-sm font-semibold">43+ Free Tools</span>
+                <span className="text-sm font-semibold">44+ Free Tools</span>
               </div>
               <div className="inline-flex items-center gap-2 rounded-2xl border bg-background/40 backdrop-blur-sm px-5 py-2.5">
                 <Shield className="h-4 w-4 text-emerald-400" />
@@ -275,28 +279,50 @@ export default function HomePage() {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
           {categories.map((cat) => {
+            const isAi = cat === "AI Workspace"
             const Icon = catIconMap[cat] || Palette
             const gradient = categoryGradients[cat]
             const iconColor = categoryIconColors[cat]
             return (
               <Link
                 key={cat}
-                href={`/tools?category=${encodeURIComponent(cat)}`}
-                className="group relative flex flex-col gap-4 rounded-2xl border bg-card/40 p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/5 hover:border-primary/30 overflow-hidden"
+                href={isAi ? "/tools/ai-workspace" : `/tools?category=${encodeURIComponent(cat)}`}
+                className={cn(
+                  "group relative flex flex-col gap-4 rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl overflow-hidden",
+                  isAi
+                    ? "border-2 border-primary/30 bg-gradient-to-br from-primary/[0.08] via-primary/[0.04] to-purple-500/[0.06] hover:shadow-primary/10"
+                    : "border bg-card/40 hover:shadow-primary/5 hover:border-primary/30"
+                )}
               >
                 <div className={cn(
                   "absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none",
                   gradient
                 )} />
+                {isAi && (
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-40 pointer-events-none" />
+                )}
                 <div className="relative">
-                  <div className="inline-flex items-center justify-center h-12 w-12 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 group-hover:scale-110 transition-transform duration-300">
+                  <div className={cn(
+                    "inline-flex items-center justify-center h-12 w-12 rounded-xl group-hover:scale-110 transition-transform duration-300",
+                    isAi
+                      ? "bg-gradient-to-br from-primary/30 to-primary/10"
+                      : "bg-gradient-to-br from-primary/20 to-primary/5"
+                  )}>
                     <Icon className={cn("h-6 w-6 transition-colors", iconColor)} />
                   </div>
                 </div>
                 <div className="relative space-y-1">
-                  <h3 className="font-semibold group-hover:text-primary transition-colors">{cat}</h3>
+                  <h3 className={cn("font-semibold group-hover:text-primary transition-colors", isAi && "text-primary")}>{cat}</h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">{catDescriptions[cat]}</p>
                 </div>
+                {isAi && (
+                  <div className="relative">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-primary/15 text-primary text-xs font-medium px-2.5 py-0.5">
+                      <Sparkles className="h-3 w-3" />
+                      New
+                    </span>
+                  </div>
+                )}
               </Link>
             )
           })}
@@ -459,7 +485,7 @@ export default function HomePage() {
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              { value: "43+ Free Tools", icon: LayoutGrid },
+              { value: "44+ Free Tools", icon: LayoutGrid },
               { value: "100% Privacy-First", icon: Shield },
               { value: "No Login Required", icon: Lock },
               { value: "Client-Side Processing", icon: Globe },

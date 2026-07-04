@@ -8,7 +8,7 @@ const slugAliases: Record<string, string> = {
 }
 
 export function generateStaticParams() {
-  return [...tools.map((tool) => ({ slug: tool.slug })), { slug: "todo" }]
+  return [...tools.filter((tool) => tool.slug !== "ai-workspace").map((tool) => ({ slug: tool.slug })), { slug: "todo" }]
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
