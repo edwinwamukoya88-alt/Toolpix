@@ -40,6 +40,13 @@ export const tools: Tool[] = [
   { slug: "url-shortener", name: "URL Shortener", description: "Generate short URLs locally", icon: "Link", category: "QR & Connectivity", badge: "Fast" },
 
   // 5. FILE CONVERSION TOOLS
+  { slug: "pdf-merger", name: "PDF Merger", description: "Combine multiple PDF files into a single document with drag-and-drop reordering", icon: "FileSymlink", category: "File Conversion", badge: "Secure" },
+  { slug: "pdf-splitter", name: "PDF Splitter", description: "Extract selected pages or split a PDF into multiple smaller documents", icon: "Scissors", category: "File Conversion", badge: "Secure" },
+  { slug: "pdf-rotator", name: "PDF Rotator", description: "Rotate individual pages or entire documents by 90°, 180°, or 270°", icon: "RotateCw", category: "File Conversion", badge: "Secure" },
+  { slug: "pdf-compressor", name: "PDF Compressor", description: "Reduce PDF file size while maintaining readable quality with adjustable compression levels", icon: "FileDown", category: "File Conversion", badge: "Secure" },
+  { slug: "protect-pdf", name: "Protect PDF", description: "Encrypt PDFs with a password to prevent unauthorized access and restrict printing or copying", icon: "Lock", category: "File Conversion", badge: "Secure" },
+  { slug: "unlock-pdf", name: "Unlock PDF", description: "Remove password protection from PDFs that you are authorized to unlock", icon: "Unlock", category: "File Conversion", badge: "Secure" },
+  { slug: "sign-pdf", name: "Sign PDF", description: "Digitally sign PDFs using typed text, uploaded signatures, or freehand drawing", icon: "Pen", category: "File Conversion", badge: "Secure" },
   { slug: "pdf-converter", name: "PDF Converter UI", description: "Convert files to and from PDF format", icon: "File", category: "File Conversion", badge: "Secure" },
   { slug: "image-converter", name: "Image Converter UI", description: "Convert images between popular formats", icon: "ImagePlus", category: "File Conversion", badge: "Secure" },
   { slug: "document-converter", name: "Document Converter UI", description: "Convert documents between formats", icon: "FileText", category: "File Conversion", badge: "Secure" },
