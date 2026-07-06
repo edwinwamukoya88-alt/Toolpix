@@ -41,3 +41,17 @@ yarn-error.log*
 next-env.d.ts
 
 .vercel
+
+# --- ToolForge specific ignores ---
+
+# Embedded git repository (accidentally committed)
+agency-agents/
+
+# SQLite database (generated at runtime)
+dev.db
+
+# Large FFmpeg binaries (download on demand)
+public/ffmpeg/
+
+# Generated code (compiled from source)
+src/generated/
