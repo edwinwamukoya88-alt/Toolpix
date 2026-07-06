@@ -155,6 +155,17 @@ function Toolbar() {
 }
 
 export default function AiWorkspaceLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname()
+  const isEducation = pathname?.startsWith("/tools/ai-workspace/education")
+
+  if (isEducation) {
+    return (
+      <WorkspaceProvider>
+        {children}
+      </WorkspaceProvider>
+    )
+  }
+
   return (
     <WorkspaceProvider>
       <div className="flex h-[calc(100vh-4rem)] gap-0 overflow-hidden rounded-2xl border border-white/[0.05] bg-background/80 backdrop-blur-sm">

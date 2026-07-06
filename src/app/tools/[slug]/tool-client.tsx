@@ -66,6 +66,7 @@ const toolComponents: Record<string, React.ComponentType> = {
   "revision-planner": dynamic(() => import("@/tools/revision-planner")),
   "exam-generator": dynamic(() => import("@/tools/exam-generator")),
   "blog-generator": dynamic(() => import("@/tools/blog-generator")),
+  "ai-workspace": dynamic(() => import("@/tools/ai-workspace")),
 
   // Network Monitoring Tools
   "speed-test": dynamic(() => import("@/tools/speed-test")),

@@ -1,23 +1,41 @@
 import { GoogleGenerativeAI } from "@google/generative-ai"
 
-const MODEL = process.env.GEMINI_MODEL || "gemini-3.5-flash"
 const API_KEY = process.env.GEMINI_API_KEY || ""
+const CONFIGURED_MODEL = process.env.GEMINI_MODEL || ""
 
-if (typeof console !== "undefined") {
-  console.log(`[Gemini] Initializing with model: ${MODEL}`)
-}
+let resolvedModel = ""
+let modelInitialized = false
+
+const MODEL_PRIORITY = [
+  "gemini-2.5-flash",
+  "gemini-2.5-pro",
+  "gemini-2.0-flash",
+  "gemini-2.0-flash-lite",
+  "gemini-2.0-pro",
+  "gemini-1.5-flash",
+  "gemini-1.5-pro",
+  "gemini-1.5-flash-8b",
+]
 
 const genAI = new GoogleGenerativeAI(API_KEY)
 
-let modelValidated = false
-let modelValid = true
+function sanitizeError(err: unknown): string {
+  const msg = err instanceof Error ? err.message : String(err)
+  return msg.replace(/key=[A-Za-z0-9._-]+/gi, "key=***")
+}
 
-async function validateModel(): Promise<void> {
-  if (modelValidated) return
-  modelValidated = true
+async function initModel(): Promise<void> {
+  if (modelInitialized) return
+  modelInitialized = true
 
   if (!API_KEY) {
-    console.warn("[Gemini] No API key configured — model validation skipped")
+    console.log("[Gemini] No API key configured")
+    return
+  }
+
+  if (CONFIGURED_MODEL) {
+    resolvedModel = CONFIGURED_MODEL
+    console.log(`[Gemini] Using configured model: ${resolvedModel}`)
     return
   }
 
@@ -25,43 +43,35 @@ async function validateModel(): Promise<void> {
     const url = `https://generativelanguage.googleapis.com/v1beta/models?key=${API_KEY}`
     const res = await fetch(url)
     if (!res.ok) {
-      console.warn(`[Gemini] Model validation failed (HTTP ${res.status}) — skipping`)
+      console.warn(`[Gemini] Model list fetch failed (HTTP ${res.status})`)
       return
     }
     const data = await res.json() as { models?: Array<{ name: string; supportedGenerationMethods?: string[] }> }
-    const models = data.models || []
+    const available = (data.models || [])
+      .filter((m) => (m.supportedGenerationMethods || []).includes("generateContent"))
+      .map((m) => m.name.replace("models/", ""))
 
-    const found = models.find((m) => m.name === `models/${MODEL}`)
-    if (!found) {
-      const available = models
-        .filter((m) => (m.supportedGenerationMethods || []).includes("generateContent"))
-        .map((m) => m.name.replace("models/", ""))
-
-      console.error(
-        `[Gemini] MODEL NOT FOUND: "${MODEL}" is not available.\n` +
-        `  Run: node scripts/list-gemini-models.mjs\n` +
-        `  Set GEMINI_MODEL to one of:\n` +
-        `    ${available.slice(0, 10).join("\n    ")}\n` +
-        `    ... and ${Math.max(0, available.length - 10)} more`,
-      )
-      modelValid = false
+    const found = MODEL_PRIORITY.find((m) => available.includes(m))
+    if (found) {
+      resolvedModel = found
+      console.log(`[Gemini] Auto-selected: ${resolvedModel}`)
       return
     }
 
-    const methods = found.supportedGenerationMethods || []
-    if (!methods.includes("generateContent")) {
-      console.error(
-        `[Gemini] MODEL INCOMPATIBLE: "${MODEL}" does not support generateContent.\n` +
-        `  Supported methods: ${methods.join(", ") || "none"}`,
-      )
-      modelValid = false
+    if (available.length > 0) {
+      resolvedModel = available[0]
+      console.log(`[Gemini] Fallback: ${resolvedModel}`)
       return
     }
 
-    console.log(`[Gemini] Model validated: ${MODEL} ✅`)
+    console.warn("[Gemini] No available models in API response")
   } catch (err) {
-    console.warn(`[Gemini] Model validation error: ${err} — proceeding with configured model`)
+    console.warn(`[Gemini] Model discovery error: ${sanitizeError(err)}`)
   }
+}
+
+function getModel(): string {
+  return resolvedModel || CONFIGURED_MODEL || MODEL_PRIORITY[0]
 }
 
 interface GenerateParams {
@@ -309,6 +319,18 @@ const designFeatures = new Set([
   "design-cards", "flyer", "poster", "certificate", "business-card",
 ])
 
+function classifyError(error: unknown): string {
+  const err = error as { message?: string; status?: number } | undefined
+  const message = err?.message || "Unknown error"
+
+  if (message.includes("not found") || message.includes("not supported") || message.includes("not available")) return "model"
+  if (message.includes("API_KEY_INVALID") || message.includes("API key") || message.includes("API_KEY_NOT_FOUND")) return "auth"
+  if (message.includes("SAFETY")) return "safety"
+  if (message.includes("quota") || message.includes("RATE_LIMIT") || err?.status === 429) return "quota"
+  if (err?.status === 503 || message.includes("503") || message.includes("Service Unavailable") || message.includes("high demand")) return "busy"
+  return "unknown"
+}
+
 export async function generateGeminiResponse(params: GenerateParams): Promise<{ output: string; html?: string }> {
   const { feature, input, settings } = params
 
@@ -318,57 +340,71 @@ export async function generateGeminiResponse(params: GenerateParams): Promise<{ 
     return { output: "Gemini API key is not configured. Please set GEMINI_API_KEY in your environment variables." }
   }
 
-  await validateModel()
-  if (!modelValid) {
-    throw new Error(`MODEL_NOT_AVAILABLE: "${MODEL}" is not available for this API key. Run "node scripts/list-gemini-models.mjs" to see available models.`)
+  await initModel()
+  const activeModel = getModel()
+  if (!activeModel) {
+    throw new Error("AI service is temporarily unavailable. Please try again later.")
   }
 
-  try {
-    const model = genAI.getGenerativeModel({ model: MODEL, systemInstruction: system })
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      const model = genAI.getGenerativeModel({ model: activeModel, systemInstruction: system })
 
-    const result = await model.generateContent(user)
-    const response = result.response
-    let text = response.text()
+      const result = await model.generateContent(user)
+      const response = result.response
+      let text = response.text()
 
-    let html: string | undefined
+      let html: string | undefined
 
-    const htmlMatch = text.match(/```html\n?([\s\S]*?)```/)
-    if (htmlMatch) {
-      html = sanitizeHTML(htmlMatch[1].trim())
-      text = text.replace(/```html\n?[\s\S]*?```/, "").trim()
-    }
+      const htmlMatch = text.match(/```html\n?([\s\S]*?)```/)
+      if (htmlMatch) {
+        html = sanitizeHTML(htmlMatch[1].trim())
+        text = text.replace(/```html\n?[\s\S]*?```/, "").trim()
+      }
 
-    if (feature === "detector") {
-      try {
-        const json = JSON.parse(text)
-        if (json.score !== undefined) {
-          const score = json.score
-          const verdict = json.verdict || "Analyzed"
-          const signals = json.signals || []
-          const color = score > 75 ? "#ef4444" : score > 50 ? "#f59e0b" : "#22c55e"
-          html = `<div class="space-y-4"><div class="flex items-center gap-4"><div class="relative h-20 w-20"><svg class="w-20 h-20 -rotate-90" viewBox="0 0 36 36"><path class="text-muted-foreground/20" stroke-width="3" stroke="currentColor" fill="none" d="M18 2a16 16 0 1 1 0 32 16 16 0 1 1 0-32"/><path stroke="${color}" stroke-width="3" fill="none" stroke-dasharray="${score}, 100" d="M18 2a16 16 0 1 1 0 32 16 16 0 1 1 0-32"/></svg><span class="absolute inset-0 flex items-center justify-center text-lg font-bold">${score}%</span></div><div><p class="font-semibold text-lg">${verdict}</p><p class="text-sm text-muted-foreground">AI-Generation Probability</p></div></div>${signals.length > 0 ? `<div class="space-y-1.5"><p class="text-xs font-medium text-muted-foreground uppercase tracking-wider">Detected Signals</p>${signals.map((s: string) => `<div class="flex items-center gap-2 text-sm"><span class="h-1.5 w-1.5 rounded-full bg-${score > 75 ? "red" : "yellow"}-400/60 flex-shrink-0"/>${s}</div>`).join("")}</div>` : ""}</div>`
-        }
-      } catch {}
-    }
+      if (feature === "detector") {
+        try {
+          const json = JSON.parse(text)
+          if (json.score !== undefined) {
+            const score = json.score
+            const verdict = json.verdict || "Analyzed"
+            const signals = json.signals || []
+            const color = score > 75 ? "#ef4444" : score > 50 ? "#f59e0b" : "#22c55e"
+            html = `<div class="space-y-4"><div class="flex items-center gap-4"><div class="relative h-20 w-20"><svg class="w-20 h-20 -rotate-90" viewBox="0 0 36 36"><path class="text-muted-foreground/20" stroke-width="3" stroke="currentColor" fill="none" d="M18 2a16 16 0 1 1 0 32 16 16 0 1 1 0-32"/><path stroke="${color}" stroke-width="3" fill="none" stroke-dasharray="${score}, 100" d="M18 2a16 16 0 1 1 0 32 16 16 0 1 1 0-32"/></svg><span class="absolute inset-0 flex items-center justify-center text-lg font-bold">${score}%</span></div><div><p class="font-semibold text-lg">${verdict}</p><p class="text-sm text-muted-foreground">AI-Generation Probability</p></div></div>${signals.length > 0 ? `<div class="space-y-1.5"><p class="text-xs font-medium text-muted-foreground uppercase tracking-wider">Detected Signals</p>${signals.map((s: string) => `<div class="flex items-center gap-2 text-sm"><span class="h-1.5 w-1.5 rounded-full bg-${score > 75 ? "red" : "yellow"}-400/60 flex-shrink-0"/>${s}</div>`).join("")}</div>` : ""}</div>`
+          }
+        } catch {}
+      }
 
-    return { output: text, html }
-  } catch (error: unknown) {
-    console.error("[Gemini] API error:", error)
-    const err = error as { message?: string; status?: number } | undefined
-    const message = err?.message || "Unknown error"
+      return { output: text, html }
+    } catch (error: unknown) {
+      console.error("[Gemini] API error:", error)
+      const category = classifyError(error)
 
-    if (message.includes("not found") || message.includes("not supported")) {
-      throw new Error(`MODEL_NOT_AVAILABLE: ${message}`)
+      if (attempt === 0 && category === "model") {
+        console.warn("[Gemini] Model may be deprecated, re-discovering...")
+        modelInitialized = false
+        resolvedModel = ""
+        await initModel()
+        const newModel = getModel()
+        if (newModel !== activeModel) continue
+      }
+
+      switch (category) {
+        case "model":
+          throw new Error("AI model unavailable. The feature uses a model that is no longer available. Please contact support.")
+        case "auth":
+          throw new Error("AI service not configured. The API key is invalid or missing.")
+        case "safety":
+          throw new Error("Your request was blocked by content safety filters. Try rephrasing.")
+        case "quota":
+          throw new Error("AI service is busy. Please try again later.")
+        case "busy":
+          throw new Error("AI service is temporarily unavailable due to high demand. Please wait a moment and try again.")
+        default:
+          throw new Error("AI service error. Please try again.")
+      }
     }
-    if (message.includes("API_KEY_INVALID") || message.includes("API key")) {
-      throw new Error("API_KEY_INVALID: The configured GEMINI_API_KEY is invalid or missing.")
-    }
-    if (message.includes("SAFETY")) {
-      throw new Error("SAFETY_BLOCKED: The request was blocked by Gemini's safety filters.")
-    }
-    if (message.includes("quota") || message.includes("RATE_LIMIT") || err?.status === 429) {
-      throw new Error("QUOTA_EXCEEDED: API quota exceeded. Try again later.")
-    }
-    throw new Error(`GEMINI_ERROR: ${message}`)
   }
+
+  throw new Error("AI service error. Please try again.")
 }

@@ -1,6 +1,6 @@
 import { enqueue } from "@/lib/ai/queue-manager"
 
-type Feature =
+export type Feature =
   | "humanize" | "detector" | "grammar" | "rewrite" | "summarize"
   | "translate" | "change-tone" | "email-writer" | "essay-improver"
   | "resume-rewriter"

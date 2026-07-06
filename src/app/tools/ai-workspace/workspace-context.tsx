@@ -64,7 +64,9 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
   const outputRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true)
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setRemaining(getRemaining())
     const unsub = subscribe((state) => {
       setQueueItems(state.items)

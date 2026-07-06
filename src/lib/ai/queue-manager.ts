@@ -282,6 +282,15 @@ async function postRequest(token: string, feature: string, input: string, settin
   return res.json()
 }
 
+const RETRYABLE_PATTERNS = [
+  "RATE_LIMITED",
+  "unavailable",
+  "busy",
+  "try again",
+  "high demand",
+  "AI request failed",
+]
+
 async function fetchWithRetry(
   feature: string,
   input: string,
@@ -293,11 +302,8 @@ async function fetchWithRetry(
     return await postRequest(token, feature, input, settings)
   } catch (err) {
     const msg = err instanceof Error ? err.message : ""
-    if (msg === "RATE_LIMITED" && attempt < RETRY_DELAYS.length) {
-      await new Promise((r) => setTimeout(r, RETRY_DELAYS[attempt]))
-      return fetchWithRetry(feature, input, settings, attempt + 1)
-    }
-    if (msg.startsWith("AI request failed") && attempt < RETRY_DELAYS.length) {
+    const isRetryable = msg && RETRYABLE_PATTERNS.some((p) => msg.toLowerCase().includes(p))
+    if (isRetryable && attempt < RETRY_DELAYS.length) {
       await new Promise((r) => setTimeout(r, RETRY_DELAYS[attempt]))
       return fetchWithRetry(feature, input, settings, attempt + 1)
     }

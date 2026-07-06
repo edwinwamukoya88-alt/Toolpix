@@ -89,7 +89,9 @@ export function incrementDailyUsage(token: string): void {
   }
 }
 
-if (typeof global !== "undefined") {
+const CLEANUP_INIT_KEY = "__toolforgeAiUsageCleanup"
+if (typeof global !== "undefined" && !(globalThis as unknown as Record<string, boolean | undefined>)[CLEANUP_INIT_KEY]) {
+  ;(globalThis as unknown as Record<string, boolean | undefined>)[CLEANUP_INIT_KEY] = true
   setInterval(() => {
     const today = getToday()
     for (const [key, record] of usageStore) {

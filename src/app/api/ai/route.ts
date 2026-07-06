@@ -36,9 +36,11 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ ...result, remaining: limit.remaining - 1 })
   } catch (error) {
-    const msg = error instanceof Error ? error.message : "INTERNAL_ERROR"
+    const err = error instanceof Error ? error : new Error(String(error))
+    console.error("[AI Route] Error:", err.message)
+    console.error("[AI Route] Stack:", err.stack)
+    const msg = err.message
     const status = msg.startsWith("QUOTA_EXCEEDED") ? 429 : 500
-    console.error("[AI Route] Error:", msg)
     return NextResponse.json({ error: msg, code: status }, { status })
   }
 }
