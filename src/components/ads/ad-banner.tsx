@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef, useState, useId } from "react"
+import { useEffect, useRef, useState, useId, startTransition } from "react"
 
 const AD_CLIENT = "ca-pub-2606064008386995"
 const IS_DEV = process.env.NODE_ENV === "development"
@@ -39,17 +39,13 @@ export default function AdBanner({ slot, format = "responsive", className = "", 
   const cfg = formatConfig[format]
 
   useEffect(() => {
-    setConsent(getConsent())
     const handler = () => setConsent(getConsent())
     window.addEventListener("storage", handler)
     return () => window.removeEventListener("storage", handler)
   }, [])
 
   useEffect(() => {
-    if (IS_DEV) {
-      setError(true)
-      return
-    }
+    if (IS_DEV) return
 
     const el = containerRef.current
     if (!el) return
@@ -89,8 +85,7 @@ export default function AdBanner({ slot, format = "responsive", className = "", 
 
       return () => clearTimeout(timeout)
     } catch {
-      setError(true)
-      setLoaded(true)
+      queueMicrotask(() => { startTransition(() => { setError(true); setLoaded(true) }) })
     }
   }, [visible, loaded, error, consent])
 

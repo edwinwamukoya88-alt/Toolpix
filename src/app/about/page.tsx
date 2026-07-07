@@ -1,6 +1,20 @@
+import type { Metadata } from "next"
 import { CheckCircle, Cpu, Lock, Sparkles, Shield, Zap, Asterisk, Globe } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+
+export const metadata: Metadata = {
+  title: "About",
+  description: "ToolForge is a privacy-first suite of 39+ browser-based tools for productivity, finance, design, education, and development. No login required.",
+  openGraph: {
+    title: "About ToolForge",
+    description: "Privacy-first browser tools for productivity, finance, design, and education. No login required.",
+    url: "https://smart-tools-kit.vercel.app/about",
+  },
+  alternates: {
+    canonical: "https://smart-tools-kit.vercel.app/about",
+  },
+}
 
 const features = [
   { icon: Asterisk, label: "38+ Tools", desc: "From QR codes to finance calculators" },

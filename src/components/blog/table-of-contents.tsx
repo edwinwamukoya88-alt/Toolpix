@@ -20,7 +20,7 @@ export default function TableOfContents() {
       text: h.textContent || "",
       level: h.tagName === "H2" ? 2 : 3,
     }))
-    setItems(tocItems)
+    const rafId = requestAnimationFrame(() => setItems(tocItems))
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -35,7 +35,7 @@ export default function TableOfContents() {
     )
 
     headings.forEach((h) => observer.observe(h))
-    return () => observer.disconnect()
+    return () => { cancelAnimationFrame(rafId); observer.disconnect() }
   }, [])
 
   if (items.length === 0) return null

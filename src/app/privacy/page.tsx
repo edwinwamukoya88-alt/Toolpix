@@ -1,6 +1,21 @@
+import type { Metadata } from "next"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
+
+export const metadata: Metadata = {
+  title: "Privacy Policy",
+  description: "ToolForge does not collect, store, or transmit any personal data. All tools run entirely in your browser. Privacy-first by design.",
+  openGraph: {
+    title: "Privacy Policy - ToolForge",
+    description: "Your privacy matters. ToolForge does not collect, store, or transmit any personal data.",
+    url: "https://smart-tools-kit.vercel.app/privacy",
+  },
+  alternates: {
+    canonical: "https://smart-tools-kit.vercel.app/privacy",
+  },
+  robots: { index: true, follow: true },
+}
 
 export default function PrivacyPage() {
   return (
@@ -20,7 +35,7 @@ export default function PrivacyPage() {
           <p>ToolForge does not collect, store, or transmit any personal data. All tools run entirely in your browser using client-side JavaScript. No files, text, or data you input is ever sent to any server.</p>
 
           <h2>Local Storage</h2>
-          <p>Some tools (such as Notes, Todo List, and Habit Tracker) use your browser's localStorage to save data locally on your device. This data never leaves your computer. You can clear it at any time via your browser settings.</p>
+          <p>Some tools (such as Notes, Task Planner, and Habit Tracker) use your browser&apos;s localStorage to save data locally on your device. This data never leaves your computer. You can clear it at any time via your browser settings.</p>
 
           <h2>Cookies</h2>
           <p>ToolForge does not use tracking cookies. We may use essential cookies for functionality (such as remembering your theme preference). No third-party analytics or tracking services are used.</p>

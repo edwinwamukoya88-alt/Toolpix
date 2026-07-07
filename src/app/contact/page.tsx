@@ -1,6 +1,20 @@
+import type { Metadata } from "next"
 import { Mail, MessageSquare, ArrowRight } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+
+export const metadata: Metadata = {
+  title: "Contact",
+  description: "Get in touch with the ToolForge team. Email us at support@toolforge.app for support or ads@toolforge.app for advertising inquiries.",
+  openGraph: {
+    title: "Contact ToolForge",
+    description: "Reach the ToolForge team for support or advertising inquiries.",
+    url: "https://smart-tools-kit.vercel.app/contact",
+  },
+  alternates: {
+    canonical: "https://smart-tools-kit.vercel.app/contact",
+  },
+}
 
 export default function ContactPage() {
   return (

@@ -1,7 +1,7 @@
 "use client"
 
 import { Suspense, useState, useMemo, useCallback, useRef } from "react"
-import { useSearchParams } from "next/navigation"
+import { useSearchParams, useRouter } from "next/navigation"
 import { ArrowRight, LayoutGrid } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import ToolCard from "@/components/tool-card"
@@ -11,6 +11,7 @@ import { trackSearch } from "@/lib/analytics"
 import Link from "next/link"
 
 function ToolsContent() {
+  const router = useRouter()
   const searchParams = useSearchParams()
   const [search, setSearch] = useState(searchParams.get("q") || "")
   const [activeCat, setActiveCat] = useState(searchParams.get("category") || "All")
@@ -65,7 +66,13 @@ function ToolsContent() {
               key={cat}
               variant={activeCat === cat ? "default" : "outline"}
               size="sm"
-              onClick={() => setActiveCat(cat)}
+              onClick={() => {
+                if (cat === "AI Workspace") {
+                  router.push("/tools/ai-workspace")
+                } else {
+                  setActiveCat(cat)
+                }
+              }}
               className="text-xs"
             >
               {cat}

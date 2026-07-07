@@ -8,8 +8,7 @@ export default function CookieConsent() {
   const [show, setShow] = useState(false)
 
   useEffect(() => {
-    const stored = localStorage.getItem("toolpix_ad_consent")
-    if (stored === null) {
+    if (localStorage.getItem("toolpix_ad_consent") === null) {
       setShow(true)
     }
   }, [])

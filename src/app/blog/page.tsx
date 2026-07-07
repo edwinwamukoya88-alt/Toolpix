@@ -4,12 +4,12 @@ import BlogHomeClient from "./blog-home-client"
 import type { BlogMeta } from "@/lib/blog-types"
 
 export const metadata: Metadata = {
-  title: "Blog - ToolForge | Privacy-First Productivity & Education Guides",
+  title: "Blog",
   description: "Read guides on CBC education, productivity techniques, privacy tips, and tool tutorials. All content from the ToolForge team.",
   openGraph: {
     title: "Blog - ToolForge",
     description: "Guides on CBC education, productivity, privacy, and more.",
-    url: "https://toolforge.app/blog",
+    url: "https://smart-tools-kit.vercel.app/blog",
     siteName: "ToolForge",
     type: "website",
   },
@@ -17,6 +17,9 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Blog - ToolForge",
     description: "Guides on CBC education, productivity, privacy, and more.",
+  },
+  alternates: {
+    canonical: "https://smart-tools-kit.vercel.app/blog",
   },
 }
 

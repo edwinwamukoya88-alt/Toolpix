@@ -52,7 +52,6 @@ export default function DayPlanner() {
   const [now, setNow] = useState(() => Date.now())
 
   useEffect(() => {
-    setNow(Date.now())
     const id = setInterval(() => setNow(Date.now()), 30_000)
     return () => clearInterval(id)
   }, [])

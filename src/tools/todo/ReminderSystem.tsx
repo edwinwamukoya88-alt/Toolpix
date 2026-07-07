@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useCallback } from "react"
 import { Bell } from "lucide-react"
 import { useTodoStore } from "./store"
 import { formatDateDisplay, formatTimeDisplay, REMINDER_OPTIONS } from "./utils"
@@ -12,6 +12,13 @@ export default function ReminderSystem() {
   const addNotification = useTodoStore((s) => s.addNotification)
 
   const notifyTimers = useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map())
+
+  const snoozeReminder = useCallback((id: string, minutes: number) => {
+    const todo = todos.find((t) => t.id === id)
+    if (!todo) return
+    updateTask(id, { reminderSent: false, reminderOffset: (todo.reminderOffset || 0) + minutes })
+    toast.success(`Snoozed for ${minutes} minutes`)
+  }, [todos, updateTask])
 
   useEffect(() => {
     function check() {
@@ -61,14 +68,7 @@ export default function ReminderSystem() {
     check()
     const interval = setInterval(check, 30000)
     return () => clearInterval(interval)
-  }, [todos, updateTask, addNotification])
-
-  function snoozeReminder(id: string, minutes: number) {
-    const todo = todos.find((t) => t.id === id)
-    if (!todo) return
-    updateTask(id, { reminderSent: false, reminderOffset: (todo.reminderOffset || 0) + minutes })
-    toast.success(`Snoozed for ${minutes} minutes`)
-  }
+  }, [todos, updateTask, addNotification, snoozeReminder])
 
   return null
 }

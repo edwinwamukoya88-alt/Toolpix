@@ -1,0 +1,84 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model SiteSetting {
+  id                Int    @id @default(1)
+  heroTitle         String @default("Smart Tools for Productivity & CBC Education")
+  heroSubtitle      String @default("Free, privacy-first utilities for students, teachers, and professionals.")
+  ctaPrimary        String @default("Explore Tools")
+  ctaPrimaryLink    String @default("/tools")
+  ctaSecondary      String @default("Read Blog")
+  ctaSecondaryLink  String @default("/blog")
+  defaultTitle      String @default("ToolForge — Smart Tools for Productivity & Education")
+  defaultDescription String @default("Free online tools for students, teachers, and professionals. Privacy-first, no sign-up required.")
+  keywords          String @default("productivity tools, cbc tools, education tools, free online tools")
+  ogImage           String @default("/og-image.png")
+  logo              String @default("/logo.png")
+  favicon           String @default("/favicon.ico")
+  twitterUrl        String @default("https://twitter.com/toolforge")
+  githubUrl         String @default("https://github.com/edwinwamukoya88-alt")
+  linkedinUrl       String @default("https://linkedin.com")
+  footerText        String @default("© 2026 ToolForge. All rights reserved.")
+}
+
+model ToolConfig {
+  slug      String   @id
+  enabled   Boolean  @default(true)
+  featured  Boolean  @default(false)
+  popular   Boolean  @default(false)
+  new       Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model BlogDraft {
+  id            String    @id
+  title         String
+  slug          String
+  description   String    @default("")
+  content       String    @default("")
+  category      String    @default("Uncategorized")
+  tags          String    @default("[]")
+  author        String    @default("ToolForge Team")
+  featured      Boolean   @default(false)
+  coverImage    String    @default("")
+  status        String    @default("draft")
+  scheduledDate DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model AdminUser {
+  email     String    @id
+  role      String    @default("viewer")
+  status    String    @default("active")
+  lastLogin DateTime?
+  invitedAt DateTime  @default(now())
+}
+
+model SponsoredAd {
+  id          String   @id
+  title       String
+  description String   @default("")
+  image       String?
+  link        String
+  slot        String   @default("hero")
+  active      Boolean  @default(true)
+  clicks      Int      @default(0)
+  impressions Int      @default(0)
+  createdAt   DateTime @default(now())
+}
+
+model ActivityLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  action    String
+  details   String?
+  createdAt DateTime @default(now())
+}

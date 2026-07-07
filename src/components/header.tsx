@@ -26,12 +26,12 @@ export default function Header() {
             <span className="text-primary">{biblicalMode ? "\u2618" : "\u25C6"}</span>
             ToolForge
           </Link>
-          <nav className="hidden md:flex items-center gap-6 text-sm text-muted-foreground">
+          <nav className="hidden md:flex items-center gap-6 text-sm text-muted-foreground" aria-label="Main navigation">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="hover:text-foreground transition-colors"
+                className="hover:text-foreground transition-colors focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2 rounded-sm"
               >
                 {link.label}
               </Link>
@@ -68,14 +68,21 @@ export default function Header() {
             <span className="hidden sm:inline">Calm</span>
           </button>
 
-          <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setMobileOpen(!mobileOpen)}>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="md:hidden"
+            onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            aria-expanded={mobileOpen}
+          >
             {mobileOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
           </Button>
         </div>
       </div>
 
       {mobileOpen && (
-        <div className="md:hidden border-t p-4 space-y-2">
+        <nav className="md:hidden border-t p-4 space-y-2" aria-label="Mobile navigation">
           <div className="flex items-center justify-between pb-2 border-b border-border mb-2">
             <span className="text-xs text-muted-foreground">Theme</span>
             <button
@@ -113,7 +120,7 @@ export default function Header() {
               {link.label}
             </Link>
           ))}
-        </div>
+        </nav>
       )}
     </header>
   )

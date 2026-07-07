@@ -6,6 +6,8 @@ import { calculateAIVisibilityScore, aiImprovementTips } from "./ai-score"
 import { generateAIMeta } from "./ai-meta"
 import { countInternalLinks } from "./ai-links"
 import { AISignals } from "./ai-signals"
+import { generateCoverConfig, generateImageMetadata } from "./blog-cover-generator"
+import { serializeCover } from "./blog-types"
 export type { BlogPost, BlogMeta }
 export { blogCategories } from "./blog-types"
 export { aiImprovementTips }
@@ -19,6 +21,10 @@ export const articleToolMapping: Record<string, string[]> = {
   "revision-planning-techniques": ["revision-planner"],
   "pomodoro-technique-guide": ["pomodoro"],
   "privacy-first-tools": [],
+  "time-management-hacks-daily-routine": ["planner", "day-planner", "pomodoro", "todo", "habit-tracker", "stopwatch", "notes-app"],
+  "stop-overwhelmed-master-daily-tasks": ["notes-app", "planner", "todo", "day-planner"],
+  "smart-time-blocking-blueprint": ["planner", "day-planner", "pomodoro", "todo"],
+  "smart-time-blocking-system": ["day-planner", "pomodoro", "notes-app", "planner", "todo"],
 }
 
 function calculateReadingTime(content: string): number {
@@ -53,22 +59,40 @@ function makeBlogAI(title: string, description: string, tags: string[], content:
   }
 }
 
+const legacyGradientKeys = ["gradient-1", "gradient-2", "gradient-3", "gradient-4", "gradient-5", "gradient-6"]
+
+function resolveCoverImage(coverImage: string, title: string, category: string, tags: string[]): string {
+  if (!coverImage || legacyGradientKeys.includes(coverImage)) {
+    const config = generateCoverConfig(title, category, tags)
+    return serializeCover(config)
+  }
+  if (coverImage.startsWith("{")) {
+    return coverImage
+  }
+  return coverImage
+}
+
 function buildMeta(fm: Record<string, unknown>, content: string, slug: string): BlogMeta {
   const title = String(fm.title || slug)
   const description = String(fm.description || "")
   const tags = (fm.tags as string[]) || []
+  const category = String(fm.category || "Uncategorized")
+  const rawCover = String(fm.coverImage || "")
+  const coverImage = resolveCoverImage(rawCover, title, category, tags)
+  const imgMeta = generateImageMetadata(title, description, category, tags)
   return {
     slug,
     title,
     description,
     date: String(fm.date || new Date().toISOString()),
     author: String(fm.author || "ToolForge Team"),
-    category: String(fm.category || "Uncategorized"),
+    category,
     tags,
     featured: Boolean(fm.featured),
-    coverImage: String(fm.coverImage || ""),
+    coverImage,
     readingTime: calculateReadingTime(content),
     ai: makeBlogAI(title, description, tags, content),
+    ...imgMeta,
   }
 }
 
@@ -76,19 +100,24 @@ function buildPost(fm: Record<string, unknown>, content: string, slug: string): 
   const title = String(fm.title || slug)
   const description = String(fm.description || "")
   const tags = (fm.tags as string[]) || []
+  const category = String(fm.category || "Uncategorized")
+  const rawCover = String(fm.coverImage || "")
+  const coverImage = resolveCoverImage(rawCover, title, category, tags)
+  const imgMeta = generateImageMetadata(title, description, category, tags)
   return {
     slug,
     title,
     description,
     date: String(fm.date || new Date().toISOString()),
     author: String(fm.author || "ToolForge Team"),
-    category: String(fm.category || "Uncategorized"),
+    category,
     tags,
     featured: Boolean(fm.featured),
-    coverImage: String(fm.coverImage || ""),
+    coverImage,
     content,
     readingTime: calculateReadingTime(content),
     ai: makeBlogAI(title, description, tags, content),
+    ...imgMeta,
   }
 }
 

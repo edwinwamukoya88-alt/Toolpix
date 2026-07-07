@@ -160,7 +160,6 @@ export default function FaviconGenerator() {
   }, [config])
 
   useEffect(() => {
-    setIsGenerating(true)
     const id = requestAnimationFrame(() => renderAll())
     return () => cancelAnimationFrame(id)
   }, [renderAll])

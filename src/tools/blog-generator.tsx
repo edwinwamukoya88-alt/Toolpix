@@ -9,7 +9,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { toast } from "sonner"
 import BlogCoverImage from "@/components/blog/blog-cover-image"
-import { generateCoverConfig, serializeCover } from "@/lib/blog-types"
+import { serializeCover } from "@/lib/blog-types"
+import { generateCoverConfig } from "@/lib/blog-cover-generator"
 import { calculateAIVisibilityScore, aiImprovementTips } from "@/lib/ai-score"
 import { getAIBadge, formatAIScore } from "@/lib/ai-badge"
 import { countInternalLinks } from "@/lib/ai-links"
@@ -49,14 +50,14 @@ const categoryToolMap: Record<string, ToolEntry[]> = {
   "CBC Education": [
     { name: "CBC Grade Calculator", url: "/tools/grade-calculator" },
     { name: "CBC Lesson Planner", url: "/tools/lesson-plan-generator" },
-    { name: "CBC Revision Planner", url: "/tools/revision-planner" },
+    { name: "CBC Learning & Revision Planner", url: "/tools/revision-planner" },
     { name: "CBC Assessment Tool", url: "/tools/exam-generator" },
     { name: "CBC Teacher Comment Generator", url: "/tools/teacher-comment-generator" },
     { name: "CBC Scheme of Work Generator", url: "/tools/scheme-of-work-generator" },
   ],
   Productivity: [
     { name: "Pomodoro Timer", url: "/tools/pomodoro" },
-    { name: "Todo List", url: "/tools/todo" },
+    { name: "Task Planner", url: "/tools/planner" },
     { name: "Notes App", url: "/tools/notes" },
     { name: "Kanban Board", url: "/tools/kanban" },
     { name: "Day Planner", url: "/tools/day-planner" },
@@ -81,7 +82,6 @@ const categoryToolMap: Record<string, ToolEntry[]> = {
     { name: "Loan / EMI Calculator", url: "/tools/loan-calculator" },
     { name: "Profit Calculator", url: "/tools/profit-calculator" },
     { name: "Currency Converter", url: "/tools/currency-converter" },
-    { name: "Expense Tracker", url: "/tools/expense-tracker" },
   ],
   Design: [
     { name: "Color Picker Pro", url: "/tools/color-picker" },
@@ -90,14 +90,14 @@ const categoryToolMap: Record<string, ToolEntry[]> = {
     { name: "Lorem Ipsum Generator", url: "/tools/lorem-ipsum" },
   ],
   "File Conversion": [
-    { name: "PDF Converter UI", url: "/tools/pdf-converter" },
-    { name: "Image Converter UI", url: "/tools/image-converter" },
-    { name: "Document Converter UI", url: "/tools/document-converter" },
-    { name: "Audio Converter UI", url: "/tools/audio-converter" },
-    { name: "File Compressor UI", url: "/tools/file-compressor" },
+    { name: "PDF Converter", url: "/tools/pdf-converter" },
+    { name: "Image Converter", url: "/tools/image-converter" },
+    { name: "Document Converter", url: "/tools/document-converter" },
+    { name: "Audio Converter", url: "/tools/audio-converter" },
+    { name: "File Compressor", url: "/tools/file-compressor" },
   ],
   General: [
-    { name: "Todo List", url: "/tools/todo" },
+    { name: "Task Planner", url: "/tools/planner" },
     { name: "Notes App", url: "/tools/notes" },
     { name: "Pomodoro Timer", url: "/tools/pomodoro" },
     { name: "Password Generator", url: "/tools/password-generator" },
@@ -111,12 +111,12 @@ const smartKeywordMap: [RegExp, ToolEntry[]][] = [
     { name: "CBC Lesson Planner", url: "/tools/lesson-plan-generator" },
     { name: "CBC Scheme of Work Generator", url: "/tools/scheme-of-work-generator" },
   ]],
-  [/revis(e|ion)|study/i, [{ name: "CBC Revision Planner", url: "/tools/revision-planner" }]],
+  [/revis(e|ion)|study/i, [{ name: "CBC Learning & Revision Planner", url: "/tools/revision-planner" }]],
   [/assess|exam|test|quiz/i, [{ name: "CBC Assessment Tool", url: "/tools/exam-generator" }]],
   [/comment|feedback|report/i, [{ name: "CBC Teacher Comment Generator", url: "/tools/teacher-comment-generator" }]],
   [/pdf|document|convert/i, [
-    { name: "PDF Converter UI", url: "/tools/pdf-converter" },
-    { name: "Document Converter UI", url: "/tools/document-converter" },
+    { name: "PDF Converter", url: "/tools/pdf-converter" },
+    { name: "Document Converter", url: "/tools/document-converter" },
   ]],
   [/qr/i, [
     { name: "QR Code Generator", url: "/tools/qr-generator" },
@@ -125,7 +125,7 @@ const smartKeywordMap: [RegExp, ToolEntry[]][] = [
   [/password|secure|encrypt/i, [{ name: "Password Generator", url: "/tools/password-generator" }]],
   [/color|colour|palette|pick/i, [{ name: "Color Picker Pro", url: "/tools/color-picker" }]],
   [/image|photo|picture/i, [
-    { name: "Image Converter UI", url: "/tools/image-converter" },
+    { name: "Image Converter", url: "/tools/image-converter" },
     { name: "Image Placeholder", url: "/tools/image-placeholder" },
   ]],
   [/json|format/i, [{ name: "JSON Formatter & Validator", url: "/tools/json-formatter" }]],
@@ -134,9 +134,8 @@ const smartKeywordMap: [RegExp, ToolEntry[]][] = [
   [/loan|emi|mortgage/i, [{ name: "Loan / EMI Calculator", url: "/tools/loan-calculator" }]],
   [/profit|margin|roi/i, [{ name: "Profit Calculator", url: "/tools/profit-calculator" }]],
   [/currency|money|exchange/i, [{ name: "Currency Converter", url: "/tools/currency-converter" }]],
-  [/expense|budget|spend/i, [{ name: "Expense Tracker", url: "/tools/expense-tracker" }]],
   [/pomodoro|timer|focus/i, [{ name: "Pomodoro Timer", url: "/tools/pomodoro" }]],
-  [/todo|task|checklist/i, [{ name: "Todo List", url: "/tools/todo" }]],
+  [/todo|task|checklist/i, [{ name: "Task Planner", url: "/tools/planner" }]],
   [/note|journal|diary/i, [{ name: "Notes App", url: "/tools/notes" }]],
   [/kanban|board|column/i, [{ name: "Kanban Board", url: "/tools/kanban" }]],
   [/favicon/i, [{ name: "Favicon Generator", url: "/tools/favicon-generator" }]],
@@ -145,8 +144,8 @@ const smartKeywordMap: [RegExp, ToolEntry[]][] = [
     { name: "Image Placeholder", url: "/tools/image-placeholder" },
     { name: "Lorem Ipsum Generator", url: "/tools/lorem-ipsum" },
   ]],
-  [/compress|zip|archive/i, [{ name: "File Compressor UI", url: "/tools/file-compressor" }]],
-  [/audio|sound|music/i, [{ name: "Audio Converter UI", url: "/tools/audio-converter" }]],
+  [/compress|zip|archive/i, [{ name: "File Compressor", url: "/tools/file-compressor" }]],
+  [/audio|sound|music/i, [{ name: "Audio Converter", url: "/tools/audio-converter" }]],
   [/schedule|plan.*day|daily/i, [{ name: "Day Planner", url: "/tools/day-planner" }]],
   [/markdown|md/i, [{ name: "Markdown Preview", url: "/tools/markdown-preview" }]],
   [/random|uuid/i, [{ name: "Random Generator", url: "/tools/random-generator" }]],
@@ -197,7 +196,7 @@ function getSmartTools(title: string): ToolEntry[] {
   }
 
   if (matched.size === 0) {
-    return [{ name: "Todo List", url: "/tools/todo" }]
+    return [{ name: "Task Planner", url: "/tools/planner" }]
   }
   return Array.from(matched.values()).slice(0, 5)
 }
@@ -571,7 +570,7 @@ function generateContent(
   sections.push("")
   sections.push("---")
   sections.push("")
-  sections.push(`*This guide was generated by ToolForge Blog Generator using ${effectiveStyle} style. All tools mentioned are free, privacy-first, and require no login. Try them today at [toolforge.app](https://toolforge.app).*`)
+  sections.push(`*This guide was generated by ToolForge Blog Generator using ${effectiveStyle} style. All tools mentioned are free, privacy-first, and require no login. Try them today at [toolforge.app](https://smart-tools-kit.vercel.app).*`)
 
   return sections.join("\n")
 }
@@ -580,7 +579,7 @@ function getToolShortDesc(url: string): string {
   const descs: Record<string, string> = {
     "/tools/grade-calculator": "Calculate scores and competency levels (EE/ME/AE/BE)",
     "/tools/lesson-plan-generator": "Create KICD-compliant lesson plans",
-    "/tools/revision-planner": "Plan and track revision sessions",
+    "/tools/revision-planner": "Plan and track curriculum-aligned revision sessions",
     "/tools/exam-generator": "Generate performance-based assessments",
     "/tools/teacher-comment-generator": "Write competency-based report comments",
     "/tools/scheme-of-work-generator": "Create termly schemes of work",
@@ -615,7 +614,6 @@ function getToolShortDesc(url: string): string {
     "/tools/loan-calculator": "Calculate loan payments and EMI schedules",
     "/tools/profit-calculator": "Calculate profit margins and ROI",
     "/tools/currency-converter": "Convert between world currencies",
-    "/tools/expense-tracker": "Track and analyze monthly spending",
   }
   return descs[url] || "Free privacy-first browser tool"
 }

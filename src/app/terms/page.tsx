@@ -1,6 +1,20 @@
+import type { Metadata } from "next"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
+
+export const metadata: Metadata = {
+  title: "Terms of Service",
+  description: "Terms of service for using ToolForge. By accessing or using ToolForge, you agree to be bound by these terms.",
+  openGraph: {
+    title: "Terms of Service - ToolForge",
+    description: "Terms of service for using the ToolForge privacy-first online tools suite.",
+    url: "https://smart-tools-kit.vercel.app/terms",
+  },
+  alternates: {
+    canonical: "https://smart-tools-kit.vercel.app/terms",
+  },
+}
 
 export default function TermsPage() {
   return (
@@ -29,7 +43,7 @@ export default function TermsPage() {
           <p>The ToolForge name, logo, and code are owned by ToolForge. The tools are provided for use, but you may not copy, redistribute, or reverse engineer the service without permission.</p>
 
           <h2>Limitation of Liability</h2>
-          <p>ToolForge is provided "as is" without any warranty. We are not liable for any damages arising from the use or inability to use the service.</p>
+          <p>ToolForge is provided &ldquo;as is&rdquo; without any warranty. We are not liable for any damages arising from the use or inability to use the service.</p>
 
           <h2>Changes to Terms</h2>
           <p>We reserve the right to update these terms. Continued use after changes constitutes acceptance of the new terms.</p>

@@ -19,7 +19,8 @@ export default function SearchBar({ value, onChange, placeholder }: SearchBarPro
   }, [local, onChange])
 
   useEffect(() => {
-    setLocal(value)
+    const id = requestAnimationFrame(() => setLocal(value))
+    return () => cancelAnimationFrame(id)
   }, [value])
 
   return (
