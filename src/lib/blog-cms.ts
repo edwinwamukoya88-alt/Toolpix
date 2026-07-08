@@ -73,7 +73,7 @@ export async function getDrafts(): Promise<BlogDraft[]> {
   } catch {
     try {
       if (typeof window !== "undefined") {
-        const raw = localStorage.getItem("tf_blog_drafts")
+        const raw = localStorage.getItem("zil_blog_drafts")
         return raw ? (JSON.parse(raw) as BlogDraft[]).sort((a, b) => b.updatedAt - a.updatedAt) : []
       }
     } catch {}
@@ -90,7 +90,7 @@ export async function getDraftById(id: string): Promise<BlogDraft | null> {
   } catch {
     try {
       if (typeof window !== "undefined") {
-        const raw = localStorage.getItem("tf_blog_drafts")
+        const raw = localStorage.getItem("zil_blog_drafts")
         const drafts: BlogDraft[] = raw ? JSON.parse(raw) : []
         return drafts.find((d) => d.id === id) ?? null
       }
@@ -148,11 +148,11 @@ export async function createDraft(data: {
 
   try {
     if (typeof window !== "undefined") {
-      const raw = localStorage.getItem("tf_blog_drafts")
+      const raw = localStorage.getItem("zil_blog_drafts")
       const drafts: BlogDraft[] = raw ? JSON.parse(raw) : []
       const draft: BlogDraft = { ...draftData, tags: draftData.tags }
       drafts.push(draft)
-      localStorage.setItem("tf_blog_drafts", JSON.stringify(drafts))
+      localStorage.setItem("zil_blog_drafts", JSON.stringify(drafts))
       return draft
     }
   } catch {}
@@ -175,12 +175,12 @@ export async function updateDraft(
 
   try {
     if (typeof window !== "undefined") {
-      const raw = localStorage.getItem("tf_blog_drafts")
+      const raw = localStorage.getItem("zil_blog_drafts")
       const drafts: BlogDraft[] = raw ? JSON.parse(raw) : []
       const index = drafts.findIndex((d) => d.id === id)
       if (index === -1) return null
       drafts[index] = { ...drafts[index], ...data, updatedAt: Date.now() }
-      localStorage.setItem("tf_blog_drafts", JSON.stringify(drafts))
+      localStorage.setItem("zil_blog_drafts", JSON.stringify(drafts))
       return drafts[index]
     }
   } catch {}
@@ -198,11 +198,11 @@ export async function deleteDraft(id: string): Promise<boolean> {
 
   try {
     if (typeof window !== "undefined") {
-      const raw = localStorage.getItem("tf_blog_drafts")
+      const raw = localStorage.getItem("zil_blog_drafts")
       const drafts: BlogDraft[] = raw ? JSON.parse(raw) : []
       const filtered = drafts.filter((d) => d.id !== id)
       if (filtered.length === drafts.length) return false
-      localStorage.setItem("tf_blog_drafts", JSON.stringify(filtered))
+      localStorage.setItem("zil_blog_drafts", JSON.stringify(filtered))
       return true
     }
   } catch {}

@@ -28,7 +28,7 @@ async function fetchAll(): Promise<ToolWithConfig[]> {
   } catch {
     try {
       if (typeof window !== "undefined") {
-        const raw = localStorage.getItem("tf_tools_config")
+        const raw = localStorage.getItem("zil_tools_config")
         const config: ToolConfigData[] = raw ? JSON.parse(raw) : []
         const configMap = new Map(config.map((c) => [c.slug, c]))
         return tools.map((tool) => {
@@ -59,7 +59,7 @@ export async function updateToolConfig(
   } catch {
     try {
       if (typeof window !== "undefined") {
-        const raw = localStorage.getItem("tf_tools_config")
+        const raw = localStorage.getItem("zil_tools_config")
         const config: ToolConfigData[] = raw ? JSON.parse(raw) : []
         const index = config.findIndex((c) => c.slug === slug)
         if (index >= 0) {
@@ -67,7 +67,7 @@ export async function updateToolConfig(
         } else {
           config.push({ slug, enabled: true, featured: false, popular: false, new: false, ...updates })
         }
-        localStorage.setItem("tf_tools_config", JSON.stringify(config))
+        localStorage.setItem("zil_tools_config", JSON.stringify(config))
       }
     } catch {}
     return true

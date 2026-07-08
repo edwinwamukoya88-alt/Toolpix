@@ -3,20 +3,21 @@ import { redirect } from "next/navigation"
 import { NextResponse } from "next/server"
 import { checkAdminRole } from "./roles"
 
-export async function requireAuth() {
+export async function requireAuth(): Promise<void> {
   const session = await auth()
 
   if (!session?.user?.email) {
-    redirect(`/api/auth/signin?callbackUrl=${encodeURIComponent("/admin")}`)
+    redirect("/admin/login")
   }
 
-  const { isAdmin } = await checkAdminRole(session.user.email)
+  const email: string = session.user.email
+  const { isAdmin } = await checkAdminRole(email)
   if (!isAdmin) {
     redirect("/access-denied")
   }
 }
 
-export async function requireApiAuth() {
+export async function requireApiAuth(): Promise<NextResponse | undefined> {
   const session = await auth()
 
   if (!session?.user?.email) {

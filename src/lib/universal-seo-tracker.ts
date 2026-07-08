@@ -6,7 +6,7 @@ export interface PagePerformance {
   toolUsageScore: number
 }
 
-const STORAGE_KEY = "tf_page_tracker"
+const STORAGE_KEY = "zil_page_tracker"
 
 interface TrackerEntry {
   path: string

@@ -20,8 +20,8 @@
   <br>
   <a href="https://vercel.com/"><img src="https://img.shields.io/badge/Vercel%20Ready-000000?style=flat-square&logo=vercel&logoColor=white" alt="Vercel Ready"></a>
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow?style=flat-square" alt="License: MIT"></a>
-  <a href="https://github.com/edwinwamukoya88-alt/smart-tools-kit"><img src="https://img.shields.io/github/stars/edwinwamukoya88-alt/smart-tools-kit?style=flat-square&logo=github" alt="GitHub stars"></a>
-  <a href="https://github.com/edwinwamukoya88-alt/smart-tools-kit/issues"><img src="https://img.shields.io/github/issues/edwinwamukoya88-alt/smart-tools-kit?style=flat-square&logo=github" alt="GitHub issues"></a>
+  <a href="https://github.com/edwinwamukoya88-alt/Toolpix"><img src="https://img.shields.io/github/stars/edwinwamukoya88-alt/Toolpix?style=flat-square&logo=github" alt="GitHub stars"></a>
+  <a href="https://github.com/edwinwamukoya88-alt/Toolpix/issues"><img src="https://img.shields.io/github/issues/edwinwamukoya88-alt/Toolpix?style=flat-square&logo=github" alt="GitHub issues"></a>
 </p>
 
 ---
@@ -174,7 +174,7 @@ xychart-beta
 ```bash
 # 1. Clone the repository
 git clone <your-repo-url>
-cd smart-tools-kit
+cd zilita
 
 # 2. Install dependencies
 npm install

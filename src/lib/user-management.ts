@@ -23,7 +23,7 @@ async function fetchAll(): Promise<AdminUserRecord[]> {
   } catch {
     try {
       if (typeof window !== "undefined") {
-        const raw = localStorage.getItem("tf_admin_invites")
+        const raw = localStorage.getItem("zil_admin_invites")
         const invites: AdminUserRecord[] = raw ? JSON.parse(raw) : []
         return [
           { email: "edwinwamukoya88@gmail.com", role: "admin", status: "active", invitedAt: 0 },
@@ -54,7 +54,7 @@ export async function inviteAdmin(email: string, role: string): Promise<AdminUse
   } catch {}
   try {
     if (typeof window !== "undefined") {
-      const raw = localStorage.getItem("tf_admin_invites")
+      const raw = localStorage.getItem("zil_admin_invites")
       const invites: AdminUserRecord[] = raw ? JSON.parse(raw) : []
       const existing = invites.find((i) => i.email === email)
       if (existing) {
@@ -63,7 +63,7 @@ export async function inviteAdmin(email: string, role: string): Promise<AdminUse
       } else {
         invites.push({ email, role, status: "invited", invitedAt: Date.now() })
       }
-      localStorage.setItem("tf_admin_invites", JSON.stringify(invites))
+      localStorage.setItem("zil_admin_invites", JSON.stringify(invites))
     }
   } catch {}
   return { email, role, status: "invited", invitedAt: Date.now() }
@@ -81,11 +81,11 @@ export async function removeAdmin(email: string): Promise<boolean> {
   } catch {}
   try {
     if (typeof window !== "undefined") {
-      const raw = localStorage.getItem("tf_admin_invites")
+      const raw = localStorage.getItem("zil_admin_invites")
       const invites: AdminUserRecord[] = raw ? JSON.parse(raw) : []
       const filtered = invites.filter((i) => i.email !== email)
       if (filtered.length === invites.length) return false
-      localStorage.setItem("tf_admin_invites", JSON.stringify(filtered))
+      localStorage.setItem("zil_admin_invites", JSON.stringify(filtered))
       return true
     }
   } catch {}
@@ -103,7 +103,7 @@ export async function updateAdminRole(email: string, role: string): Promise<bool
   } catch {}
   try {
     if (typeof window !== "undefined") {
-      const raw = localStorage.getItem("tf_admin_invites")
+      const raw = localStorage.getItem("zil_admin_invites")
       const invites: AdminUserRecord[] = raw ? JSON.parse(raw) : []
       const invite = invites.find((i) => i.email === email)
       if (invite) {
@@ -111,7 +111,7 @@ export async function updateAdminRole(email: string, role: string): Promise<bool
       } else {
         invites.push({ email, role, status: "active", invitedAt: 0 })
       }
-      localStorage.setItem("tf_admin_invites", JSON.stringify(invites))
+      localStorage.setItem("zil_admin_invites", JSON.stringify(invites))
     }
   } catch {}
   return true
@@ -128,12 +128,12 @@ export async function setAdminStatus(email: string, status: string): Promise<boo
   } catch {}
   try {
     if (typeof window !== "undefined") {
-      const raw = localStorage.getItem("tf_admin_invites")
+      const raw = localStorage.getItem("zil_admin_invites")
       const invites: AdminUserRecord[] = raw ? JSON.parse(raw) : []
       const invite = invites.find((i) => i.email === email)
       if (invite) {
         invite.status = status
-        localStorage.setItem("tf_admin_invites", JSON.stringify(invites))
+        localStorage.setItem("zil_admin_invites", JSON.stringify(invites))
         return true
       }
     }

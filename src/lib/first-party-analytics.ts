@@ -4,7 +4,7 @@
  * All data stays on-device — no third-party services required.
  * ────────────────────────────────────────────────────────────── */
 
-const DB_NAME = "tf_analytics"
+const DB_NAME = "zil_analytics"
 const DB_VERSION = 2
 const STORES = ["tool_events", "blog_events", "page_views", "sessions"] as const
 
@@ -221,10 +221,10 @@ async function countRange(store: StoreName, field: "timestamp" | "startTime", st
 
 function getSessionId(): string {
   if (typeof window === "undefined") return ""
-  let sid = sessionStorage.getItem("tf_session_id")
+  let sid = sessionStorage.getItem("zil_session_id")
   if (!sid) {
     sid = `s_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`
-    sessionStorage.setItem("tf_session_id", sid)
+    sessionStorage.setItem("zil_session_id", sid)
   }
   return sid
 }

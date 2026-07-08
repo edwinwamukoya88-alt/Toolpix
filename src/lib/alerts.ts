@@ -23,7 +23,7 @@ export interface MetricComparison {
   threshold: number
 }
 
-const STORAGE_KEY = "tf_analytics_alerts"
+const STORAGE_KEY = "zil_analytics_alerts"
 
 function loadAlerts(): Alert[] {
   if (typeof window === "undefined") return []

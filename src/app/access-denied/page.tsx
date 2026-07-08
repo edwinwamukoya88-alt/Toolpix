@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { auth } from "@/auth"
+import { auth, signIn } from "@/auth"
 import Link from "next/link"
 import { ShieldAlert } from "lucide-react"
 
@@ -43,12 +43,19 @@ export default async function AccessDeniedPage() {
           >
             Return Home
           </Link>
-          <Link
-            href="/api/auth/signin"
-            className="inline-flex items-center justify-center gap-2 rounded-lg border border-border bg-background px-6 py-2.5 text-sm font-medium hover:bg-muted transition-colors"
+          <form
+            action={async () => {
+              "use server"
+              await signIn("google", { redirectTo: "/admin" })
+            }}
           >
-            Sign in with another account
-          </Link>
+            <button
+              type="submit"
+              className="inline-flex items-center justify-center gap-2 rounded-lg border border-border bg-background px-6 py-2.5 text-sm font-medium hover:bg-muted transition-colors"
+            >
+              Sign in with another account
+            </button>
+          </form>
         </div>
       </div>
     </div>

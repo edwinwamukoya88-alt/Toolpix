@@ -30,7 +30,7 @@ export async function loadSettings(): Promise<SiteSettings> {
   } catch {
     try {
       if (typeof window !== "undefined") {
-        const raw = localStorage.getItem("tf_site_settings")
+        const raw = localStorage.getItem("zil_site_settings")
         if (raw) return { ...defaultSettings, ...JSON.parse(raw) }
       }
     } catch {}
@@ -50,9 +50,9 @@ export async function saveSettings(settings: Partial<SiteSettings>): Promise<Sit
   } catch {
     try {
       if (typeof window !== "undefined") {
-        const current = JSON.parse(localStorage.getItem("tf_site_settings") ?? "{}")
+        const current = JSON.parse(localStorage.getItem("zil_site_settings") ?? "{}")
         const updated = { ...current, ...settings }
-        localStorage.setItem("tf_site_settings", JSON.stringify(updated))
+        localStorage.setItem("zil_site_settings", JSON.stringify(updated))
         return updated
       }
     } catch {}

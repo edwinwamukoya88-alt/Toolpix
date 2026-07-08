@@ -16,7 +16,7 @@ const tabs: { id: TabId; label: string; icon: typeof BarChart3 }[] = [
   { id: "insights", label: "AI Insights", icon: Sparkles },
 ]
 
-const STORAGE_KEY = "tf_dashboard_tab"
+const STORAGE_KEY = "zil_dashboard_tab"
 
 export default function DashboardNavigation({
   activeTab,
