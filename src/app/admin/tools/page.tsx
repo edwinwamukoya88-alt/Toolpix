@@ -164,7 +164,7 @@ export default function AdminToolsPage() {
 
       <PageHeader
         title="Tools Management"
-        description="Manage all ToolForge utilities — enable, feature, and categorize"
+        description="Manage all Zilita utilities — enable, feature, and categorize"
       />
 
       <div className="space-y-6">

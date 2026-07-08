@@ -9,7 +9,7 @@ interface ShareButtonsProps {
   slug: string
 }
 
-const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://smart-tools-kit.vercel.app"
+const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://zilita.com"
 
 export default function ShareButtons({ title, slug }: ShareButtonsProps) {
   const blogUrl = `${BASE_URL}/blog/${slug}`

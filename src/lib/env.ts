@@ -87,7 +87,7 @@ function startupWarning(): void {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL
   if (!appUrl) {
     console.warn(
-      `⚠️  NEXT_PUBLIC_APP_URL not set — using fallback "https://smart-tools-kit.vercel.app"\n` +
+      `⚠️  NEXT_PUBLIC_APP_URL not set — using fallback "https://zilita.com"\n` +
       `   → Set NEXT_PUBLIC_APP_URL in .env.local for correct canonical URLs and SEO.`
     )
   }

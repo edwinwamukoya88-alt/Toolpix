@@ -17,21 +17,21 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const resolvedSlug = slugAliases[slug] || slug
   const tool = tools.find((t) => t.slug === resolvedSlug)
   if (!tool) return {}
-  const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://smart-tools-kit.vercel.app"
+  const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zilita.com"
   const ogImageUrl = `${siteUrl}/api/og?title=${encodeURIComponent(tool.name)}&category=${encodeURIComponent(tool.category)}&type=tool`
   const canonicalUrl = getAppUrl(`/tools/${tool.slug}`)
   return {
     title: tool.name,
     description: tool.description,
     openGraph: {
-      title: `${tool.name} - ToolForge`,
+      title: `${tool.name} - Zilita`,
       description: tool.description,
       url: canonicalUrl,
       images: [{ url: ogImageUrl, width: 1200, height: 630, alt: tool.name }],
     },
     twitter: {
       card: "summary_large_image",
-      title: `${tool.name} - ToolForge`,
+      title: `${tool.name} - Zilita`,
       description: tool.description,
       images: [ogImageUrl],
     },
@@ -47,7 +47,7 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
   const tool = tools.find((t) => t.slug === resolvedSlug)
   if (!tool) notFound()
 
-  const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://smart-tools-kit.vercel.app"
+  const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zilita.com"
 
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",

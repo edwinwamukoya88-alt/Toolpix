@@ -16,20 +16,20 @@ import AdSlot from "@/components/ads/AdSlot"
 import type { LucideIcon } from "lucide-react"
 import AdvertiseCTA from "@/components/home/advertise-cta"
 
-const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://smart-tools-kit.vercel.app"
+const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zilita.com"
 
 export const metadata: Metadata = {
-  title: "ToolForge — 44+ Free Privacy-First Online Tools",
+  title: "Zilita — 44+ Free Privacy-First Online Tools",
   description: "44+ free browser-based tools for teachers, students, developers, creators, and businesses. Privacy-first, no login required, 100% client-side processing.",
   openGraph: {
-    title: "ToolForge — Free Privacy-First Online Tools",
+    title: "Zilita — Free Privacy-First Online Tools",
     description: "Plan lessons, manage tasks, create content, and boost productivity — all in your browser. No data ever leaves your device.",
     url: siteUrl,
-    images: [{ url: `${siteUrl}/api/og?title=ToolForge&category=Productivity&type=site`, width: 1200, height: 630, alt: "ToolForge" }],
+    images: [{ url: `${siteUrl}/api/og?title=Zilita&category=Productivity&type=site`, width: 1200, height: 630, alt: "Zilita" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "ToolForge — Free Privacy-First Online Tools",
+    title: "Zilita — Free Privacy-First Online Tools",
     description: "Plan lessons, manage tasks, create content, and boost productivity — all in your browser. No data ever leaves your device.",
   },
   alternates: {
@@ -132,7 +132,7 @@ export default function HomePage() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Organization",
-            name: "ToolForge",
+            name: "Zilita",
             url: siteUrl,
             logo: `${siteUrl}/favicon.svg`,
             description: "44+ free browser-based tools for teachers, students, developers, creators, and businesses. Privacy-first, no login required, 100% client-side processing.",
@@ -268,7 +268,7 @@ export default function HomePage() {
           <div className="rounded-2xl border border-green-500/20 bg-green-500/[0.03] p-6 md:p-8 space-y-4">
             <h3 className="text-lg font-semibold text-green-500 flex items-center gap-2">
               <span className="flex h-7 w-7 items-center justify-center rounded-full bg-green-500/10 text-green-500">✓</span>
-              The ToolForge Way
+              The Zilita Way
             </h3>
             <ul className="space-y-3">
               {[
@@ -438,7 +438,7 @@ export default function HomePage() {
         <div className="flex items-end justify-between mb-10">
           <div className="space-y-1">
             <h2 className="text-3xl font-bold tracking-tight">Latest From The Blog</h2>
-            <p className="text-muted-foreground">Guides, tutorials, and insights from the ToolForge team</p>
+            <p className="text-muted-foreground">Guides, tutorials, and insights from the Zilita team</p>
           </div>
           <Link href="/blog" className="hidden sm:block">
             <Button variant="outline" size="sm" className="gap-1.5 rounded-xl">

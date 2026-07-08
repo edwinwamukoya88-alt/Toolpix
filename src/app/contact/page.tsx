@@ -3,21 +3,21 @@ import { Mail, MessageSquare, ArrowRight } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 
-const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://smart-tools-kit.vercel.app"
+const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zilita.com"
 
 export const metadata: Metadata = {
   title: "Contact",
-  description: "Get in touch with the ToolForge team. Email us at support@toolforge.app for support or ads@toolforge.app for advertising inquiries.",
+  description: "Get in touch with the Zilita team. Email us at support@zilita.com for support or ads@zilita.com for advertising inquiries.",
   openGraph: {
-    title: "Contact ToolForge",
-    description: "Reach the ToolForge team for support or advertising inquiries.",
+    title: "Contact Zilita",
+    description: "Reach the Zilita team for support or advertising inquiries.",
     url: `${siteUrl}/contact`,
-    images: [{ url: `${siteUrl}/api/og?title=Contact+ToolForge&category=Productivity&type=site`, width: 1200, height: 630, alt: "Contact ToolForge" }],
+    images: [{ url: `${siteUrl}/api/og?title=Contact+Zilita&category=Productivity&type=site`, width: 1200, height: 630, alt: "Contact Zilita" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Contact ToolForge",
-    description: "Reach the ToolForge team for support or advertising inquiries.",
+    title: "Contact Zilita",
+    description: "Reach the Zilita team for support or advertising inquiries.",
   },
   alternates: {
     canonical: `${siteUrl}/contact`,
@@ -31,7 +31,7 @@ export default function ContactPage() {
         <div className="container py-16 md:py-20 text-center space-y-4">
           <h1 className="text-3xl md:text-4xl font-bold tracking-tight">Contact Us</h1>
           <p className="text-muted-foreground max-w-md mx-auto">
-            Get in touch with the ToolForge team. We are happy to help.
+            Get in touch with the Zilita team. We are happy to help.
           </p>
         </div>
       </section>
@@ -44,14 +44,14 @@ export default function ContactPage() {
                 <Mail className="h-5 w-5" />
               </div>
               <h2 className="font-semibold">Email</h2>
-              <p className="text-sm text-muted-foreground">support@toolforge.app</p>
+              <p className="text-sm text-muted-foreground">support@zilita.com</p>
             </div>
             <div className="rounded-xl border bg-background/40 p-6 text-center space-y-3">
               <div className="inline-flex items-center justify-center h-10 w-10 rounded-lg bg-primary/10 text-primary">
                 <MessageSquare className="h-5 w-5" />
               </div>
               <h2 className="font-semibold">Ad Inquiries</h2>
-              <p className="text-sm text-muted-foreground">ads@toolforge.app</p>
+              <p className="text-sm text-muted-foreground">ads@zilita.com</p>
             </div>
           </div>
 

@@ -4,7 +4,7 @@
 
 ```
 /                               ─ Home (Landing page with hero, categories, popular tools, blog preview)
-├── /about                      ─ About ToolForge (mission, features, CTA)
+├── /about                      ─ About Zilita (mission, features, CTA)
 ├── /access-denied              ─ Admin access denied page
 ├── /advertise                  ─ Advertising & pricing page (3 tiers, submission form)
 ├── /blog                       ─ Blog listing (search, category filter, featured post)

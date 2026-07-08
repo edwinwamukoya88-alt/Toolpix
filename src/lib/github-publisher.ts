@@ -25,7 +25,7 @@ function githubHeaders(token: string): Record<string, string> {
     Authorization: `Bearer ${token}`,
     Accept: "application/vnd.github.v3+json",
     "Content-Type": "application/json",
-    "User-Agent": "toolforge-blog-publisher",
+    "User-Agent": "zilita-blog-publisher",
   }
 }
 

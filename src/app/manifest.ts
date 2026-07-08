@@ -2,8 +2,8 @@ import type { MetadataRoute } from "next"
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "ToolForge — 39+ Free Privacy-First Online Tools",
-    short_name: "ToolForge",
+    name: "Zilita — 39+ Free Privacy-First Online Tools",
+    short_name: "Zilita",
     description: "39+ free browser-based tools for teachers, students, developers, and businesses. Privacy-first, no login required.",
     start_url: "/",
     display: "standalone",

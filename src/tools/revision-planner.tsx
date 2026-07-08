@@ -708,7 +708,7 @@ export default function CBCLearningRevisionPlanner() {
       ...(assessments ? [`• Assessments: ${assessments}`] : ["• Weekly mini assessments and reflection"]),
       "",
       "=".repeat(60),
-      `Generated with ToolForge — ${process.env.NEXT_PUBLIC_APP_URL || "smart-tools-kit.vercel.app"}`,
+      `Generated with Zilita — ${process.env.NEXT_PUBLIC_APP_URL || "zilita.com"}`,
     ]
     navigator.clipboard.writeText(lines.join("\n"))
     trackToolUse("revision-planner", "copy")

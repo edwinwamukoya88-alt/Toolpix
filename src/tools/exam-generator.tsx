@@ -791,7 +791,7 @@ export default function CBCAssessmentTool() {
               {/* Footer */}
               <div className="px-6 py-4 bg-muted/10 flex items-center justify-between text-[10px] text-muted-foreground">
                 <span>KICD Competency-Based Curriculum — Performance Assessment</span>
-                <span>Generated with ToolForge</span>
+                <span>Generated with Zilita</span>
               </div>
             </div>
           </div>

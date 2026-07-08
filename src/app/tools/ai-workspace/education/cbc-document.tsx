@@ -520,7 +520,7 @@ function DocumentHeader({ title }: { title: string }) {
     <div className="text-center mb-8 pb-5 border-b-2 border-gray-200">
       <div className="flex items-center justify-center gap-2 mb-2">
         <Sparkles className="h-5 w-5 text-primary/60" />
-        <span className="text-sm font-semibold uppercase tracking-[0.2em] text-primary/60">ToolForge AI Assistant</span>
+        <span className="text-sm font-semibold uppercase tracking-[0.2em] text-primary/60">Zilita AI Assistant</span>
       </div>
       <h1 className="text-3xl font-bold text-gray-900 tracking-tight">{title}</h1>
     </div>

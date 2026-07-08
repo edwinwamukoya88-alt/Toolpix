@@ -1,21 +1,21 @@
 import type { Metadata } from "next"
 
-const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://smart-tools-kit.vercel.app"
+const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zilita.com"
 
 export const metadata: Metadata = {
-  title: "Advertise With ToolForge — Reach Productivity-Focused Users",
+  title: "Advertise With Zilita — Reach Productivity-Focused Users",
   description:
     "Advertise to teachers, students, developers, and creators using privacy-first browser tools. Premium sponsorships, featured placements, and sponsored content.",
   openGraph: {
-    title: "Advertise With ToolForge",
+    title: "Advertise With Zilita",
     description:
       "Reach thousands of users using privacy-first productivity tools. Premium brand placements that respect user privacy.",
     url: `${siteUrl}/advertise`,
-    images: [{ url: `${siteUrl}/api/og?title=Advertise+With+ToolForge&category=Business&type=site`, width: 1200, height: 630, alt: "Advertise With ToolForge" }],
+    images: [{ url: `${siteUrl}/api/og?title=Advertise+With+Zilita&category=Business&type=site`, width: 1200, height: 630, alt: "Advertise With Zilita" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Advertise With ToolForge",
+    title: "Advertise With Zilita",
     description:
       "Reach thousands of users using privacy-first productivity tools. Premium brand placements that respect user privacy.",
   },

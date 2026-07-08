@@ -47,7 +47,7 @@ function defaultWeekData(): WeekTasks {
 }
 
 export default function DayPlanner() {
-  const [weekData, setWeekData] = useLocalStorage<WeekTasks>("toolpix_weekly_planner", defaultWeekData())
+  const [weekData, setWeekData] = useLocalStorage<WeekTasks>("zilita_weekly_planner", defaultWeekData())
   const [activeDay, setActiveDay] = useState<DayKey>(getTodayKey)
   const [now, setNow] = useState(() => Date.now())
 

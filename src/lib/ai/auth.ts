@@ -101,7 +101,7 @@ export function incrementDailyUsage(token: string): void {
   }
 }
 
-const CLEANUP_INIT_KEY = "__toolforgeAiUsageCleanup"
+const CLEANUP_INIT_KEY = "__zilitaAiUsageCleanup"
 if (typeof global !== "undefined" && !(globalThis as unknown as Record<string, boolean | undefined>)[CLEANUP_INIT_KEY]) {
   ;(globalThis as unknown as Record<string, boolean | undefined>)[CLEANUP_INIT_KEY] = true
   setInterval(() => {

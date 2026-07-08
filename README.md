@@ -1,7 +1,7 @@
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/badge/ToolForge-8B5CF6?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIyIiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGQ9Ik0xMiAyTDkgOUwxMiAxNUwxNSA5eiIvPjxwYXRoIGQ9Ik05IDlIMyIgb3BhY2l0eT0iMC42Ii8+PHBhdGggZD0iTTE1IDlIMjEiIG9wYWNpdHk9IjAuNiIvPjwvc3ZnPg==">
-    <img alt="ToolForge" src="https://img.shields.io/badge/ToolForge-8B5CF6?style=for-the-badge">
+    <source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/badge/Zilita-8B5CF6?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIyIiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGQ9Ik0xMiAyTDkgOUwxMiAxNUwxNSA5eiIvPjxwYXRoIGQ9Ik05IDlIMyIgb3BhY2l0eT0iMC42Ii8+PHBhdGggZD0iTTE1IDlIMjEiIG9wYWNpdHk9IjAuNiIvPjwvc3ZnPg==">
+    <img alt="Zilita" src="https://img.shields.io/badge/Zilita-8B5CF6?style=for-the-badge">
   </picture>
 </p>
 

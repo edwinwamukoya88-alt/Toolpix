@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const canonicalUrl = getAppUrl(`/blog/${post.slug}`)
 
   return {
-    title: `${post.title} - ToolForge Blog`,
+    title: `${post.title} - Zilita Blog`,
     description: post.description,
     keywords: [post.imageKeywords, post.tags.join(", ")].filter(Boolean).join(", "),
     authors: [{ name: post.author }],
@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       title: post.title,
       description: post.description,
       url: canonicalUrl,
-      siteName: "ToolForge",
+      siteName: "Zilita",
       type: "article",
       publishedTime: post.date,
       authors: [post.author],
@@ -37,7 +37,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
           url: ogImageUrl,
           width: 1200,
           height: 630,
-          alt: post.imageAlt || `${post.title} - ToolForge Blog`,
+          alt: post.imageAlt || `${post.title} - Zilita Blog`,
         },
       ],
     },
@@ -67,7 +67,7 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
   const toolSlugs = getToolSlugsForArticle(post.slug)
   const ogImageUrl = getBlogCoverUrl(post.title, post.category)
   const canonicalUrl = getAppUrl(`/blog/${post.slug}`)
-  const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://smart-tools-kit.vercel.app"
+  const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zilita.com"
 
   const articleJsonLd = {
     "@context": "https://schema.org",
@@ -83,7 +83,7 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
     image: ogImageUrl,
     publisher: {
       "@type": "Organization",
-      name: "ToolForge",
+      name: "Zilita",
     },
     mainEntityOfPage: {
       "@type": "WebPage",

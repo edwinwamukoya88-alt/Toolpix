@@ -2,7 +2,7 @@
 
 ## Overview
 
-ToolForge ships **41 tools** across **8 categories**. All tools are client-side only (no data leaves the user's device), lazy-loaded via `next/dynamic()`, and require no authentication.
+Zilita ships **41 tools** across **8 categories**. All tools are client-side only (no data leaves the user's device), lazy-loaded via `next/dynamic()`, and require no authentication.
 
 ---
 

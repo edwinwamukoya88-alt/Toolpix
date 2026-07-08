@@ -13,9 +13,9 @@ import {
 import { Button } from "@/components/ui/button"
 
 export const metadata: Metadata = {
-  title: "Media Kit | ToolForge Advertising",
+  title: "Media Kit | Zilita Advertising",
   description:
-    "Download the ToolForge media kit with audience insights, traffic data, sponsorship opportunities, and pricing information.",
+    "Download the Zilita media kit with audience insights, traffic data, sponsorship opportunities, and pricing information.",
   robots: { index: true, follow: true },
 }
 
@@ -82,10 +82,10 @@ export default function MediaKitPage() {
             Advertising resources
           </div>
           <h1 className="text-3xl md:text-5xl font-bold tracking-tight">
-            ToolForge <span className="text-primary">Media Kit</span>
+            Zilita <span className="text-primary">Media Kit</span>
           </h1>
           <p className="text-base md:text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed">
-            Everything you need to know about advertising on ToolForge —
+            Everything you need to know about advertising on Zilita —
             audience insights, sponsorship options, and platform metrics.
           </p>
           <div className="flex items-center justify-center gap-3 pt-2">
@@ -153,10 +153,10 @@ export default function MediaKitPage() {
           </p>
           <div className="pt-2">
             <a
-              href="mailto:ads@toolforge.app"
+              href="mailto:ads@zilita.com"
               className="inline-flex items-center gap-1.5 text-sm font-medium text-primary underline underline-offset-4 hover:opacity-80 transition-opacity"
             >
-              ads@toolforge.app
+              ads@zilita.com
               <ArrowRight className="h-3.5 w-3.5" />
             </a>
           </div>

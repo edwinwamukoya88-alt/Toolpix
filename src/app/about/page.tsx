@@ -3,20 +3,20 @@ import { CheckCircle, Cpu, Lock, Sparkles, Shield, Zap, Asterisk, Globe } from "
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 
-const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://smart-tools-kit.vercel.app"
+const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zilita.com"
 
 export const metadata: Metadata = {
   title: "About",
-  description: "ToolForge is a privacy-first suite of 39+ browser-based tools for productivity, finance, design, education, and development. No login required.",
+  description: "Zilita is a privacy-first suite of 39+ browser-based tools for productivity, finance, design, education, and development. No login required.",
   openGraph: {
-    title: "About ToolForge",
+    title: "About Zilita",
     description: "Privacy-first browser tools for productivity, finance, design, and education. No login required.",
     url: `${siteUrl}/about`,
-    images: [{ url: `${siteUrl}/api/og?title=About+ToolForge&category=Productivity&type=site`, width: 1200, height: 630, alt: "About ToolForge" }],
+    images: [{ url: `${siteUrl}/api/og?title=About+Zilita&category=Productivity&type=site`, width: 1200, height: 630, alt: "About Zilita" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "About ToolForge",
+    title: "About Zilita",
     description: "Privacy-first browser tools for productivity, finance, design, and education. No login required.",
   },
   alternates: {
@@ -45,7 +45,7 @@ export default function AboutPage() {
       {/* Hero */}
       <section className="border-b bg-gradient-to-b from-muted/30 to-background">
         <div className="container py-16 md:py-20 text-center space-y-4">
-          <h1 className="text-3xl md:text-4xl font-bold tracking-tight">About ToolForge</h1>
+          <h1 className="text-3xl md:text-4xl font-bold tracking-tight">About Zilita</h1>
           <p className="text-muted-foreground max-w-xl mx-auto">
             A privacy-first suite of browser-based tools for productivity, finance, and design.
           </p>
@@ -57,7 +57,7 @@ export default function AboutPage() {
         <div className="max-w-2xl mx-auto text-center space-y-4">
           <h2 className="text-2xl font-bold tracking-tight">Our Mission</h2>
           <p className="text-muted-foreground leading-relaxed">
-            ToolForge is built to give users fast, free, and private utilities that run entirely in the browser.
+            Zilita is built to give users fast, free, and private utilities that run entirely in the browser.
             No servers, no uploads, no accounts — just tools that work the moment you open them.
           </p>
         </div>
@@ -89,10 +89,10 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Why ToolForge */}
+      {/* Why Zilita */}
       <section className="container pb-16">
         <div className="max-w-4xl mx-auto space-y-6">
-          <h2 className="text-2xl font-bold tracking-tight text-center">Why ToolForge</h2>
+          <h2 className="text-2xl font-bold tracking-tight text-center">Why Zilita</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {reasons.map((r) => {
               const Icon = r.icon

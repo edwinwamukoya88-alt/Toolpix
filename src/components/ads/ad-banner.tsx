@@ -6,7 +6,7 @@ const IS_DEV = process.env.NODE_ENV === "development"
 
 function getConsent(): boolean | null {
   try {
-    const val = localStorage.getItem("toolpix_ad_consent")
+    const val = localStorage.getItem("zilita_ad_consent")
     if (val === null) return null
     return val === "true"
   } catch {

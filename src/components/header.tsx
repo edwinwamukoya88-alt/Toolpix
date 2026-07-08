@@ -31,9 +31,9 @@ export default function Header() {
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-sm supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 sm:h-16 items-center justify-between">
         <div className="flex items-center gap-4 sm:gap-8">
-          <Link href="/" className="flex items-center gap-2 font-bold text-lg sm:text-xl shrink-0" aria-label="ToolForge Home">
+          <Link href="/" className="flex items-center gap-2 font-bold text-lg sm:text-xl shrink-0" aria-label="Zilita Home">
             <span className="text-primary" aria-hidden="true">{biblicalMode ? "\u2618" : "\u25C6"}</span>
-            <span className="hidden sm:inline">ToolForge</span>
+            <span className="hidden sm:inline">Zilita</span>
             <span className="sm:hidden">TF</span>
           </Link>
           <nav className="hidden md:flex items-center gap-6 text-sm text-muted-foreground" aria-label="Main navigation">

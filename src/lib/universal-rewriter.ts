@@ -13,7 +13,7 @@ function ensureQuickAnswerBlock(content: string, title: string): string {
     `- **One-line definition**: ${title} helps users accomplish their goals more efficiently.`,
     `- **Simple explanation**: This guide breaks down the key concepts and provides actionable steps you can follow.`,
     `- **Practical use case**: Apply these strategies to improve your workflow and achieve better results.`,
-    `- **Related ToolForge tools**: Use our free tools to put these concepts into practice.`,
+    `- **Related Zilita tools**: Use our free tools to put these concepts into practice.`,
     "",
   ].join("\n")
 
@@ -116,7 +116,7 @@ function injectToolLinks(content: string): string {
       } else {
         const summaryMatch = result.match(/## Summary/)
         if (summaryMatch && summaryMatch.index !== undefined) {
-          result = result.slice(0, summaryMatch.index) + "## Tools You Can Use\n\nUse these free ToolForge tools to get started:\n" + line + "\n\n" + result.slice(summaryMatch.index)
+          result = result.slice(0, summaryMatch.index) + "## Tools You Can Use\n\nUse these free Zilita tools to get started:\n" + line + "\n\n" + result.slice(summaryMatch.index)
         }
       }
     }

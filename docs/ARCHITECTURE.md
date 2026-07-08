@@ -1,8 +1,8 @@
-# ToolForge Architecture
+# Zilita Architecture
 
 ## Executive Summary
 
-ToolForge (project name: `toolpix`) is a privacy-first, client-side web application that provides 40+ free online tools for teachers, students, creators, developers, and businesses. Built with Next.js 16 (App Router) and React 19, it uses SQLite via Prisma ORM for data persistence, Auth.js v5 for Google OAuth authentication, and Tailwind CSS v4 for styling. The application is deployed on Vercel.
+Zilita (project name: `zilita`) is a privacy-first, client-side web application that provides 40+ free online tools for teachers, students, creators, developers, and businesses. Built with Next.js 16 (App Router) and React 19, it uses SQLite via Prisma ORM for data persistence, Auth.js v5 for Google OAuth authentication, and Tailwind CSS v4 for styling. The application is deployed on Vercel.
 
 **Key principles:**
 - Privacy-first: All tool processing happens client-side; no data leaves the user's device

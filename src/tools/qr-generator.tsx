@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input"
 import { toast } from "sonner"
 import { trackDownload } from "@/lib/analytics"
 
-const DEFAULT_TEXT = `${process.env.NEXT_PUBLIC_APP_URL || "https://smart-tools-kit.vercel.app"}/tools/qr-generator`
+const DEFAULT_TEXT = `${process.env.NEXT_PUBLIC_APP_URL || "https://zilita.com"}/tools/qr-generator`
 
 export default function QrGenerator() {
   const [text, setText] = useState(DEFAULT_TEXT)

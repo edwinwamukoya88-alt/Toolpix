@@ -30,7 +30,7 @@ export async function POST(request: Request) {
         content: body.content ?? "",
         category: body.category ?? "Uncategorized",
         tags: JSON.stringify(body.tags ?? []),
-        author: body.author ?? "ToolForge Team",
+        author: body.author ?? "Zilita Team",
         featured: body.featured ?? false,
         coverImage: body.coverImage ?? "",
         status: body.status ?? "draft",

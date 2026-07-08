@@ -2,7 +2,7 @@
 
 ## Overview
 
-ToolForge uses **SQLite** as its database, accessed through **Prisma ORM** (v7.8.0) with the **Better-SQLite3** adapter. The database contains 6 models with no explicit foreign key relationships. Application-layer logic handles any cross-table operations.
+Zilita uses **SQLite** as its database, accessed through **Prisma ORM** (v7.8.0) with the **Better-SQLite3** adapter. The database contains 6 models with no explicit foreign key relationships. Application-layer logic handles any cross-table operations.
 
 **Database file:** `dev.db` (local development)
 
@@ -135,16 +135,16 @@ A single-row configuration table (always `id: 1`) for site-wide branding and SEO
 | ctaPrimaryLink | String | "/tools" |
 | ctaSecondary | String | "Read Blog" |
 | ctaSecondaryLink | String | "/blog" |
-| defaultTitle | String | "ToolForge — Smart Tools..." |
+| defaultTitle | String | "Zilita — Smart Tools..." |
 | defaultDescription | String | "Free online tools..." |
 | keywords | String | "productivity tools, cbc tools..." |
 | ogImage | String | "/og-image.png" |
 | logo | String | "/logo.png" |
 | favicon | String | "/favicon.ico" |
-| twitterUrl | String | "https://twitter.com/toolforge" |
+| twitterUrl | String | "https://twitter.com/Zilita" |
 | githubUrl | String | "https://github.com/edwinwamukoya88-alt" |
 | linkedinUrl | String | "https://linkedin.com" |
-| footerText | String | "(c) 2026 ToolForge. All rights reserved." |
+| footerText | String | "(c) 2026 Zilita. All rights reserved." |
 
 ### ToolConfig
 
@@ -173,7 +173,7 @@ Stores blog posts in draft or scheduled status. Published posts are stored as MD
 | content | String | "" | MDX content body |
 | category | String | "Uncategorized" | Blog category |
 | tags | String | "[]" | JSON array as string |
-| author | String | "ToolForge Team" | Author name |
+| author | String | "Zilita Team" | Author name |
 | featured | Boolean | false | Featured post flag |
 | coverImage | String | "" | Cover image URL/config |
 | status | String | "draft" | `draft`, `published`, or `scheduled` |

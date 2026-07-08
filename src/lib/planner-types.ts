@@ -67,7 +67,7 @@ export interface VerseSuggestion {
   explanation: string
 }
 
-export const STORAGE_KEY = "toolforge_lesson_plans"
+export const STORAGE_KEY = "zilita_lesson_plans"
 
 export const STEPS = [
   { id: 1, label: "Lesson Setup", desc: "School metadata & curriculum level" },

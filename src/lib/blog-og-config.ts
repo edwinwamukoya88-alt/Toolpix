@@ -123,6 +123,6 @@ export function getBlogCategoryStyle(category: string): BlogCategoryStyle {
 }
 
 export function getBlogCoverUrl(title: string, category: string): string {
-  const base = process.env.NEXT_PUBLIC_APP_URL || "https://smart-tools-kit.vercel.app"
+  const base = process.env.NEXT_PUBLIC_APP_URL || "https://zilita.com"
   return `${base}/api/og?title=${encodeURIComponent(title)}&category=${encodeURIComponent(category)}&type=blog`
 }

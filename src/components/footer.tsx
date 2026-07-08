@@ -11,7 +11,7 @@ export default function Footer() {
               className="inline-flex items-center gap-2 font-semibold text-2xl mb-5"
             >
               <span className="text-primary/80">◆</span>
-              <span>Tool</span><span className="text-primary">Forge</span>
+              <span>Zil</span><span className="text-primary">ita</span>
             </Link>
             <p className="text-sm text-muted-foreground/70 leading-relaxed max-w-xs">
               Free browser tools for productivity, education, and development
@@ -99,7 +99,7 @@ export default function Footer() {
 
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-6 text-xs text-muted-foreground/50">
           <p>
-            &copy; {new Date().getFullYear()} ToolForge. All tools run entirely
+            &copy; {new Date().getFullYear()} Zilita. All tools run entirely
             in your browser.
           </p>
         </div>

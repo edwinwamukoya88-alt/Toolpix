@@ -15,7 +15,7 @@ interface Note {
 }
 
 export default function NotesApp() {
-  const [notes, setNotes] = useLocalStorage<Note[]>("toolpix_notes", [])
+  const [notes, setNotes] = useLocalStorage<Note[]>("zilita_notes", [])
   const [title, setTitle] = useState("")
   const [content, setContent] = useState("")
   const [editing, setEditing] = useState<string | null>(null)

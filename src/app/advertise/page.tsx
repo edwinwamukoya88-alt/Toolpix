@@ -19,7 +19,7 @@ const benefits = [
   {
     icon: ShieldCheck,
     title: "Privacy-First Audience",
-    desc: "Reach users who value privacy — teachers, students, developers, and creators who choose ToolForge for its zero-tracking approach.",
+    desc: "Reach users who value privacy — teachers, students, developers, and creators who choose Zilita for its zero-tracking approach.",
   },
   {
     icon: Target,
@@ -78,7 +78,7 @@ export default function AdvertisePage() {
           <div className="max-w-3xl mx-auto text-center space-y-8">
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.05]">
               Advertise on{" "}
-              <span className="text-primary">ToolForge</span>
+              <span className="text-primary">Zilita</span>
             </h1>
             <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
               Reach teachers, students, developers, creators, and businesses
@@ -109,12 +109,12 @@ export default function AdvertisePage() {
         </div>
       </section>
 
-      {/* ─── WHY TOOLFORGE ─── */}
+      {/* ─── WHY ZILITA ─── */}
       <section className="container py-16 md:py-20">
         <div className="max-w-5xl mx-auto space-y-12">
           <div className="text-center space-y-3">
             <h2 className="text-3xl md:text-4xl font-bold tracking-tight">
-              Why <span className="text-primary">ToolForge</span>
+              Why <span className="text-primary">Zilita</span>
             </h2>
             <p className="text-muted-foreground max-w-md mx-auto">
               A premium environment for your brand
@@ -248,7 +248,7 @@ export default function AdvertisePage() {
             </div>
             <h2 className="text-3xl md:text-4xl font-bold tracking-tight">
               Ready to Advertise on{" "}
-              <span className="text-primary">ToolForge?</span>
+              <span className="text-primary">Zilita?</span>
             </h2>
             <p className="text-muted-foreground max-w-lg mx-auto text-base leading-relaxed">
               We&apos;d love to learn about your business and recommend the

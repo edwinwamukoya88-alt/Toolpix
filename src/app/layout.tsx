@@ -33,8 +33,8 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "ToolForge — 39+ Free Privacy-First Online Tools",
-    template: "%s | ToolForge",
+    default: "Zilita — 39+ Free Privacy-First Online Tools",
+    template: "%s | Zilita",
   },
   description: "39+ free browser-based tools for teachers, students, developers, creators, and businesses. Privacy-first, no login required, 100% client-side processing.",
   keywords: [
@@ -43,9 +43,9 @@ export const metadata: Metadata = {
     "password generator", "base64 encoder", "productivity tools", "teacher tools", "developer utilities",
     "KICD lesson planner", "CBC assessment", "student tools", "file converter", "image converter",
   ],
-  authors: [{ name: "ToolForge Team" }],
-  creator: "ToolForge",
-  publisher: "ToolForge",
+  authors: [{ name: "Zilita Team" }],
+  creator: "Zilita",
+  publisher: "Zilita",
   robots: { index: true, follow: true },
   alternates: {
     canonical: SITE_URL,
@@ -53,15 +53,15 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: SITE_URL,
-    siteName: "ToolForge",
-    title: "ToolForge — 39+ Free Privacy-First Online Tools",
+    siteName: "Zilita",
+    title: "Zilita — 39+ Free Privacy-First Online Tools",
     description: "39+ free browser-based tools for teachers, students, developers, creators, and businesses. Privacy-first, no login required.",
     locale: "en_US",
-    images: [{ url: `${SITE_URL}/api/og?title=ToolForge&category=Productivity&type=site`, width: 1200, height: 630, alt: "ToolForge" }],
+    images: [{ url: `${SITE_URL}/api/og?title=Zilita&category=Productivity&type=site`, width: 1200, height: 630, alt: "Zilita" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "ToolForge — 39+ Free Privacy-First Online Tools",
+    title: "Zilita — 39+ Free Privacy-First Online Tools",
     description: "39+ free browser-based tools for teachers, students, developers, creators, and businesses. Privacy-first, no login required.",
   },
   verification: {
@@ -73,7 +73,7 @@ export const metadata: Metadata = {
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  name: "ToolForge",
+  name: "Zilita",
   url: SITE_URL,
   description: "39+ free browser-based tools for teachers, students, developers, creators, and businesses. Privacy-first, no login required.",
   potentialAction: {
@@ -105,7 +105,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "Organization",
-              name: "ToolForge",
+              name: "Zilita",
               url: SITE_URL,
               logo: `${SITE_URL}/favicon.svg`,
               description: "39+ free browser-based tools for teachers, students, developers, creators, and businesses. Privacy-first, no login required, 100% client-side processing.",

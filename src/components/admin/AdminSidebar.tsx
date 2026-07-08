@@ -49,7 +49,7 @@ export default function AdminSidebar() {
           {!collapsed && (
             <Link href="/admin" className="flex items-center gap-2 font-semibold text-sm">
               <LayoutDashboard className="h-5 w-5 text-primary shrink-0" />
-              <span>ToolForge</span>
+              <span>Zilita</span>
             </Link>
           )}
           {collapsed && (

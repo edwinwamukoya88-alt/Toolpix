@@ -20,7 +20,7 @@ import type {
 } from "./types"
 import { generateNextOccurrence, migrateLegacyTodo, todayStr, createNotificationId } from "./utils"
 
-const STORAGE_KEY = "toolpix_todo_store"
+const STORAGE_KEY = "zilita_todo_store"
 
 function getDefaultAnalytics(): AnalyticsData {
   return { dailyLog: {}, longestStreak: 0, currentStreak: 0, lastActiveDate: null }
@@ -155,7 +155,7 @@ export const useTodoStore = create<TodoStore>()(
       // Migration from old format
       const migrate = () => {
         try {
-          const oldTodos = localStorage.getItem("toolpix_todos")
+          const oldTodos = localStorage.getItem("zilita_todos")
           if (oldTodos) {
             const parsed = JSON.parse(oldTodos)
             if (Array.isArray(parsed)) {
@@ -166,22 +166,22 @@ export const useTodoStore = create<TodoStore>()(
                 set({ todos: migrated })
               }
             }
-            localStorage.removeItem("toolpix_todos")
+            localStorage.removeItem("zilita_todos")
           }
-          const oldAnalytics = localStorage.getItem("toolpix_todo_analytics")
+          const oldAnalytics = localStorage.getItem("zilita_todo_analytics")
           if (oldAnalytics) {
             try { set({ analytics: JSON.parse(oldAnalytics) }) } catch { /* ignore */ }
-            localStorage.removeItem("toolpix_todo_analytics")
+            localStorage.removeItem("zilita_todo_analytics")
           }
-          const oldCategories = localStorage.getItem("toolpix_todo_categories")
+          const oldCategories = localStorage.getItem("zilita_todo_categories")
           if (oldCategories) {
             try { set({ customCategories: JSON.parse(oldCategories) }) } catch { /* ignore */ }
-            localStorage.removeItem("toolpix_todo_categories")
+            localStorage.removeItem("zilita_todo_categories")
           }
-          const oldBackup = localStorage.getItem("toolpix_todo_backup_timestamp")
+          const oldBackup = localStorage.getItem("zilita_todo_backup_timestamp")
           if (oldBackup) {
             set({ backupTimestamp: oldBackup })
-            localStorage.removeItem("toolpix_todo_backup_timestamp")
+            localStorage.removeItem("zilita_todo_backup_timestamp")
           }
         } catch { /* ignore migration errors */ }
       }

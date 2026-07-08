@@ -15,16 +15,16 @@ model SiteSetting {
   ctaPrimaryLink    String @default("/tools")
   ctaSecondary      String @default("Read Blog")
   ctaSecondaryLink  String @default("/blog")
-  defaultTitle      String @default("ToolForge — Smart Tools for Productivity & Education")
+  defaultTitle      String @default("Zilita — Smart Tools for Productivity & Education")
   defaultDescription String @default("Free online tools for students, teachers, and professionals. Privacy-first, no sign-up required.")
   keywords          String @default("productivity tools, cbc tools, education tools, free online tools")
   ogImage           String @default("/og-image.png")
   logo              String @default("/logo.png")
   favicon           String @default("/favicon.ico")
-  twitterUrl        String @default("https://twitter.com/toolforge")
+  twitterUrl        String @default("https://twitter.com/zilita")
   githubUrl         String @default("https://github.com/edwinwamukoya88-alt")
   linkedinUrl       String @default("https://linkedin.com")
-  footerText        String @default("© 2026 ToolForge. All rights reserved.")
+  footerText        String @default("© 2026 Zilita. All rights reserved.")
 }
 
 model ToolConfig {
@@ -45,7 +45,7 @@ model BlogDraft {
   content       String    @default("")
   category      String    @default("Uncategorized")
   tags          String    @default("[]")
-  author        String    @default("ToolForge Team")
+  author        String    @default("Zilita Team")
   featured      Boolean   @default(false)
   coverImage    String    @default("")
   status        String    @default("draft")

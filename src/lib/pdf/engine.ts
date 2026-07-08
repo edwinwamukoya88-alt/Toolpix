@@ -151,7 +151,7 @@ export async function unlockPdf(
 
   const actualHeader = data.slice(0, header.length)
   if (actualHeader.every((b, i) => b !== header[i])) {
-    throw new Error("Not a ToolForge encrypted PDF")
+    throw new Error("Not a Zilita encrypted PDF")
   }
 
   const salt = data.slice(header.length, header.length + 16)

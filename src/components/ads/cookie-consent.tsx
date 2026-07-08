@@ -5,7 +5,7 @@ import { Cookie, X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
 
-const CONSENT_KEY = "toolpix_ad_consent"
+const CONSENT_KEY = "zilita_ad_consent"
 
 export default function CookieConsent() {
   const [show, setShow] = useState(true)
@@ -36,7 +36,7 @@ export default function CookieConsent() {
           <div className="text-sm">
             <p className="font-medium mb-0.5">We value your privacy</p>
             <p className="text-muted-foreground text-xs leading-relaxed">
-              ToolForge uses cookies from Google to deliver and enhance the quality of its services and to analyze traffic.
+              Zilita uses cookies from Google to deliver and enhance the quality of its services and to analyze traffic.
               You can choose to accept or decline. No personal data is stored on our servers.
             </p>
           </div>

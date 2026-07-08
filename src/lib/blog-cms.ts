@@ -125,7 +125,7 @@ export async function createDraft(data: {
     content: data.content ?? "",
     category: data.category ?? "Uncategorized",
     tags: data.tags ?? [],
-    author: data.author ?? "ToolForge Team",
+    author: data.author ?? "Zilita Team",
     featured: data.featured ?? false,
     coverImage: data.coverImage ?? "",
     status: (data.status ?? "draft") as BlogDraft["status"],

@@ -2,7 +2,7 @@
 
 ## Overview
 
-ToolForge uses **Next.js API Routes** (Route Handlers) for all server-side operations. There are **19 route files** across **15 endpoint groups**. All admin API routes are protected by `requireApiAuth()` which validates the Auth.js JWT session and admin role.
+Zilita uses **Next.js API Routes** (Route Handlers) for all server-side operations. There are **19 route files** across **15 endpoint groups**. All admin API routes are protected by `requireApiAuth()` which validates the Auth.js JWT session and admin role.
 
 **Base URL:** `/api/` (deployed as Vercel Serverless Functions)
 
@@ -275,7 +275,7 @@ Dynamic Open Graph image generator.
 | Field | Value |
 |-------|-------|
 | **Purpose** | Generate 1200×630 PNG for social media previews |
-| **Query Params** | `title` (default: "ToolForge Blog"), `category` (default: "Guide") |
+| **Query Params** | `title` (default: "Zilita Blog"), `category` (default: "Guide") |
 | **Response** | PNG image (ImageResponse) |
 | **Runtime** | **Edge** |
 

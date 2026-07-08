@@ -74,13 +74,13 @@ export default function CBCLessonPlanner() {
 
   useEffect(() => {
     const id = requestAnimationFrame(() => {
-      try { const saved = localStorage.getItem("toolforge_teacher_notes"); if (saved) setTeacherPrivateNotes(saved) } catch { /* ignore */ }
+      try { const saved = localStorage.getItem("zilita_teacher_notes"); if (saved) setTeacherPrivateNotes(saved) } catch { /* ignore */ }
     })
     return () => cancelAnimationFrame(id)
   }, [])
 
   useEffect(() => {
-    try { localStorage.setItem("toolforge_teacher_notes", teacherPrivateNotes) } catch { /* ignore */ }
+    try { localStorage.setItem("zilita_teacher_notes", teacherPrivateNotes) } catch { /* ignore */ }
   }, [teacherPrivateNotes])
 
   useEffect(() => {

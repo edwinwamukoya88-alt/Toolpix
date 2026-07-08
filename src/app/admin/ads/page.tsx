@@ -31,7 +31,7 @@ async function loadAds(): Promise<SponsoredAd[]> {
     }))
   } catch {
     try {
-      const raw = localStorage.getItem("toolforge_sponsored_ads")
+      const raw = localStorage.getItem("zilita_sponsored_ads")
       return raw ? JSON.parse(raw) : []
     } catch {
       return []
@@ -95,7 +95,7 @@ export default function AdminAdsPage() {
       })
     } catch {
       const updated = [...await loadAds(), newAd]
-      localStorage.setItem("toolforge_sponsored_ads", JSON.stringify(updated))
+      localStorage.setItem("zilita_sponsored_ads", JSON.stringify(updated))
     }
     setTitle("")
     setDescription("")
@@ -120,7 +120,7 @@ export default function AdminAdsPage() {
       const updated = current.map((a) =>
         a.id === id ? { ...a, active: !a.active } : a,
       )
-      localStorage.setItem("toolforge_sponsored_ads", JSON.stringify(updated))
+      localStorage.setItem("zilita_sponsored_ads", JSON.stringify(updated))
     }
     refresh()
   }
@@ -133,7 +133,7 @@ export default function AdminAdsPage() {
     } catch {
       const current = await loadAds()
       const updated = current.filter((a) => a.id !== id)
-      localStorage.setItem("toolforge_sponsored_ads", JSON.stringify(updated))
+      localStorage.setItem("zilita_sponsored_ads", JSON.stringify(updated))
     }
     refresh()
   }
@@ -147,7 +147,7 @@ export default function AdminAdsPage() {
         <div className="container py-12 md:py-16 text-center space-y-4">
           <h1 className="text-3xl md:text-4xl font-bold tracking-tight">Sponsored Ads Manager</h1>
           <p className="text-muted-foreground max-w-lg mx-auto">
-            Create and manage sponsored ad placements for ToolForge
+            Create and manage sponsored ad placements for Zilita
           </p>
         </div>
       </section>

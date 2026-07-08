@@ -49,7 +49,7 @@ export default function BlogHomeClient({ posts, featured }: BlogHomeClientProps)
               Guides, tutorials, and insights
             </div>
             <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
-              ToolForge <span className="text-primary">Blog</span>
+              Zilita <span className="text-primary">Blog</span>
             </h1>
             <p className="text-base text-muted-foreground max-w-lg mx-auto">
               Guides on CBC education, productivity techniques, privacy tips, and more.

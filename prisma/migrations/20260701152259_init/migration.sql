@@ -7,16 +7,16 @@ CREATE TABLE "SiteSetting" (
     "ctaPrimaryLink" TEXT NOT NULL DEFAULT '/tools',
     "ctaSecondary" TEXT NOT NULL DEFAULT 'Read Blog',
     "ctaSecondaryLink" TEXT NOT NULL DEFAULT '/blog',
-    "defaultTitle" TEXT NOT NULL DEFAULT 'ToolForge — Smart Tools for Productivity & Education',
+    "defaultTitle" TEXT NOT NULL DEFAULT 'Zilita — Smart Tools for Productivity & Education',
     "defaultDescription" TEXT NOT NULL DEFAULT 'Free online tools for students, teachers, and professionals. Privacy-first, no sign-up required.',
     "keywords" TEXT NOT NULL DEFAULT 'productivity tools, cbc tools, education tools, free online tools',
     "ogImage" TEXT NOT NULL DEFAULT '/og-image.png',
     "logo" TEXT NOT NULL DEFAULT '/logo.png',
     "favicon" TEXT NOT NULL DEFAULT '/favicon.ico',
-    "twitterUrl" TEXT NOT NULL DEFAULT 'https://twitter.com/toolforge',
+    "twitterUrl" TEXT NOT NULL DEFAULT 'https://twitter.com/zilita',
     "githubUrl" TEXT NOT NULL DEFAULT 'https://github.com/edwinwamukoya88-alt',
     "linkedinUrl" TEXT NOT NULL DEFAULT 'https://linkedin.com',
-    "footerText" TEXT NOT NULL DEFAULT '© 2026 ToolForge. All rights reserved.'
+    "footerText" TEXT NOT NULL DEFAULT '© 2026 Zilita. All rights reserved.'
 );
 
 -- CreateTable
@@ -39,7 +39,7 @@ CREATE TABLE "BlogDraft" (
     "content" TEXT NOT NULL DEFAULT '',
     "category" TEXT NOT NULL DEFAULT 'Uncategorized',
     "tags" TEXT NOT NULL DEFAULT '[]',
-    "author" TEXT NOT NULL DEFAULT 'ToolForge Team',
+    "author" TEXT NOT NULL DEFAULT 'Zilita Team',
     "featured" BOOLEAN NOT NULL DEFAULT false,
     "coverImage" TEXT NOT NULL DEFAULT '',
     "status" TEXT NOT NULL DEFAULT 'draft',

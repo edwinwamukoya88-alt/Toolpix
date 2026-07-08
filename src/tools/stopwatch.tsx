@@ -9,7 +9,7 @@ import { useLocalStorage } from "@/hooks/use-local-storage"
 export default function Stopwatch() {
   const [running, setRunning] = useState(false)
   const [time, setTime] = useState(0)
-  const [laps, setLaps] = useLocalStorage<number[]>("toolpix_laps", [])
+  const [laps, setLaps] = useLocalStorage<number[]>("zilita_laps", [])
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
 
   useEffect(() => {

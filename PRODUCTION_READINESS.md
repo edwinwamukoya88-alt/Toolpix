@@ -1,7 +1,7 @@
 # Production Readiness Report
 
 > **Generated:** July 2, 2026
-> **Project:** ToolForge — 39+ Privacy-First Online Tools
+> **Project:** Zilita — 39+ Privacy-First Online Tools
 > **Build Status:** ✅ Passing (0 errors)
 > **Lint Status:** ✅ Passing (0 errors, 32 warnings — all pre-existing or unfixable without breaking changes)
 
@@ -69,7 +69,7 @@
 
 | Area | Before | After |
 |------|--------|-------|
-| **Root metadata** | "Task Planner \| ToolForge" — wrong title | Template: `%s \| ToolForge` with site-wide description |
+| **Root metadata** | "Task Planner \| Zilita" — wrong title | Template: `%s \| Zilita` with site-wide description |
 | **Pages with metadata** | 3 of 16+ pages | **All 16 pages**: homepage, about, contact, privacy, terms, help, advertise, blog listing, blog articles, tools listing, tool detail, access-denied, not-found, error, admin |
 | **JSON-LD Structured Data** | None | **Organization** (WebSite with SearchAction), **BlogPosting** (all articles), **BreadcrumbList** (tools, blog articles), **SoftwareApplication** (each tool) |
 | **robots.txt** | None | Custom robots.txt — allows all public pages, disallows /admin/ and /api/ |
@@ -291,7 +291,7 @@
 
 ## Summary
 
-ToolForge is **production-ready** with:
+Zilita is **production-ready** with:
 
 - ✅ **0 ESLint errors**, 32 pre-existing warnings
 - ✅ **Build passes** with TypeScript strict mode

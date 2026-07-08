@@ -37,7 +37,7 @@ interface CoreState {
   cleanupTimer: ReturnType<typeof setInterval> | undefined
 }
 
-const GLOBAL_KEY = "__toolforgeAiqm"
+const GLOBAL_KEY = "__zilitaAiqm"
 
 const COST_TIERS: Record<string, number> = {
   humanize: 1, detector: 1, grammar: 1, rewrite: 1, summarize: 1,

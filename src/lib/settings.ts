@@ -9,16 +9,16 @@ const defaultSettings: SiteSettings = {
   ctaPrimaryLink: "/tools",
   ctaSecondary: "Read Blog",
   ctaSecondaryLink: "/blog",
-  defaultTitle: "ToolForge — Smart Tools for Productivity & Education",
+  defaultTitle: "Zilita — Smart Tools for Productivity & Education",
   defaultDescription: "Free online tools for students, teachers, and professionals. Privacy-first, no sign-up required.",
   keywords: "productivity tools, cbc tools, education tools, free online tools",
   ogImage: "/og-image.png",
   logo: "/logo.png",
   favicon: "/favicon.ico",
-  twitterUrl: "https://twitter.com/toolforge",
+  twitterUrl: "https://twitter.com/zilita",
   githubUrl: "https://github.com/edwinwamukoya88-alt",
   linkedinUrl: "https://linkedin.com",
-  footerText: "© 2026 ToolForge. All rights reserved.",
+  footerText: "© 2026 Zilita. All rights reserved.",
 }
 
 export async function loadSettings(): Promise<SiteSettings> {

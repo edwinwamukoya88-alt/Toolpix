@@ -42,7 +42,7 @@ next-env.d.ts
 
 .vercel
 
-# --- ToolForge specific ignores ---
+# --- Zilita specific ignores ---
 
 # Embedded git repository (accidentally committed)
 agency-agents/

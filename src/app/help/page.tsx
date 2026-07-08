@@ -22,8 +22,8 @@ const sections: FaqSection[] = [
     title: "General",
     items: [
       {
-        q: "What is ToolForge?",
-        a: "ToolForge is a privacy-first browser utility suite offering 38+ tools for everyday tasks — QR codes, file conversion, image editing, planners, calculators, and more. Everything runs entirely in your browser with no server uploads.",
+        q: "What is Zilita?",
+        a: "Zilita is a privacy-first browser utility suite offering 38+ tools for everyday tasks — QR codes, file conversion, image editing, planners, calculators, and more. Everything runs entirely in your browser with no server uploads.",
       },
       {
         q: "Is my data stored?",
@@ -31,7 +31,7 @@ const sections: FaqSection[] = [
       },
       {
         q: "Do I need an account?",
-        a: "No. ToolForge requires zero sign-up, no email, and no account. Every tool is fully functional without any authentication.",
+        a: "No. Zilita requires zero sign-up, no email, and no account. Every tool is fully functional without any authentication.",
       },
     ],
   },
@@ -59,7 +59,7 @@ const sections: FaqSection[] = [
     items: [
       {
         q: "Is my data uploaded?",
-        a: "No. ToolForge processes everything entirely in your browser using client-side JavaScript. No files, text, or data you input is ever sent to any server.",
+        a: "No. Zilita processes everything entirely in your browser using client-side JavaScript. No files, text, or data you input is ever sent to any server.",
       },
       {
         q: "Is anything stored online?",
@@ -124,7 +124,7 @@ export default function HelpPage() {
       <section className="border-b bg-gradient-to-b from-muted/30 to-background">
         <div className="container py-12 md:py-16 text-center space-y-4">
           <h1 className="text-3xl md:text-4xl font-bold tracking-tight">Help Center</h1>
-          <p className="text-muted-foreground max-w-md mx-auto">Find answers about using ToolForge tools</p>
+          <p className="text-muted-foreground max-w-md mx-auto">Find answers about using Zilita tools</p>
           <div className="relative max-w-md mx-auto mt-6">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <input

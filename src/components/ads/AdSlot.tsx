@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import { AD_CLIENT } from "@/lib/constants"
 const IS_DEV = process.env.NODE_ENV === "development"
-const STORAGE_KEY = "toolforge_sponsored_ads"
+const STORAGE_KEY = "zilita_sponsored_ads"
 
 interface SponsoredAd {
   id: string

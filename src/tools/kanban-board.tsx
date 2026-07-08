@@ -19,7 +19,7 @@ interface Column {
 }
 
 export default function KanbanBoard() {
-  const [columns, setColumns] = useLocalStorage<Column[]>("toolpix_kanban", [
+  const [columns, setColumns] = useLocalStorage<Column[]>("zilita_kanban", [
     { id: "todo", title: "To Do", tasks: [] },
     { id: "doing", title: "In Progress", tasks: [] },
     { id: "done", title: "Done", tasks: [] },

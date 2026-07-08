@@ -1,6 +1,6 @@
 # Screenshots
 
-This directory contains screenshots of the ToolForge application.
+This directory contains screenshots of the Zilita application.
 
 ## Required Screenshots
 

@@ -3,21 +3,21 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
 
-const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://smart-tools-kit.vercel.app"
+const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zilita.com"
 
 export const metadata: Metadata = {
   title: "Terms of Service",
-  description: "Terms of service for using ToolForge. By accessing or using ToolForge, you agree to be bound by these terms.",
+  description: "Terms of service for using Zilita. By accessing or using Zilita, you agree to be bound by these terms.",
   openGraph: {
-    title: "Terms of Service - ToolForge",
-    description: "Terms of service for using the ToolForge privacy-first online tools suite.",
+    title: "Terms of Service - Zilita",
+    description: "Terms of service for using the Zilita privacy-first online tools suite.",
     url: `${siteUrl}/terms`,
-    images: [{ url: `${siteUrl}/api/og?title=Terms+of+Service&category=Productivity&type=site`, width: 1200, height: 630, alt: "Terms of Service - ToolForge" }],
+    images: [{ url: `${siteUrl}/api/og?title=Terms+of+Service&category=Productivity&type=site`, width: 1200, height: 630, alt: "Terms of Service - Zilita" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Terms of Service - ToolForge",
-    description: "Terms of service for using the ToolForge privacy-first online tools suite.",
+    title: "Terms of Service - Zilita",
+    description: "Terms of service for using the Zilita privacy-first online tools suite.",
   },
   alternates: {
     canonical: `${siteUrl}/terms`,
@@ -31,7 +31,7 @@ export default function TermsPage() {
         <div className="container py-16 md:py-20 text-center space-y-4">
           <h1 className="text-3xl md:text-4xl font-bold tracking-tight">Terms of Service</h1>
           <p className="text-muted-foreground max-w-md mx-auto">
-            By using ToolForge, you agree to these terms.
+            By using Zilita, you agree to these terms.
           </p>
         </div>
       </section>
@@ -39,25 +39,25 @@ export default function TermsPage() {
       <section className="container py-12">
         <div className="max-w-3xl mx-auto prose prose-invert prose-sm md:prose-base">
           <h2>Acceptance of Terms</h2>
-          <p>By accessing or using ToolForge, you agree to be bound by these terms. If you do not agree, do not use the service.</p>
+          <p>By accessing or using Zilita, you agree to be bound by these terms. If you do not agree, do not use the service.</p>
 
           <h2>Use of Service</h2>
-          <p>ToolForge provides free, browser-based utility tools for personal and commercial use. You agree not to misuse the tools or attempt to disrupt the service.</p>
+          <p>Zilita provides free, browser-based utility tools for personal and commercial use. You agree not to misuse the tools or attempt to disrupt the service.</p>
 
           <h2>No Data Collection</h2>
-          <p>All tools run client-side. ToolForge does not collect, store, or transmit your data. Your use of the tools is private and self-contained within your browser.</p>
+          <p>All tools run client-side. Zilita does not collect, store, or transmit your data. Your use of the tools is private and self-contained within your browser.</p>
 
           <h2>Intellectual Property</h2>
-          <p>The ToolForge name, logo, and code are owned by ToolForge. The tools are provided for use, but you may not copy, redistribute, or reverse engineer the service without permission.</p>
+          <p>The Zilita name, logo, and code are owned by Zilita. The tools are provided for use, but you may not copy, redistribute, or reverse engineer the service without permission.</p>
 
           <h2>Limitation of Liability</h2>
-          <p>ToolForge is provided &ldquo;as is&rdquo; without any warranty. We are not liable for any damages arising from the use or inability to use the service.</p>
+          <p>Zilita is provided &ldquo;as is&rdquo; without any warranty. We are not liable for any damages arising from the use or inability to use the service.</p>
 
           <h2>Changes to Terms</h2>
           <p>We reserve the right to update these terms. Continued use after changes constitutes acceptance of the new terms.</p>
 
           <h2>Contact</h2>
-          <p>For questions about these terms, contact <strong>support@toolforge.app</strong>.</p>
+          <p>For questions about these terms, contact <strong>support@zilita.com</strong>.</p>
         </div>
       </section>
 

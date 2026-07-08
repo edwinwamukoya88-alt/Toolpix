@@ -30,7 +30,7 @@ function getCategoryColor(category: string) {
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
-  const title = searchParams.get("title") || "ToolForge"
+  const title = searchParams.get("title") || "Zilita"
   const category = searchParams.get("category") || "Tool"
   const type = searchParams.get("type") || "blog"
 
@@ -185,7 +185,7 @@ async function generateBlogOG(title: string, category: string) {
                   letterSpacing: "-0.5px",
                 }}
               >
-                ToolForge
+                Zilita
               </span>
             </div>
 
@@ -283,7 +283,7 @@ async function generateBlogOG(title: string, category: string) {
               textTransform: "uppercase",
             }}
           >
-            <span>toolforge.app</span>
+            <span>zilita.com</span>
             <span style={{ width: "4px", height: "4px", borderRadius: "50%", background: "rgba(255,255,255,0.3)" }} />
             <span>Privacy-First Browser Tools</span>
           </div>
@@ -375,7 +375,7 @@ async function generateToolOG(title: string, category: string) {
               T
             </div>
             <span style={{ fontSize: "20px", fontWeight: 700, color: "white" }}>
-              ToolForge
+              Zilita
             </span>
           </div>
 
@@ -425,7 +425,7 @@ async function generateToolOG(title: string, category: string) {
                 fontWeight: 500,
               }}
             >
-              ToolForge Tools
+              Zilita Tools
             </div>
           </div>
 
@@ -442,7 +442,7 @@ async function generateToolOG(title: string, category: string) {
               textTransform: "uppercase",
             }}
           >
-            toolforge.app
+            zilita.com
           </div>
         </div>
       </div>

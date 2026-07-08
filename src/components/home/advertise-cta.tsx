@@ -26,7 +26,7 @@ export default function AdvertiseCTA() {
           <div className="flex-1 space-y-4">
             <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
               Advertise on{" "}
-              <span className="text-primary">ToolForge</span>
+              <span className="text-primary">Zilita</span>
             </h2>
             <p className="text-sm text-muted-foreground leading-relaxed max-w-xl">
               Reach teachers, students, developers, creators, and businesses

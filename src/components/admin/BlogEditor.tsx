@@ -27,7 +27,7 @@ export function BlogEditor({ draft }: BlogEditorProps) {
   const [tagsInput, setTagsInput] = useState(draft?.tags?.join(", ") ?? "")
   const [featured, setFeatured] = useState(draft?.featured ?? false)
   const [coverImage, setCoverImage] = useState(draft?.coverImage ?? "")
-  const [author, setAuthor] = useState(draft?.author ?? "ToolForge Team")
+  const [author, setAuthor] = useState(draft?.author ?? "Zilita Team")
   const [status, setStatus] = useState(draft?.status ?? "draft")
   const [saving, setSaving] = useState(false)
   const [autoSlug, setAutoSlug] = useState(!draft)
@@ -264,7 +264,7 @@ export function BlogEditor({ draft }: BlogEditorProps) {
             <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">SEO Preview</h3>
             <div className="space-y-1 p-3 rounded-lg border border-border/30 bg-background">
               <p className="text-xs text-blue-500 truncate">
-                https://toolforge.vercel.app/blog/{slug || "article-slug"}
+                https://zilita.com/blog/{slug || "article-slug"}
               </p>
               <p className="text-sm font-semibold text-foreground leading-tight truncate">
                 {title || "Article Title"}

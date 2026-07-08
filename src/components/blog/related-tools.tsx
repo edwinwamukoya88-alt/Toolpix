@@ -31,7 +31,7 @@ export default function RelatedTools({ toolSlugs }: RelatedToolsProps) {
     <section className="rounded-xl border bg-background/40 p-6 space-y-4">
       <div>
         <h2 className="text-lg font-bold">Related Tools</h2>
-        <p className="text-sm text-muted-foreground mt-0.5">Try these ToolForge tools mentioned in this article</p>
+        <p className="text-sm text-muted-foreground mt-0.5">Try these Zilita tools mentioned in this article</p>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {relatedTools.map((tool) => (

@@ -39,7 +39,7 @@ async function main() {
     console.log(`  ${name}`)
     if (displayName) console.log(`    Display: ${displayName}`)
     if (tags) console.log(`    Methods: ${tags}`)
-    if (hasGenerateContent) console.log(`    STATUS:  COMPATIBLE with ToolForge AI Workspace`)
+    if (hasGenerateContent) console.log(`    STATUS:  COMPATIBLE with Zilita AI Workspace`)
     if (desc) {
       const short = desc.length > 120 ? desc.slice(0, 120) + "..." : desc
       console.log(`    Info:    ${short}`)

@@ -19,7 +19,7 @@ function getToday() {
 }
 
 export default function HabitTracker() {
-  const [habits, setHabits] = useLocalStorage<Habit[]>("toolpix_habits", [])
+  const [habits, setHabits] = useLocalStorage<Habit[]>("zilita_habits", [])
   const [name, setName] = useState("")
 
   function add() {
