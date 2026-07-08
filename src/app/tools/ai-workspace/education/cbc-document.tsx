@@ -1,6 +1,7 @@
 "use client"
 
 import { useMemo, useRef, useCallback, useState, useEffect } from "react"
+import { generatePdfFromHtml } from "@/tools/ai-workspace/utils/pdf-html-generator"
 import {
   Target, CheckCircle2, HelpCircle, Lightbulb, Heart,
   Globe, BookOpen, Clock, UserCheck, Users,
@@ -650,6 +651,23 @@ export function CbcDocument({ text, featureLabel, onCopy, onEdit, onRegenerate, 
     setTimeout(() => win.print(), 500)
   }, [featureLabel])
 
+  const handlePdf = useCallback(async () => {
+    const content = paperRef.current?.innerHTML
+    if (!content) return
+    const filename = `cbc-${featureLabel.toLowerCase().replace(/\s+/g, "-")}`
+    try {
+      await generatePdfFromHtml(content, featureLabel, filename)
+    } catch (err) {
+      console.error("PDF generation failed, falling back to browser print", err)
+      const win = window.open("", "_blank")
+      if (!win) return
+      win.document.write(printHTML(content, featureLabel))
+      win.document.close()
+      win.focus()
+      setTimeout(() => win.print(), 500)
+    }
+  }, [featureLabel])
+
   const handleDownloadHtml = useCallback(() => {
     const content = paperRef.current?.innerHTML
     if (!content) return
@@ -708,7 +726,7 @@ export function CbcDocument({ text, featureLabel, onCopy, onEdit, onRegenerate, 
           <ActionButton icon={RotateCcwIcon} label="Regenerate" onClick={onRegenerate} disabled={isProcessing} />
           <span className="mx-2 h-5 w-px bg-white/[0.08]" />
           <ActionButton icon={Printer} label="Print" onClick={handlePrint} />
-          <ActionButton icon={FileDown} label="PDF" onClick={handlePrint} />
+          <ActionButton icon={FileDown} label="PDF" onClick={handlePdf} />
           <ActionButton icon={FileText} label="DOCX" onClick={handleDownloadDocx} />
           <ActionButton icon={Download} label="HTML" onClick={handleDownloadHtml} />
         </div>
