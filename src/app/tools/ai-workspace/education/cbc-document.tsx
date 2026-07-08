@@ -799,25 +799,208 @@ function printHTML(content: string, title: string): string {
 <style>
   @page { margin: 2cm; size: A4; }
   * { box-sizing: border-box; }
+
+  /* Prevent browser from fading/lightening text on print */
+  html, *, *::before, *::after {
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+
+  /* Force solid white background and black text at root */
+  html {
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  /* Disable all transitions and animations during printing */
+  *, *::before, *::after {
+    transition: none !important;
+    animation: none !important;
+    animation-duration: 0s !important;
+    transition-duration: 0s !important;
+  }
+
+  /* Reset all problematic visual properties */
+  *, *::before, *::after {
+    opacity: 1 !important;
+    filter: none !important;
+    -webkit-filter: none !important;
+    mix-blend-mode: normal !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* CSS custom properties for print (light mode) */
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 6%;
+    --muted-foreground: 0 0% 20%;
+    --primary: 217 91% 40%;
+    --card: 0 0% 100%;
+    --border: 0 0% 80%;
+    --muted: 0 0% 90%;
+    --secondary: 0 0% 85%;
+    --accent: 0 0% 88%;
+    --popover: 0 0% 100%;
+    --card-foreground: 0 0% 6%;
+    --secondary-foreground: 0 0% 6%;
+    --accent-foreground: 0 0% 6%;
+    --destructive: 0 70% 40%;
+    --destructive-foreground: 0 0% 100%;
+    --input: 0 0% 80%;
+    --ring: 217 91% 40%;
+    --radius: 0.5rem;
+  }
+
   body {
     font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
     font-size: 12pt;
     line-height: 1.75;
-    color: #111;
+    color: #000 !important;
     max-width: 850px;
     margin: 0 auto;
     padding: 30px;
-    background: white;
+    background: #fff !important;
   }
-  h1 { font-size: 24pt; font-weight: 700; text-align: center; margin-bottom: 8pt; }
-  h2 { font-size: 16pt; font-weight: 700; margin-top: 20pt; margin-bottom: 10pt; }
+  h1 { font-size: 24pt; font-weight: 700; text-align: center; margin-bottom: 8pt; color: #000 !important; }
+  h2 { font-size: 16pt; font-weight: 700; margin-top: 20pt; margin-bottom: 10pt; color: #000 !important; }
+  h3 { color: #000 !important; }
+  h4, h5, h6 { color: #000 !important; }
+  p { margin: 6pt 0; line-height: 1.75; color: #000 !important; }
   table { border-collapse: collapse; width: 100%; margin: 10pt 0; font-size: 12pt; }
-  th, td { border: 1px solid #bbb; padding: 6pt 10pt; text-align: left; vertical-align: top; line-height: 1.7; }
+  th, td { border: 1px solid #bbb; padding: 6pt 10pt; text-align: left; vertical-align: top; line-height: 1.7; color: #000 !important; }
   th { background: #f5f5f5; font-weight: 700; }
   ul { padding-left: 22pt; margin: 6pt 0; }
-  li { margin-bottom: 4pt; line-height: 1.7; }
-  p { margin: 6pt 0; line-height: 1.75; }
+  li { margin-bottom: 4pt; line-height: 1.7; color: #000 !important; }
   hr { border: none; border-top: 1px solid #ccc; margin: 16pt 0; }
+  label, small, pre, blockquote, figcaption, caption, legend, summary, mark, ins, del, sub, sup {
+    color: #000 !important;
+  }
+
+  /* Override all Tailwind text color classes to solid black */
+  [class*="text-foreground"],
+  [class*="text-muted-foreground"],
+  [class*="text-primary"],
+  [class*="text-secondary"],
+  [class*="text-card-foreground"],
+  [class*="text-popover"],
+  [class*="text-accent"],
+  [class*="text-destructive"],
+  [class*="text-gray"],
+  [class*="text-white"],
+  [class*="text-black"],
+  [class*="text-slate"],
+  [class*="text-zinc"],
+  [class*="text-neutral"],
+  [class*="text-stone"],
+  [class*="text-red"],
+  [class*="text-blue"],
+  [class*="text-green"],
+  [class*="text-yellow"],
+  [class*="text-indigo"],
+  [class*="text-purple"],
+  [class*="text-pink"],
+  [class*="text-amber"],
+  [class*="text-teal"],
+  [class*="text-cyan"],
+  [class*="text-emerald"],
+  [class*="text-orange"],
+  [class*="text-violet"],
+  [class*="text-rose"],
+  [class*="text-sky"],
+  [class*="text-lime"],
+  [class*="text-fuchsia"],
+  [class*="text-current"],
+  [class*="text-inherit"] {
+    color: #000 !important;
+  }
+
+  /* Override element-specific text colors */
+  span, div, strong, em, code, a, b, i, u, s {
+    color: #000 !important;
+  }
+  a { text-decoration: underline; }
+
+  /* Make all backgrounds transparent/white for print */
+  [class*="bg-card"],
+  [class*="bg-primary"],
+  [class*="bg-muted"],
+  [class*="bg-secondary"],
+  [class*="bg-accent"],
+  [class*="bg-popover"],
+  [class*="bg-destructive"],
+  [class*="bg-background"],
+  [class*="bg-white"],
+  [class*="bg-black"],
+  [class*="bg-transparent"],
+  [class*="bg-blue"],
+  [class*="bg-emerald"],
+  [class*="bg-amber"],
+  [class*="bg-rose"],
+  [class*="bg-teal"],
+  [class*="bg-indigo"],
+  [class*="bg-orange"],
+  [class*="bg-sky"],
+  [class*="bg-violet"],
+  [class*="bg-red"],
+  [class*="bg-cyan"],
+  [class*="bg-pink"],
+  [class*="bg-slate"],
+  [class*="bg-gray"],
+  [class*="bg-green"],
+  [class*="bg-yellow"],
+  [class*="bg-purple"],
+  [class*="bg-lime"],
+  [class*="bg-fuchsia"],
+  [class*="bg-stone"],
+  [class*="bg-zinc"],
+  [class*="bg-neutral"],
+  [class*="bg-gradient"] {
+    background: transparent !important;
+  }
+
+  /* Borders for print */
+  [class*="border-border"],
+  [class*="border-gray"],
+  [class*="border-white"],
+  [class*="border-black"],
+  [class*="border-slate"],
+  [class*="border-zinc"],
+  [class*="border-neutral"],
+  [class*="border-stone"],
+  [class*="border-red"],
+  [class*="border-blue"],
+  [class*="border-green"],
+  [class*="border-yellow"],
+  [class*="border-indigo"],
+  [class*="border-purple"],
+  [class*="border-pink"],
+  [class*="border-amber"],
+  [class*="border-teal"],
+  [class*="border-cyan"],
+  [class*="border-emerald"],
+  [class*="border-orange"],
+  [class*="border-violet"],
+  [class*="border-rose"],
+  [class*="border-sky"],
+  [class*="border-lime"],
+  [class*="border-fuchsia"] {
+    border-color: #ccc !important;
+  }
+
+  /* Remove opacity modifiers */
+  [class*="/"],
+  [style*="opacity"] {
+    opacity: 1 !important;
+  }
+
+  /* Force all gradient backgrounds to be transparent */
+  [class*="from-"],
+  [class*="via-"],
+  [class*="to-"] {
+    background: transparent !important;
+  }
+
   .curriculum-grid { display: flex; flex-wrap: wrap; gap: 6pt; margin: 8pt 0; }
   .curriculum-item { border: 1px solid #ddd; padding: 4pt 8pt; border-radius: 4pt; flex: 1 0 45%; }
   .chip-list { display: flex; flex-wrap: wrap; gap: 4pt; }

@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from "next/server"
 import { generateGeminiResponse } from "@/lib/ai/gemini"
 import { validateToken, checkDailyLimit, incrementDailyUsage } from "@/lib/ai/auth"
 
+export const runtime = "nodejs"
+export const dynamic = "force-dynamic"
+
 export async function POST(request: NextRequest) {
   const token = request.headers.get("x-ai-token")
   if (!token) {

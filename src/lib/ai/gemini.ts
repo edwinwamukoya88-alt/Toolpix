@@ -1,10 +1,8 @@
 import { GoogleGenerativeAI } from "@google/generative-ai"
 
-const API_KEY = process.env.GEMINI_API_KEY || ""
-const CONFIGURED_MODEL = process.env.GEMINI_MODEL || ""
-
 let resolvedModel = ""
 let modelInitialized = false
+let genAI: GoogleGenerativeAI | null = null
 
 const MODEL_PRIORITY = [
   "gemini-2.5-flash",
@@ -17,7 +15,18 @@ const MODEL_PRIORITY = [
   "gemini-1.5-flash-8b",
 ]
 
-const genAI = new GoogleGenerativeAI(API_KEY)
+function getApiKey(): string {
+  return process.env.GEMINI_API_KEY || ""
+}
+
+function getConfiguredModel(): string {
+  return process.env.GEMINI_MODEL || ""
+}
+
+function getGenAI(): GoogleGenerativeAI {
+  if (!genAI) genAI = new GoogleGenerativeAI(getApiKey())
+  return genAI
+}
 
 function sanitizeError(err: unknown): string {
   const msg = err instanceof Error ? err.message : String(err)
@@ -28,19 +37,21 @@ async function initModel(): Promise<void> {
   if (modelInitialized) return
   modelInitialized = true
 
-  if (!API_KEY) {
+  const apiKey = getApiKey()
+  if (!apiKey) {
     console.log("[Gemini] No API key configured")
     return
   }
 
-  if (CONFIGURED_MODEL) {
-    resolvedModel = CONFIGURED_MODEL
+  const configuredModel = getConfiguredModel()
+  if (configuredModel) {
+    resolvedModel = configuredModel
     console.log(`[Gemini] Using configured model: ${resolvedModel}`)
     return
   }
 
   try {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models?key=${API_KEY}`
+    const url = `https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`
     const res = await fetch(url)
     if (!res.ok) {
       console.warn(`[Gemini] Model list fetch failed (HTTP ${res.status})`)
@@ -71,7 +82,7 @@ async function initModel(): Promise<void> {
 }
 
 function getModel(): string {
-  return resolvedModel || CONFIGURED_MODEL || MODEL_PRIORITY[0]
+  return resolvedModel || getConfiguredModel() || MODEL_PRIORITY[0]
 }
 
 interface GenerateParams {
@@ -334,7 +345,16 @@ export async function generateGeminiResponse(params: GenerateParams): Promise<{ 
 
   const { system, user } = getPrompt(feature, input, settings)
 
-  if (!API_KEY) {
+  if (!getApiKey()) {
+    const env = process.env.NODE_ENV || "unknown"
+    const diag = JSON.stringify({
+      route: "/api/ai",
+      variable: "GEMINI_API_KEY",
+      present: false,
+      runtime: "nodejs",
+      NODE_ENV: env,
+    })
+    console.error(`[Gemini] Missing environment variable: ${diag}`)
     return { output: "Gemini API key is not configured. Please set GEMINI_API_KEY in your environment variables." }
   }
 
@@ -346,7 +366,7 @@ export async function generateGeminiResponse(params: GenerateParams): Promise<{ 
 
   for (let attempt = 0; attempt < 2; attempt++) {
     try {
-      const model = genAI.getGenerativeModel({ model: activeModel, systemInstruction: system })
+      const model = getGenAI().getGenerativeModel({ model: activeModel, systemInstruction: system })
 
       const result = await model.generateContent(user)
       const response = result.response
