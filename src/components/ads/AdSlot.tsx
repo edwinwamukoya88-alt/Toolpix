@@ -1,8 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-
-const AD_CLIENT = "ca-pub-2606064008386995"
+import { AD_CLIENT } from "@/lib/constants"
 const IS_DEV = process.env.NODE_ENV === "development"
 const STORAGE_KEY = "toolforge_sponsored_ads"
 
@@ -142,6 +141,7 @@ export default function AdSlot({ type, slot, image, title, description, link, cl
           <div className="flex items-center gap-4 pt-4">
             {ad.image && (
               <div className="h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-muted">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={ad.image} alt="" className="h-full w-full object-cover" />
               </div>
             )}

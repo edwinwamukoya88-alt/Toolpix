@@ -179,7 +179,7 @@ export default function CBCSchemeOfWorkGenerator() {
             <div className="space-y-1.5">
               <label className="text-xs font-medium text-muted-foreground">Term</label>
               <select value={data.term} onChange={(e) => updateMeta("term", e.target.value)}
-                className="h-10 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-sm outline-none focus-visible:border-ring dark:bg-input/30">
+                className="flex h-10 w-full rounded-lg border border-input bg-transparent px-3 py-1 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50">
                 {terms.map((t) => (<option key={t} value={t}>{t}</option>))}
               </select>
             </div>
@@ -235,7 +235,17 @@ export default function CBCSchemeOfWorkGenerator() {
         </CardContent>
       </Card>
 
-      {generated && (
+      {!generated ? (
+        <div className="flex flex-col items-center justify-center py-16 text-center">
+          <div className="rounded-full bg-muted/30 p-4 mb-4">
+            <ClipboardList className="h-8 w-8 text-muted-foreground/30" />
+          </div>
+          <p className="text-sm font-medium text-muted-foreground">No scheme generated yet</p>
+          <p className="text-xs text-muted-foreground/60 mt-1.5 max-w-[280px]">
+            Fill in the details above and click Generate to create a KICD scheme of work
+          </p>
+        </div>
+      ) : (
         <Card className="border-primary/30">
           <CardContent className="p-5 space-y-4">
             <div className="flex items-center justify-between">

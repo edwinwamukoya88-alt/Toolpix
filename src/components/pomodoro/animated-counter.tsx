@@ -56,6 +56,7 @@ export default function AnimatedCounter({
 
     frameRef.current = requestAnimationFrame(animate)
     return () => cancelAnimationFrame(frameRef.current)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value, duration])
 
   return (

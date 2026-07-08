@@ -14,7 +14,7 @@ const CHIPS: PromptChip[] = [
     icon: "📘",
     label: "Lesson Plan",
     featureId: "lesson-planner",
-    prompt: "Generate a detailed KICD-compliant CBC lesson plan that includes: learning outcomes, introduction, lesson development (step by step), learning resources, assessment methods, and summary. Focus on making it practical for a classroom setting with: ",
+    prompt: "Generate a KICD-compliant CBC lesson plan using the 11-section structure: Lesson Information, Learning Outcomes, Success Criteria, Key Inquiry Question, Core Competencies, Values, PCIs, Learning Resources, Lesson Development (paragraph form with Introduction, Lesson Development, Conclusion), Assessment Methods, and Reflection. Focus on: ",
   },
   {
     id: "assessment",
@@ -56,7 +56,7 @@ const CHIPS: PromptChip[] = [
     icon: "🧩",
     label: "Learning Activities",
     featureId: "lesson-planner",
-    prompt: "Design engaging and interactive learning activities that: address different learning styles, promote learner participation, use available local resources, and include differentiation for diverse learners. The activities should teach: ",
+    prompt: "Design engaging and interactive learning activities that address different learning styles, promote learner participation, and use available local resources. The activities should teach: ",
   },
   {
     id: "rubric",
@@ -77,10 +77,11 @@ export default function PromptChips({ onSelect }: PromptChipsProps) {
       {CHIPS.map((chip) => (
         <button
           key={chip.id}
+          type="button"
           onClick={() => onSelect(chip.prompt, chip.featureId)}
-          className="inline-flex items-center gap-1.5 rounded-full border border-border/40 bg-card/60 px-3.5 py-2 text-xs font-medium text-foreground/80 hover:bg-card hover:border-border/70 transition-all active:scale-[0.97]"
+          className="inline-flex items-center gap-1.5 rounded-full border border-border/40 bg-card/60 px-3.5 py-2 text-xs font-medium text-foreground/80 hover:bg-card hover:border-border/70 transition-all active:scale-[0.97] min-h-[44px]"
         >
-          <span className="text-sm">{chip.icon}</span>
+          <span className="text-sm" aria-hidden="true">{chip.icon}</span>
           {chip.label}
         </button>
       ))}

@@ -232,13 +232,13 @@ export default function CBCLessonPlanner() {
   const complianceReady = complianceScore >= 80
 
   const exportBtnClass =
-    "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border border-border/40 bg-muted/10 hover:bg-muted/20 transition-colors"
+    "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border border-border/40 bg-muted/10 hover:bg-muted/20 transition-colors min-h-[44px]"
   const exportPrimaryClass =
-    "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border border-border/40 bg-primary/5 text-primary hover:bg-primary/10 transition-colors"
+    "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border border-border/40 bg-primary/5 text-primary hover:bg-primary/10 transition-colors min-h-[44px]"
   const exportBlueClass =
-    "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border border-border/40 bg-blue-500/5 text-blue-600 hover:bg-blue-500/10 transition-colors"
+    "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border border-border/40 bg-blue-500/5 text-blue-600 hover:bg-blue-500/10 transition-colors min-h-[44px]"
   const actionBtnClass =
-    "w-full inline-flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium border border-border/40 bg-muted/10 hover:bg-muted/20 transition-colors"
+    "w-full inline-flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium border border-border/40 bg-muted/10 hover:bg-muted/20 transition-colors min-h-[44px]"
 
   const renderExportSection = (grid: boolean) => (
     <div className="rounded-xl border border-border/40 bg-card p-4">
@@ -322,13 +322,14 @@ export default function CBCLessonPlanner() {
           <div className="flex items-center gap-1">
             {currentStep > 1 && (
               <button type="button" onClick={goPrev}
-                className="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium text-muted-foreground hover:bg-muted/10 transition-colors"
+                className="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium text-muted-foreground hover:bg-muted/10 transition-colors min-h-[44px]"
+                aria-label="Previous step"
               >
                 <ChevronLeft className="h-3 w-3" />
               </button>
             )}
             <button type="button" onClick={currentStep < 6 ? goNext : undefined} disabled={currentStep < 6 ? !canGoNext : false}
-              className="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium text-foreground hover:bg-muted/10 transition-colors disabled:opacity-40"
+              className="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium text-foreground hover:bg-muted/10 transition-colors disabled:opacity-40 min-h-[44px]"
             >
               {currentStep < 6 ? (
                 <><ChevronRight className="h-3 w-3" /> Next</>
@@ -579,31 +580,31 @@ export default function CBCLessonPlanner() {
         </div>
 
         {/* Bottom spacer for mobile sticky nav */}
-        <div className="h-24 sm:hidden" />
+        <div className="h-20 sm:hidden" />
       </div>
 
       {/* ── MOBILE STICKY BOTTOM NAV ── */}
-      <div className="fixed bottom-0 left-0 right-0 sm:hidden z-50 border-t border-border/40 bg-background/95 backdrop-blur-md px-4 py-3">
+      <div className="fixed bottom-0 left-0 right-0 sm:hidden z-50 border-t border-border/40 bg-background/95 backdrop-blur-md px-4 py-3 safe-bottom">
         <div className="flex items-center justify-between max-w-lg mx-auto">
           <div className="flex gap-2">
             {currentStep > 1 && (
-              <Button variant="outline" size="sm" onClick={goPrev}>
-                <ChevronLeft className="h-3.5 w-3.5" /> Back
+              <Button variant="outline" size="sm" onClick={goPrev} className="min-h-[44px]">
+                <ChevronLeft className="h-4 w-4" /> Back
               </Button>
             )}
           </div>
           <div className="flex gap-2">
             {currentStep < 6 ? (
-              <Button size="sm" onClick={goNext} disabled={!canGoNext}>
-                Continue <ChevronRight className="h-3.5 w-3.5" />
+              <Button size="sm" onClick={goNext} disabled={!canGoNext} className="min-h-[44px]">
+                Continue <ChevronRight className="h-4 w-4" />
               </Button>
             ) : (
-              <Button onClick={generate} size="sm">
-                <BookOpen className="h-3.5 w-3.5" /> Generate
+              <Button onClick={generate} size="sm" className="min-h-[44px]">
+                <BookOpen className="h-4 w-4" /> Generate
               </Button>
             )}
-            <Button variant="ghost" size="sm" onClick={resetForm} className="text-muted-foreground">
-              <RefreshCw className="h-3.5 w-3.5" />
+            <Button variant="ghost" size="sm" onClick={resetForm} className="text-muted-foreground min-h-[44px] min-w-[44px]" aria-label="Reset form">
+              <RefreshCw className="h-4 w-4" />
             </Button>
           </div>
         </div>
@@ -611,10 +612,10 @@ export default function CBCLessonPlanner() {
 
       {/* ====== SAVE DIALOG ====== */}
       {saveDialogOpen && (
-        <div role="dialog" aria-modal="true" aria-labelledby="save-dialog-title" className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm" onClick={() => setSaveDialogOpen(false)}>
-          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="bg-background rounded-2xl shadow-2xl p-6 w-full max-w-sm mx-4 border border-border/30" onClick={(e) => e.stopPropagation()}>
+        <div role="dialog" aria-modal="true" aria-labelledby="save-dialog-title" className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4" onClick={() => setSaveDialogOpen(false)}>
+          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="bg-background rounded-2xl shadow-2xl p-6 w-full max-w-sm border border-border/30" onClick={(e) => e.stopPropagation()}>
             <h3 id="save-dialog-title" className="font-semibold text-sm mb-4">Save Lesson Plan</h3>
-            <Input value={planName} onChange={(e) => setPlanName(e.target.value)} placeholder="Enter plan name..." className="mb-4" autoFocus onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); saveToStorage(planName) } }} />
+            <Input value={planName} onChange={(e) => setPlanName(e.target.value)} placeholder="Enter plan name..." className="mb-4 h-10" autoFocus onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); saveToStorage(planName) } }} />
             <div className="flex gap-2 justify-end">
               <Button variant="outline" size="sm" onClick={() => setSaveDialogOpen(false)}>Cancel</Button>
               <Button size="sm" onClick={() => saveToStorage(planName)} disabled={!planName.trim()}>Save</Button>
@@ -625,11 +626,17 @@ export default function CBCLessonPlanner() {
 
       {/* ====== LOAD DIALOG ====== */}
       {loadDialogOpen && (
-        <div role="dialog" aria-modal="true" aria-labelledby="load-dialog-title" className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm" onClick={() => setLoadDialogOpen(false)}>
-          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="bg-background rounded-2xl shadow-2xl p-6 w-full max-w-md mx-4 max-h-[70vh] overflow-y-auto border border-border/30" onClick={(e) => e.stopPropagation()}>
+        <div role="dialog" aria-modal="true" aria-labelledby="load-dialog-title" className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4" onClick={() => setLoadDialogOpen(false)}>
+          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="bg-background rounded-2xl shadow-2xl p-6 w-full max-w-md max-h-[70vh] overflow-y-auto border border-border/30" onClick={(e) => e.stopPropagation()}>
             <h3 id="load-dialog-title" className="font-semibold text-sm mb-4">Saved Lesson Plans</h3>
             {savedPlans.length === 0 ? (
-              <p className="text-xs text-muted-foreground text-center py-6">No saved plans yet</p>
+              <div className="flex flex-col items-center justify-center py-8 text-center">
+                <div className="rounded-full bg-muted/30 p-3 mb-3">
+                  <Upload className="h-5 w-5 text-muted-foreground/40" />
+                </div>
+                <p className="text-sm font-medium text-muted-foreground">No saved plans yet</p>
+                <p className="text-xs text-muted-foreground/60 mt-1">Save your first lesson plan to see it here</p>
+              </div>
             ) : (
               <div className="space-y-2">
                 {savedPlans.map((entry) => (
@@ -639,8 +646,8 @@ export default function CBCLessonPlanner() {
                       <p className="text-[10px] text-muted-foreground">{new Date(entry.createdAt).toLocaleDateString()} | {entry.plan.grade} | {entry.plan.learningArea}</p>
                     </div>
                     <div className="flex gap-1 ml-2">
-                      <Button variant="ghost" size="xs" onClick={() => loadFromStorage(entry)}><Upload className="h-3 w-3" /></Button>
-                      <Button variant="ghost" size="xs" onClick={() => deleteSaved(entry.id)}><Trash2 className="h-3 w-3 text-red-500" /></Button>
+                      <Button variant="ghost" size="icon-sm" onClick={() => loadFromStorage(entry)} aria-label={`Load ${entry.name}`}><Upload className="h-3.5 w-3.5" /></Button>
+                      <Button variant="ghost" size="icon-sm" onClick={() => deleteSaved(entry.id)} aria-label={`Delete ${entry.name}`}><Trash2 className="h-3.5 w-3.5 text-red-500" /></Button>
                     </div>
                   </div>
                 ))}
@@ -670,24 +677,18 @@ export default function CBCLessonPlanner() {
               <div><span className="font-semibold">Duration:</span> {plan.duration} min</div>
             </div>
             <Separator />
-            <div><span className="font-semibold">1. Specific Learning Outcomes</span><ul className="list-disc list-inside text-muted-foreground mt-0.5 space-y-0.5">{plan.outcomes.length ? plan.outcomes.map((o, i) => <li key={i}>{o}</li>) : <li className="list-none text-muted-foreground">\u2014</li>}</ul></div>
-            <div><span className="font-semibold">2. Core Competencies</span><div className="flex flex-wrap gap-1 mt-0.5">{plan.competencies.length ? plan.competencies.map((c) => <span key={c} className="px-2 py-0.5 rounded-full bg-primary/10 text-xs">{c}</span>) : <span className="text-muted-foreground">\u2014</span>}</div></div>
-            <div><span className="font-semibold">3. Values</span><div className="flex flex-wrap gap-1 mt-0.5">{plan.values.length ? plan.values.map((v) => <span key={v} className="px-2 py-0.5 rounded-full bg-green-500/10 text-xs">{v}</span>) : <span className="text-muted-foreground">\u2014</span>}</div></div>
-            <div><span className="font-semibold">4. PCIs</span><div className="flex flex-wrap gap-1 mt-0.5">{plan.pcis.length ? plan.pcis.map((p) => <span key={p} className="px-2 py-0.5 rounded-full bg-purple-500/10 text-xs">{p}</span>) : <span className="text-muted-foreground">\u2014</span>}</div></div>
-            <div><span className="font-semibold">5. Learning Activities</span><div className="mt-0.5"><p className="font-medium text-xs text-muted-foreground">Teacher:</p><ul className="list-disc list-inside text-muted-foreground space-y-0.5">{plan.teacherActivities.length ? plan.teacherActivities.map((a, i) => <li key={i}>{a}</li>) : <li className="list-none text-muted-foreground">\u2014</li>}</ul><p className="font-medium text-xs text-muted-foreground mt-1">Learner:</p><ul className="list-disc list-inside text-muted-foreground space-y-0.5">{plan.learnerActivities.length ? plan.learnerActivities.map((a, i) => <li key={i}>{a}</li>) : <li className="list-none text-muted-foreground">\u2014</li>}</ul></div></div>
-            <div><span className="font-semibold">6. Resources</span><ul className="list-disc list-inside text-muted-foreground mt-0.5 space-y-0.5">{plan.resources.length ? plan.resources.map((r, i) => <li key={i}>{r}</li>) : <li className="list-none text-muted-foreground">\u2014</li>}</ul></div>
-            <div><span className="font-semibold">7. Assessment Methods</span><ul className="list-disc list-inside text-muted-foreground mt-0.5 space-y-0.5">{plan.assessmentMethods.length ? plan.assessmentMethods.map((a, i) => <li key={i}>{a}</li>) : <li className="list-none text-muted-foreground">\u2014</li>}</ul></div>
-            <div><span className="font-semibold">8. Remarks:</span> {plan.remarks || "\u2014"}</div>
-            {biblicalVerseEnabled && biblicalVerse && (
-              <div className="border-t-2 border-amber-200/40 pt-3 mt-3">
-                <span className="font-bold text-xs text-amber-700 dark:text-amber-400">Biblical Reflection (Optional):</span>
-                <p className="text-[11px] font-bold text-amber-800 dark:text-amber-300 mt-1">{biblicalVerse.split(" \u2014 ")[0]}</p>
-                <p className="text-muted-foreground text-xs italic">&ldquo;{biblicalVerse.split(" \u2014 ").slice(1).join(" \u2014 ")}&rdquo;</p>
-                {curriculumConnection && <p className="text-[10px] text-amber-700/80 dark:text-amber-300/80 mt-1 leading-relaxed"><span className="font-semibold">Curriculum Connection:</span> {curriculumConnection}</p>}
-                {verseExplanation && <p className="text-[10px] text-amber-600/70 dark:text-amber-400/70 italic mt-0.5 leading-relaxed">{verseExplanation}</p>}
-                {teacherReflectionNotes && <p className="text-muted-foreground text-[10px] italic mt-1">\u2014 {teacherReflectionNotes}</p>}
-              </div>
+            <div><span className="font-semibold">1. Learning Outcomes</span><ul className="list-disc list-inside text-muted-foreground mt-0.5 space-y-0.5">{plan.outcomes.length ? plan.outcomes.map((o, i) => <li key={i}>{o}</li>) : <li className="list-none text-muted-foreground">\u2014</li>}</ul></div>
+            {plan.successCriteria.length > 0 && <div><span className="font-semibold">2. Success Criteria</span><ul className="list-disc list-inside text-muted-foreground mt-0.5 space-y-0.5">{plan.successCriteria.map((s, i) => <li key={i} className="text-xs">{s}</li>)}</ul></div>}
+            {plan.keyInquiryQuestion && <div><span className="font-semibold">3. Key Inquiry Question</span><p className="text-xs text-muted-foreground mt-0.5 italic">{plan.keyInquiryQuestion}</p></div>}
+            <div><span className="font-semibold">4. Core Competencies</span><div className="flex flex-wrap gap-1 mt-0.5">{plan.competencies.length ? plan.competencies.map((c) => <span key={c} className="px-2 py-0.5 rounded-full bg-primary/10 text-xs">{c}</span>) : <span className="text-muted-foreground">\u2014</span>}</div></div>
+            <div><span className="font-semibold">5. Values</span><div className="flex flex-wrap gap-1 mt-0.5">{plan.values.length ? plan.values.map((v) => <span key={v} className="px-2 py-0.5 rounded-full bg-green-500/10 text-xs">{v}</span>) : <span className="text-muted-foreground">\u2014</span>}</div></div>
+            <div><span className="font-semibold">6. Pertinent and Contemporary Issues (PCIs)</span><div className="flex flex-wrap gap-1 mt-0.5">{plan.pcis.length ? plan.pcis.map((p) => <span key={p} className="px-2 py-0.5 rounded-full bg-purple-500/10 text-xs">{p}</span>) : <span className="text-muted-foreground">\u2014</span>}</div></div>
+            <div><span className="font-semibold">7. Learning Resources</span><ul className="list-disc list-inside text-muted-foreground mt-0.5 space-y-0.5">{plan.resources.length ? plan.resources.map((r, i) => <li key={i}>{r}</li>) : <li className="list-none text-muted-foreground">\u2014</li>}</ul></div>
+            {plan.lessonDevelopment && (
+              <div><span className="font-semibold">8. Lesson Development</span><div className="mt-1 space-y-1 text-xs text-muted-foreground leading-relaxed">{plan.lessonDevelopment.split("\n").filter(l => l.trim()).map((line, i) => { const t = line.trim(); return /^(Introduction|Lesson Development|Conclusion)/i.test(t) ? <p key={i} className="font-semibold text-foreground/80">{t}</p> : <p key={i} className="text-justify">{t}</p> })}</div></div>
             )}
+            <div><span className="font-semibold">9. Assessment</span><ul className="list-disc list-inside text-muted-foreground mt-0.5 space-y-0.5">{plan.assessmentMethods.length ? plan.assessmentMethods.map((a, i) => <li key={i}>{a}</li>) : <li className="list-none text-muted-foreground">\u2014</li>}</ul></div>
+            <div><span className="font-semibold">10. Reflection:</span> {plan.remarks || "\u2014"}</div>
             {includeNotesInExport && teacherPrivateNotes.trim() && <div className="border-t pt-2 mt-2"><span className="font-semibold text-muted-foreground text-xs">Teacher Notes (Private):</span><p className="text-muted-foreground text-xs mt-0.5 whitespace-pre-wrap">{teacherPrivateNotes}</p></div>}
           </div>
         </div>
@@ -715,15 +716,18 @@ export default function CBCLessonPlanner() {
                   <div><span className="font-semibold">Duration:</span> {p.duration} min</div>
                 </div>
                 <Separator />
-                <div><span className="font-semibold">1. Outcomes</span><ul className="list-disc list-inside text-muted-foreground mt-0.5">{p.outcomes.map((o, i) => <li key={i}>{o}</li>)}</ul></div>
-                {p.remarks && <div><span className="font-semibold">Remarks:</span> {p.remarks}</div>}
-                {biblicalVerseEnabled && biblicalVerse && (
-                  <div className="text-xs text-amber-700 dark:text-amber-400 mt-1 space-y-0.5">
-                    <p><span className="font-semibold">Biblical Reflection:</span> &ldquo;{biblicalVerse.split(" \u2014 ")[0]}&rdquo;</p>
-                    {curriculumConnection && <p className="text-[10px] leading-relaxed"><span className="font-semibold">Curriculum Connection:</span> {curriculumConnection}</p>}
-                    {verseExplanation && <p className="text-[10px] italic leading-relaxed">{verseExplanation}</p>}
-                  </div>
+                <div><span className="font-semibold">1. Learning Outcomes</span><ul className="list-disc list-inside text-muted-foreground mt-0.5">{p.outcomes.map((o, i) => <li key={i}>{o}</li>)}</ul></div>
+                {p.successCriteria.length > 0 && <div><span className="font-semibold">2. Success Criteria</span><ul className="list-disc list-inside text-muted-foreground mt-0.5">{p.successCriteria.map((s, i) => <li key={i}>{s}</li>)}</ul></div>}
+                {p.keyInquiryQuestion && <div><span className="font-semibold">3. Key Inquiry Question</span><p className="text-xs text-muted-foreground mt-0.5 italic">{p.keyInquiryQuestion}</p></div>}
+                <div><span className="font-semibold">4. Core Competencies</span><div className="flex flex-wrap gap-1 mt-0.5">{p.competencies.length ? p.competencies.map((c) => <span key={c} className="px-2 py-0.5 rounded-full bg-primary/10 text-xs">{c}</span>) : <span className="text-muted-foreground">\u2014</span>}</div></div>
+                <div><span className="font-semibold">5. Values</span><div className="flex flex-wrap gap-1 mt-0.5">{p.values.length ? p.values.map((v) => <span key={v} className="px-2 py-0.5 rounded-full bg-green-500/10 text-xs">{v}</span>) : <span className="text-muted-foreground">\u2014</span>}</div></div>
+                <div><span className="font-semibold">6. Pertinent and Contemporary Issues (PCIs)</span><div className="flex flex-wrap gap-1 mt-0.5">{p.pcis.length ? p.pcis.map((pc) => <span key={pc} className="px-2 py-0.5 rounded-full bg-purple-500/10 text-xs">{pc}</span>) : <span className="text-muted-foreground">\u2014</span>}</div></div>
+                <div><span className="font-semibold">7. Learning Resources</span><ul className="list-disc list-inside text-muted-foreground mt-0.5">{p.resources.map((r, i) => <li key={i}>{r}</li>)}</ul></div>
+                {p.lessonDevelopment && (
+                  <div><span className="font-semibold">8. Lesson Development</span><div className="mt-1 space-y-1 text-xs text-muted-foreground leading-relaxed">{p.lessonDevelopment.split("\n").filter(l => l.trim()).map((line, i) => { const t = line.trim(); return /^(Introduction|Lesson Development|Conclusion)/i.test(t) ? <p key={i} className="font-semibold text-foreground/80">{t}</p> : <p key={i} className="text-justify">{t}</p> })}</div></div>
                 )}
+                <div><span className="font-semibold">9. Assessment</span><div className="flex flex-wrap gap-1 mt-0.5">{p.assessmentMethods.length ? p.assessmentMethods.map((a) => <span key={a} className="px-2 py-0.5 rounded-full bg-red-500/10 text-xs">{a}</span>) : <span className="text-muted-foreground">\u2014</span>}</div></div>
+                {p.remarks && <div><span className="font-semibold">10. Reflection:</span> {p.remarks}</div>}
               </div>
             )
           })}

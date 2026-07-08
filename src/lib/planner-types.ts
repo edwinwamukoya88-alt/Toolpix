@@ -12,6 +12,8 @@ export interface KICDPlan {
   week: string
   topicTitle: string
   outcomes: string[]
+  successCriteria: string[]
+  keyInquiryQuestion: string
   competencies: string[]
   values: string[]
   pcis: string[]
@@ -20,6 +22,7 @@ export interface KICDPlan {
   resources: string[]
   assessmentMethods: string[]
   remarks: string
+  lessonDevelopment: string
   customGrades: string[]
   customLearningAreas: string[]
   customStrands: string[]

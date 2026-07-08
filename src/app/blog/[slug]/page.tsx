@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { getBlogBySlug, getAllBlogs, getBlogSlugs, getRelatedPosts, getToolSlugsForArticle } from "@/lib/blog"
 import { getBlogCoverUrl } from "@/lib/blog-og-config"
+import { getAppUrl } from "@/lib/app-url"
 import BlogArticleClient from "./blog-article-client"
 
 export async function generateStaticParams() {
@@ -15,7 +16,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!post) return {}
 
   const ogImageUrl = getBlogCoverUrl(post.title, post.category)
-  const canonicalUrl = `https://smart-tools-kit.vercel.app/blog/${post.slug}`
+  const canonicalUrl = getAppUrl(`/blog/${post.slug}`)
 
   return {
     title: `${post.title} - ToolForge Blog`,
@@ -65,7 +66,8 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
   const relatedPosts = getRelatedPosts(post.slug, post.category)
   const toolSlugs = getToolSlugsForArticle(post.slug)
   const ogImageUrl = getBlogCoverUrl(post.title, post.category)
-  const canonicalUrl = `https://smart-tools-kit.vercel.app/blog/${post.slug}`
+  const canonicalUrl = getAppUrl(`/blog/${post.slug}`)
+  const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://smart-tools-kit.vercel.app"
 
   const articleJsonLd = {
     "@context": "https://schema.org",
@@ -94,8 +96,8 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: "https://smart-tools-kit.vercel.app" },
-      { "@type": "ListItem", position: 2, name: "Blog", item: "https://smart-tools-kit.vercel.app/blog" },
+      { "@type": "ListItem", position: 1, name: "Home", item: siteUrl },
+      { "@type": "ListItem", position: 2, name: "Blog", item: `${siteUrl}/blog` },
       { "@type": "ListItem", position: 3, name: post.title, item: canonicalUrl },
     ],
   }

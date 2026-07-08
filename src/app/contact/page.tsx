@@ -3,16 +3,24 @@ import { Mail, MessageSquare, ArrowRight } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 
+const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://smart-tools-kit.vercel.app"
+
 export const metadata: Metadata = {
   title: "Contact",
   description: "Get in touch with the ToolForge team. Email us at support@toolforge.app for support or ads@toolforge.app for advertising inquiries.",
   openGraph: {
     title: "Contact ToolForge",
     description: "Reach the ToolForge team for support or advertising inquiries.",
-    url: "https://smart-tools-kit.vercel.app/contact",
+    url: `${siteUrl}/contact`,
+    images: [{ url: `${siteUrl}/api/og?title=Contact+ToolForge&category=Productivity&type=site`, width: 1200, height: 630, alt: "Contact ToolForge" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Contact ToolForge",
+    description: "Reach the ToolForge team for support or advertising inquiries.",
   },
   alternates: {
-    canonical: "https://smart-tools-kit.vercel.app/contact",
+    canonical: `${siteUrl}/contact`,
   },
 }
 

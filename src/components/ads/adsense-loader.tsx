@@ -1,8 +1,7 @@
 "use client"
 
 import { useEffect } from "react"
-
-const AD_CLIENT = "ca-pub-2606064008386995"
+import { AD_CLIENT } from "@/lib/constants"
 
 export default function AdSenseLoader() {
   useEffect(() => {

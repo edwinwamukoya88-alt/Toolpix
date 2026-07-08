@@ -30,6 +30,7 @@ export default function QrExtractor() {
 
           {imageUrl && (
             <div className="flex flex-col items-center gap-4">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={imageUrl} alt="QR" className="max-w-[200px] rounded-lg border" />
               {result && (
                 <div className="p-4 rounded-lg bg-muted text-sm w-full">

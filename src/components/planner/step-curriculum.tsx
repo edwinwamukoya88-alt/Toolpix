@@ -49,12 +49,14 @@ export function StepCurriculum({
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="space-y-1.5">
-          <label className="text-xs font-medium text-muted-foreground">Strand <span className="text-primary">*</span></label>
+          <label htmlFor="strand" className="text-xs font-medium text-muted-foreground">Strand <span className="text-primary">*</span></label>
           <select
+            id="strand"
             value={plan.strand}
             onChange={(e) => handleStrandChange(e.target.value)}
             disabled={!plan.learningArea}
             className="flex h-11 w-full rounded-xl border border-border/60 bg-muted/20 px-3 py-2 text-sm outline-none transition-all focus:border-ring focus:ring-2 focus:ring-ring/30 hover:border-primary/40 disabled:opacity-40 disabled:cursor-not-allowed"
+            aria-required="true"
           >
             <option value="">Select strand...</option>
             {[...strands, ...plan.customStrands].map((s) => <option key={s} value={s}>{s}</option>)}
@@ -71,8 +73,9 @@ export function StepCurriculum({
           </div>
         </div>
         <div className="space-y-1.5">
-          <label className="text-xs font-medium text-muted-foreground">Sub-Strand</label>
+          <label htmlFor="sub-strand" className="text-xs font-medium text-muted-foreground">Sub-Strand</label>
           <select
+            id="sub-strand"
             value={plan.subStrand}
             onChange={(e) => handleSubStrandChange(e.target.value)}
             disabled={!plan.strand}
@@ -113,6 +116,30 @@ export function StepCurriculum({
           }
         }}
       />
+
+      <SearchableMultiSelect
+        label="Success Criteria"
+        options={plan.outcomes}
+        selected={plan.successCriteria}
+        onChange={(val) => updateField("successCriteria", val)}
+        placeholder="Search or type success criteria..."
+        allowCustom
+        customPlaceholder="Type a success criterion..."
+        description="Measurable indicators that show learners have achieved the learning outcomes."
+      />
+
+      <div className="space-y-1.5">
+        <label htmlFor="key-inquiry" className="text-xs font-medium text-muted-foreground">Key Inquiry Question</label>
+        <p className="text-[9px] text-muted-foreground/60 -mt-0.5">The overarching question that guides the lesson</p>
+        <input
+          id="key-inquiry"
+          type="text"
+          value={plan.keyInquiryQuestion}
+          onChange={(e) => updateField("keyInquiryQuestion", e.target.value)}
+          placeholder="e.g. How can we use addition to solve problems in our daily lives?"
+          className="flex h-11 w-full rounded-xl border border-border/60 bg-muted/20 px-3 py-2 text-sm outline-none transition-all focus:border-ring focus:ring-2 focus:ring-ring/30 hover:border-primary/40"
+        />
+      </div>
 
       {plan.subStrand && suggestedOutcomes.length === 0 && (
         <motion.div

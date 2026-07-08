@@ -12,7 +12,7 @@ const bullets = [
 export default function AdvertiseCTA() {
   return (
     <section className="container py-8">
-      <div className="relative rounded-3xl border border-white/[0.06] bg-gradient-to-br from-primary/[0.04] via-card/60 to-purple-500/[0.04] backdrop-blur-xl p-6 md:p-8 shadow-[0_0_0_1px_hsl(var(--border)/0.2),0_8px_32px_hsl(var(--primary)/0.04)] overflow-hidden">
+      <div className="relative rounded-3xl border border-border/30 bg-gradient-to-br from-primary/[0.04] via-card/60 to-purple-500/[0.04] backdrop-blur-xl p-6 md:p-8 shadow-[0_0_0_1px_hsl(var(--border)/0.2),0_8px_32px_hsl(var(--primary)/0.04)] overflow-hidden">
         <div
           className="absolute -top-24 -right-24 w-64 h-64 bg-primary/5 rounded-full blur-[120px] pointer-events-none"
           aria-hidden="true"

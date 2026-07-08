@@ -35,53 +35,62 @@ export function StepSetup({ plan, updateField, setActivePlan, learningAreas }: S
 
       {/* ── School Name ── */}
       <div className="space-y-1.5">
-        <label className="text-xs font-medium text-foreground">School Name <span className="text-primary">*</span></label>
+        <label htmlFor="school-name" className="text-xs font-medium text-foreground">School Name <span className="text-primary">*</span></label>
         <input
+          id="school-name"
           type="text"
           value={plan.schoolName}
           onChange={(e) => updateField("schoolName", e.target.value)}
           placeholder=""
           className={inputClass}
+          aria-required="true"
         />
       </div>
 
       {/* ── Teacher Name ── */}
       <div className="space-y-1.5">
-        <label className="text-xs font-medium text-foreground">Teacher Name <span className="text-primary">*</span></label>
+        <label htmlFor="teacher-name" className="text-xs font-medium text-foreground">Teacher Name <span className="text-primary">*</span></label>
         <input
+          id="teacher-name"
           type="text"
           value={plan.teacherName}
           onChange={(e) => updateField("teacherName", e.target.value)}
           placeholder=""
           className={inputClass}
+          aria-required="true"
         />
       </div>
 
       {/* ── Date / Term / Week ── */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="space-y-1.5">
-          <label className="text-xs font-medium text-foreground">Lesson Date <span className="text-primary">*</span></label>
+          <label htmlFor="lesson-date" className="text-xs font-medium text-foreground">Lesson Date <span className="text-primary">*</span></label>
           <input
+            id="lesson-date"
             type="date"
             value={plan.lessonDate}
             onChange={(e) => updateField("lessonDate", e.target.value)}
             className={`${inputClass} [color-scheme:light] dark:[color-scheme:dark]`}
+            aria-required="true"
           />
         </div>
         <div className="space-y-1.5">
-          <label className="text-xs font-medium text-foreground">Term <span className="text-primary">*</span></label>
+          <label htmlFor="term" className="text-xs font-medium text-foreground">Term <span className="text-primary">*</span></label>
           <select
+            id="term"
             value={plan.term}
             onChange={(e) => updateField("term", e.target.value)}
             className={selectClass}
+            aria-required="true"
           >
             <option value="">Select term...</option>
             {TERMS.map((t) => <option key={t} value={t}>{t}</option>)}
           </select>
         </div>
         <div className="space-y-1.5">
-          <label className="text-xs font-medium text-foreground">Week</label>
+          <label htmlFor="week" className="text-xs font-medium text-foreground">Week</label>
           <input
+            id="week"
             type="number"
             min={1}
             max={14}
@@ -96,8 +105,9 @@ export function StepSetup({ plan, updateField, setActivePlan, learningAreas }: S
       {/* ── Lesson Number / Duration ── */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="space-y-1.5">
-          <label className="text-xs font-medium text-foreground">Lesson Number</label>
+          <label htmlFor="lesson-number" className="text-xs font-medium text-foreground">Lesson Number</label>
           <input
+            id="lesson-number"
             type="number"
             min={1}
             max={30}
@@ -109,8 +119,9 @@ export function StepSetup({ plan, updateField, setActivePlan, learningAreas }: S
           <p className="text-[10px] text-muted-foreground/60">Sequential number within the term</p>
         </div>
         <div className="space-y-1.5">
-          <label className="text-xs font-medium text-foreground">Lesson Duration (Minutes)</label>
+          <label htmlFor="duration" className="text-xs font-medium text-foreground">Lesson Duration (Minutes)</label>
           <input
+            id="duration"
             type="number"
             min={5}
             max={120}
@@ -125,8 +136,9 @@ export function StepSetup({ plan, updateField, setActivePlan, learningAreas }: S
 
       {/* ── Topic Title ── */}
       <div className="space-y-1.5">
-        <label className="text-xs font-medium text-foreground">Lesson Topic / Sub-topic Title</label>
+        <label htmlFor="topic-title" className="text-xs font-medium text-foreground">Lesson Topic / Sub-topic Title</label>
         <input
+          id="topic-title"
           type="text"
           value={plan.topicTitle}
           onChange={(e) => updateField("topicTitle", e.target.value)}
@@ -141,8 +153,9 @@ export function StepSetup({ plan, updateField, setActivePlan, learningAreas }: S
       {/* ── Curriculum Level ── */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="space-y-1.5">
-          <label className="text-xs font-medium text-foreground">Grade <span className="text-primary">*</span></label>
+          <label htmlFor="grade" className="text-xs font-medium text-foreground">Grade <span className="text-primary">*</span></label>
           <select
+            id="grade"
             value={plan.grade}
             onChange={(e) => {
               const val = e.target.value
@@ -150,6 +163,7 @@ export function StepSetup({ plan, updateField, setActivePlan, learningAreas }: S
               setActivePlan({ ...plan, grade: val, learningArea: "", strand: "", subStrand: "", outcomes: [], competencies: [], values: [], pcis: [] })
             }}
             className={selectClass}
+            aria-required="true"
           >
             <option value="">Select grade...</option>
             {[...GRADES, ...plan.customGrades].map((g) => <option key={g} value={g}>{g}</option>)}
@@ -163,8 +177,9 @@ export function StepSetup({ plan, updateField, setActivePlan, learningAreas }: S
           />
         </div>
         <div className="space-y-1.5">
-          <label className="text-xs font-medium text-foreground">Learning Area <span className="text-primary">*</span></label>
+          <label htmlFor="learning-area" className="text-xs font-medium text-foreground">Learning Area <span className="text-primary">*</span></label>
           <select
+            id="learning-area"
             value={plan.learningArea}
             onChange={(e) => {
               const val = e.target.value
@@ -172,6 +187,7 @@ export function StepSetup({ plan, updateField, setActivePlan, learningAreas }: S
             }}
             disabled={!plan.grade}
             className={selectClass}
+            aria-required="true"
           >
             <option value="">Select learning area...</option>
             {[...learningAreas, ...plan.customLearningAreas].map((la) => <option key={la} value={la}>{la}</option>)}

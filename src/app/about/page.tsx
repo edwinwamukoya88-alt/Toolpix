@@ -3,16 +3,24 @@ import { CheckCircle, Cpu, Lock, Sparkles, Shield, Zap, Asterisk, Globe } from "
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 
+const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://smart-tools-kit.vercel.app"
+
 export const metadata: Metadata = {
   title: "About",
   description: "ToolForge is a privacy-first suite of 39+ browser-based tools for productivity, finance, design, education, and development. No login required.",
   openGraph: {
     title: "About ToolForge",
     description: "Privacy-first browser tools for productivity, finance, design, and education. No login required.",
-    url: "https://smart-tools-kit.vercel.app/about",
+    url: `${siteUrl}/about`,
+    images: [{ url: `${siteUrl}/api/og?title=About+ToolForge&category=Productivity&type=site`, width: 1200, height: 630, alt: "About ToolForge" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "About ToolForge",
+    description: "Privacy-first browser tools for productivity, finance, design, and education. No login required.",
   },
   alternates: {
-    canonical: "https://smart-tools-kit.vercel.app/about",
+    canonical: `${siteUrl}/about`,
   },
 }
 

@@ -1,8 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState, useId, startTransition } from "react"
-
-const AD_CLIENT = "ca-pub-2606064008386995"
+import { AD_CLIENT } from "@/lib/constants"
 const IS_DEV = process.env.NODE_ENV === "development"
 
 function getConsent(): boolean | null {

@@ -108,6 +108,7 @@ export default function WhatsMyIP() {
   }, [])
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchIPInfo()
     setBrowserInfo(getBrowserInfo())
   }, [fetchIPInfo])
@@ -131,7 +132,7 @@ export default function WhatsMyIP() {
     return (
       <div className="max-w-2xl mx-auto space-y-6">
         <div className="text-center space-y-1">
-          <h2 className="text-2xl font-bold tracking-tight">What's My IP</h2>
+          <h2 className="text-2xl font-bold tracking-tight">What&apos;s My IP</h2>
           <p className="text-sm text-muted-foreground">Discover your public IP and network information</p>
         </div>
         <Card>
@@ -152,7 +153,7 @@ export default function WhatsMyIP() {
     return (
       <div className="max-w-2xl mx-auto space-y-6">
         <div className="text-center space-y-1">
-          <h2 className="text-2xl font-bold tracking-tight">What's My IP</h2>
+          <h2 className="text-2xl font-bold tracking-tight">What&apos;s My IP</h2>
           <p className="text-sm text-muted-foreground">Discover your public IP and network information</p>
         </div>
         <Card>
@@ -189,11 +190,11 @@ export default function WhatsMyIP() {
   return (
     <div className="max-w-2xl mx-auto space-y-6">
       <div className="text-center space-y-1">
-        <h2 className="text-2xl font-bold tracking-tight">What's My IP</h2>
-        <p className="text-sm text-muted-foreground">Discover your public IP and network information</p>
-      </div>
+          <h2 className="text-2xl font-bold tracking-tight">What&apos;s My IP</h2>
+          <p className="text-sm text-muted-foreground">Discover your public IP and network information</p>
+        </div>
 
-      <Card>
+        <Card>
         <CardContent className="p-5 space-y-0 divide-y divide-muted/50">
           {items.map((item, i) => (
             <div key={i} className="flex items-center justify-between py-3 first:pt-0 last:pb-0">

@@ -16,25 +16,29 @@ import AdSlot from "@/components/ads/AdSlot"
 import type { LucideIcon } from "lucide-react"
 import AdvertiseCTA from "@/components/home/advertise-cta"
 
+const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://smart-tools-kit.vercel.app"
+
 export const metadata: Metadata = {
   title: "ToolForge — 44+ Free Privacy-First Online Tools",
   description: "44+ free browser-based tools for teachers, students, developers, creators, and businesses. Privacy-first, no login required, 100% client-side processing.",
   openGraph: {
     title: "ToolForge — Free Privacy-First Online Tools",
     description: "Plan lessons, manage tasks, create content, and boost productivity — all in your browser. No data ever leaves your device.",
-    url: "https://smart-tools-kit.vercel.app",
+    url: siteUrl,
+    images: [{ url: `${siteUrl}/api/og?title=ToolForge&category=Productivity&type=site`, width: 1200, height: 630, alt: "ToolForge" }],
   },
   twitter: {
+    card: "summary_large_image",
     title: "ToolForge — Free Privacy-First Online Tools",
     description: "Plan lessons, manage tasks, create content, and boost productivity — all in your browser. No data ever leaves your device.",
   },
   alternates: {
-    canonical: "https://smart-tools-kit.vercel.app",
+    canonical: siteUrl,
   },
 }
 
 const catIconMap: Record<string, LucideIcon> = {
-  "AI Workspace": Sparkles,
+  "AI Assistant": Sparkles,
   Productivity: Brain,
   "Education & CBC Tools": GraduationCap,
   "Security & Text": Shield,
@@ -48,7 +52,7 @@ const catIconMap: Record<string, LucideIcon> = {
 }
 
 const catDescriptions: Record<string, string> = {
-  "AI Workspace": "All-in-one AI writing, education (CBC), and design workspace",
+  "AI Assistant": "All-in-one AI writing, education (CBC), and design assistant",
   Productivity: "Organize tasks, notes, and time with daily planners and trackers",
   "Education & CBC Tools": "Tools for teachers, students, and CBC curriculum planning",
   "Security & Text": "Encrypt, encode, and clean text securely",
@@ -62,7 +66,7 @@ const catDescriptions: Record<string, string> = {
 }
 
 const categoryGradients: Record<string, string> = {
-  "AI Workspace": "from-primary/20 via-purple-500/10 to-transparent",
+  "AI Assistant": "from-primary/20 via-purple-500/10 to-transparent",
   Productivity: "from-blue-500/10 via-cyan-500/5 to-transparent",
   "Education & CBC Tools": "from-emerald-500/10 via-teal-500/5 to-transparent",
   "Security & Text": "from-purple-500/10 via-pink-500/5 to-transparent",
@@ -76,7 +80,7 @@ const categoryGradients: Record<string, string> = {
 }
 
 const categoryIconColors: Record<string, string> = {
-  "AI Workspace": "text-primary",
+  "AI Assistant": "text-primary",
   Productivity: "text-blue-400",
   "Education & CBC Tools": "text-emerald-400",
   "Security & Text": "text-purple-400",
@@ -121,7 +125,22 @@ const audienceItems = [
 
 export default function HomePage() {
   return (
-    <div>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            name: "ToolForge",
+            url: siteUrl,
+            logo: `${siteUrl}/favicon.svg`,
+            description: "44+ free browser-based tools for teachers, students, developers, creators, and businesses. Privacy-first, no login required, 100% client-side processing.",
+            sameAs: [],
+          }),
+        }}
+      />
+      <div>
 
       {/* ─── Hero ─── */}
       <section className="relative overflow-hidden py-20 md:py-28 lg:py-32">
@@ -279,7 +298,7 @@ export default function HomePage() {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
           {categories.map((cat) => {
-            const isAi = cat === "AI Workspace"
+            const isAi = cat === "AI Assistant"
             const Icon = catIconMap[cat] || Palette
             const gradient = categoryGradients[cat]
             const iconColor = categoryIconColors[cat]
@@ -556,5 +575,6 @@ export default function HomePage() {
 
       <AdvertiseCTA />
     </div>
+    </>
   )
 }

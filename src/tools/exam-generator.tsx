@@ -1,11 +1,10 @@
 "use client"
 
 import { useState, useCallback, useMemo } from "react"
-import { ClipboardCheck, Copy, Printer, FileDown, RefreshCw, GraduationCap, BookOpen, BarChart3, ListChecks, Brain, Target, Sparkles, CheckCircle2, AlertCircle } from "lucide-react"
+import { ClipboardCheck, Copy, Printer, FileDown, RefreshCw, GraduationCap, BookOpen, BarChart3, ListChecks, Brain, Target, Sparkles, CheckCircle2 } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Separator } from "@/components/ui/separator"
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
 import { toast } from "sonner"
@@ -508,6 +507,17 @@ export default function CBCAssessmentTool() {
         </CardContent>
       </Card>
 
+      {!generated && (
+        <div className="flex flex-col items-center justify-center py-16 text-center">
+          <div className="rounded-full bg-muted/30 p-4 mb-4">
+            <ClipboardCheck className="h-8 w-8 text-muted-foreground/30" />
+          </div>
+          <p className="text-sm font-medium text-muted-foreground">No assessment generated yet</p>
+          <p className="text-xs text-muted-foreground/60 mt-1.5 max-w-[280px]">
+            Configure your assessment settings above and click Generate
+          </p>
+        </div>
+      )}
       {generated && blueprintData && (
         <>
           {/* ── KICD DOCUMENT ── */}

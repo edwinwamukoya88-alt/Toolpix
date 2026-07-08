@@ -368,14 +368,17 @@ export default function FaviconGenerator() {
                 <div key={size} className="text-center space-y-2">
                   <div className="mx-auto rounded-xl border bg-card shadow-sm p-3 inline-flex">
                     {previewUrls[size] && (
-                      <img
-                        src={previewUrls[size]}
-                        alt={`${size}x${size}`}
-                        width={size}
-                        height={size}
-                        className="image-rendering-pixelated"
-                        style={{ imageRendering: "pixelated" }}
-                      />
+                      <>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={previewUrls[size]}
+                          alt={`${size}x${size}`}
+                          width={size}
+                          height={size}
+                          className="image-rendering-pixelated"
+                          style={{ imageRendering: "pixelated" }}
+                        />
+                      </>
                     )}
                   </div>
                   <p className="text-xs text-muted-foreground font-medium tabular-nums">{size}x{size}</p>

@@ -47,12 +47,13 @@ export function StepAssessment({ plan, updateField, autoGenerateRemarks }: StepA
 
       <div className="space-y-1.5">
         <div className="flex items-center justify-between">
-          <label className="text-xs font-medium text-muted-foreground">Remarks</label>
+          <label htmlFor="remarks" className="text-xs font-medium text-muted-foreground">Remarks</label>
           <Button variant="ghost" size="sm" type="button" onClick={autoGenerateRemarks} className="text-primary">
             <Sparkles className="h-3 w-3" /> Auto-generate
           </Button>
         </div>
         <select
+          id="remarks"
           value={plan.remarks}
           onChange={(e) => updateField("remarks", e.target.value)}
           className="flex h-11 w-full rounded-xl border border-border/60 bg-muted/20 px-3 py-2 text-sm outline-none transition-all focus:border-ring focus:ring-2 focus:ring-ring/30 hover:border-primary/40"

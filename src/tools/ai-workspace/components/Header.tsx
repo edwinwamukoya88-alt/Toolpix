@@ -1,5 +1,6 @@
 "use client"
 
+import { memo } from "react"
 import { Sparkles, History } from "lucide-react"
 import type { FeatureDef } from "../types"
 
@@ -8,7 +9,7 @@ interface HeaderProps {
   onHistoryClick: () => void
 }
 
-export default function Header({ feature, onHistoryClick }: HeaderProps) {
+export default memo(function Header({ feature, onHistoryClick }: HeaderProps) {
   return (
     <header className="sticky top-0 z-30 border-b border-border/30 bg-background/95 backdrop-blur-xl supports-[backdrop-filter]:bg-background/80">
       <div className="mx-auto flex h-14 max-w-5xl items-center gap-3 px-3 sm:px-4 md:px-6">
@@ -16,7 +17,7 @@ export default function Header({ feature, onHistoryClick }: HeaderProps) {
           <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary/10">
             <Sparkles className="h-4 w-4 text-primary" />
           </div>
-          <h1 className="text-sm font-semibold hidden sm:block">AI Workspace</h1>
+          <h1 className="text-sm font-semibold hidden sm:block">AI Assistant</h1>
         </div>
 
         {feature && (
@@ -32,8 +33,9 @@ export default function Header({ feature, onHistoryClick }: HeaderProps) {
 
         <div className="flex items-center gap-1">
           <button
+            type="button"
             onClick={onHistoryClick}
-            className="flex items-center justify-center h-10 w-10 rounded-xl hover:bg-muted/50 transition-colors"
+            className="flex items-center justify-center min-h-[44px] min-w-[44px] rounded-xl hover:bg-muted/50 transition-colors"
             aria-label="View history"
           >
             <History className="h-4 w-4 text-muted-foreground" />
@@ -42,4 +44,4 @@ export default function Header({ feature, onHistoryClick }: HeaderProps) {
       </div>
     </header>
   )
-}
+})

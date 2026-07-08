@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/db"
 import { tools, categories, type Tool } from "@/lib/tools-data"
+import { requireApiAuth } from "@/lib/auth-guard"
 
 export interface ToolWithConfig extends Tool {
   enabled: boolean
@@ -10,6 +11,8 @@ export interface ToolWithConfig extends Tool {
 }
 
 export async function GET() {
+  const authResponse = await requireApiAuth()
+  if (authResponse) return authResponse
   try {
     const configs = await prisma.toolConfig.findMany()
     const configMap = new Map(configs.map((c) => [c.slug, c]))
@@ -30,6 +33,8 @@ export async function GET() {
 }
 
 export async function PUT(request: Request) {
+  const authResponse = await requireApiAuth()
+  if (authResponse) return authResponse
   try {
     const body = await request.json()
     const { slug, updates } = body
@@ -48,6 +53,8 @@ export async function PUT(request: Request) {
 }
 
 export async function POST(request: Request) {
+  const authResponse = await requireApiAuth()
+  if (authResponse) return authResponse
   try {
     const body = await request.json()
     const { slugs, updates } = body

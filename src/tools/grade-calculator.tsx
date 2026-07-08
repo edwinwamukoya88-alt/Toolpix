@@ -147,7 +147,17 @@ export default function CBCGradeCalculator() {
             </div>
           </div>
 
-          {obtained && total && (
+          {!obtained || !total ? (
+            <div className="flex flex-col items-center justify-center py-12 text-center">
+              <div className="rounded-full bg-muted/30 p-4 mb-4">
+                <Percent className="h-8 w-8 text-muted-foreground/30" />
+              </div>
+              <p className="text-sm font-medium text-muted-foreground">Enter marks to see CBC level</p>
+              <p className="text-xs text-muted-foreground/60 mt-1.5 max-w-[240px]">
+                Fill in the marks obtained and total marks above to calculate the competency level
+              </p>
+            </div>
+          ) : (
             <>
               <Separator />
 

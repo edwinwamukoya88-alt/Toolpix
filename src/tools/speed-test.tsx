@@ -109,13 +109,9 @@ export default function SpeedTest() {
   const [status, setStatus] = useState<"idle" | "testing" | "done">("idle")
   const [progress, setProgress] = useState(0)
   const [result, setResult] = useState<SpeedResult | null>(null)
-  const [history, setHistory] = useState<SpeedResult[]>([])
+  const [history, setHistory] = useState<SpeedResult[]>(() => loadHistory())
   const [testingPhase, setTestingPhase] = useState("")
   const [error, setError] = useState("")
-
-  useEffect(() => {
-    setHistory(loadHistory())
-  }, [])
 
   const startTest = useCallback(async () => {
     setStatus("testing")

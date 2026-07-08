@@ -4,7 +4,7 @@ import { useState, useCallback } from "react"
 import { useRouter } from "next/navigation"
 import {
   Save, Send, Clock, Sparkles, Eye, ArrowLeft,
-  Image, Tag, Hash,
+  Image as ImageIcon, Tag, Hash,
 } from "lucide-react"
 import {
   slugify, calculateReadingTime, createDraft, updateDraft,
@@ -237,7 +237,7 @@ export function BlogEditor({ draft }: BlogEditorProps) {
 
             <div className="space-y-1.5">
               <label className="text-xs font-medium text-muted-foreground flex items-center gap-1">
-                <Image className="h-3 w-3" />
+                <ImageIcon className="h-3 w-3" />
                 Cover Image URL
               </label>
               <input

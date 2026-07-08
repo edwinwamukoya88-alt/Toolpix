@@ -107,11 +107,14 @@ export default async function AdminDashboard() {
         <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
         <div className="relative flex items-center gap-5">
           {user?.image ? (
-            <img
-              src={user.image}
-              alt={user?.name ?? ""}
-              className="h-16 w-16 rounded-full object-cover ring-2 ring-primary/30"
-            />
+              <>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={user.image}
+                  alt={user?.name ?? ""}
+                  className="h-16 w-16 rounded-full object-cover ring-2 ring-primary/30"
+                />
+              </>
           ) : (
             <div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center ring-2 ring-primary/30">
               <Users className="h-8 w-8 text-primary" />

@@ -56,6 +56,7 @@ export default function CompoundInterestCalculator() {
       })
     }
     return data
+  // eslint-disable-next-line react-hooks/preserve-manual-memoization
   }, [initial, monthly, rate, years, freq])
 
   return (

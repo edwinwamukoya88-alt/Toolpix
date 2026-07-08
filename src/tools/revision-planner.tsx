@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useCallback, useMemo, useEffect, useRef } from "react"
+import { useState, useCallback, useMemo, useEffect } from "react"
 import {
   CalendarDays, Copy, Printer, FileDown, Trash2,
   User, GraduationCap, School, Calendar, BookOpen,
@@ -708,7 +708,7 @@ export default function CBCLearningRevisionPlanner() {
       ...(assessments ? [`• Assessments: ${assessments}`] : ["• Weekly mini assessments and reflection"]),
       "",
       "=".repeat(60),
-      "Generated with ToolForge — smart-tools-kit.vercel.app",
+      `Generated with ToolForge — ${process.env.NEXT_PUBLIC_APP_URL || "smart-tools-kit.vercel.app"}`,
     ]
     navigator.clipboard.writeText(lines.join("\n"))
     trackToolUse("revision-planner", "copy")
@@ -1038,7 +1038,7 @@ export default function CBCLearningRevisionPlanner() {
             <p className="text-xs text-muted-foreground">Select the core competencies this revision plan will focus on:</p>
             <div className="flex flex-wrap gap-2">
               {coreCompetencyOptions.map((comp) => (
-                <button key={comp}
+                <button key={comp} type="button"
                   onClick={() => toggleCompetency(comp)}
                   className={cn(
                     "px-3 py-1.5 rounded-full text-xs font-medium border transition-all",
@@ -1064,7 +1064,7 @@ export default function CBCLearningRevisionPlanner() {
                 <Sparkles className="size-4 text-amber-500" />
                 <span className="text-xs font-medium">Auto-generate weekly activities</span>
               </div>
-              <button
+              <button type="button"
                 onClick={() => setAutoGenerate(!autoGenerate)}
                 className={cn(
                   "relative inline-flex h-5 w-9 items-center rounded-full transition-colors",
@@ -1327,7 +1327,7 @@ export default function CBCLearningRevisionPlanner() {
             <div className="flex items-center justify-between mb-3">
               <div />
               <div className="flex items-center gap-2">
-                <button
+                <button type="button"
                   onClick={() => setFlowPreviewMode(!flowPreviewMode)}
                   className={cn(
                     "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-all",

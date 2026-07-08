@@ -1258,6 +1258,7 @@ export default function ImageConverter() {
               >
                 {showBeforeAfter && originalDataUrl ? (
                   <div className="relative" style={{ transform: `scale(${zoom})`, transformOrigin: "center center" }}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={originalDataUrl} alt="Original" className="max-w-full max-h-[500px] object-contain" />
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-background/80"
                       style={{ clipPath: "inset(0 50% 0 0)" }}>
@@ -1268,12 +1269,15 @@ export default function ImageConverter() {
                 ) : (
                   <>
                     {previewDataUrl && (
-                      <img
-                        src={showBeforeAfter && originalDataUrl ? originalDataUrl : previewDataUrl}
-                        alt="Preview"
-                        className="max-w-full max-h-[500px] object-contain transition-all"
-                        style={{ transform: `scale(${zoom})`, transformOrigin: "center center" }}
-                      />
+                      <>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={showBeforeAfter && originalDataUrl ? originalDataUrl : previewDataUrl}
+                          alt="Preview"
+                          className="max-w-full max-h-[500px] object-contain transition-all"
+                          style={{ transform: `scale(${zoom})`, transformOrigin: "center center" }}
+                        />
+                      </>
                     )}
                     {showGrid && (
                       <div className="absolute inset-0 pointer-events-none"
@@ -1348,6 +1352,7 @@ export default function ImageConverter() {
                   )}
                   {outputUrl && (
                     <div className="flex items-center gap-1.5 ml-1 pl-2 border-l border-border/40">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={outputUrl} alt="Output preview" className="h-8 w-8 rounded object-cover border" />
                       <span className="text-[9px] text-muted-foreground">Output</span>
                     </div>

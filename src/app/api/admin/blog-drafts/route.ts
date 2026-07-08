@@ -1,7 +1,10 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/db"
+import { requireApiAuth } from "@/lib/auth-guard"
 
 export async function GET() {
+  const authResponse = await requireApiAuth()
+  if (authResponse) return authResponse
   try {
     const drafts = await prisma.blogDraft.findMany({
       orderBy: { updatedAt: "desc" },
@@ -13,6 +16,8 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  const authResponse = await requireApiAuth()
+  if (authResponse) return authResponse
   try {
     const body = await request.json()
     const now = new Date()

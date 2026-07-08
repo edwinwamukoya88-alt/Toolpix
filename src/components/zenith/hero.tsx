@@ -13,7 +13,6 @@ import {
   Brain,
   Star,
   Timer,
-  ChevronRight,
 } from "lucide-react"
 import type { PomodoroGamification, PomodoroAnalytics } from "@/lib/pomodoro-analytics"
 import { cn } from "@/lib/utils"
@@ -106,7 +105,7 @@ function ZenithHero({ gamification, analytics, timerMode = "focus", onOpenSettin
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={onOpenSettings}
-              className="flex h-8 w-8 items-center justify-center rounded-xl border border-indigo-500/20 bg-indigo-500/10 text-indigo-300/70 hover:bg-indigo-500/20 hover:text-indigo-200 transition-all"
+              className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-xl border border-indigo-500/20 bg-indigo-500/10 text-indigo-300/70 hover:bg-indigo-500/20 hover:text-indigo-200 transition-all"
               aria-label="Settings"
             >
               <Settings className="h-4 w-4" />

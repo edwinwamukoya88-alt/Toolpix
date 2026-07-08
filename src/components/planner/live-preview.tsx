@@ -126,7 +126,7 @@ export function LivePreview({
           <div className="divide-y divide-border/30">
             {plan.outcomes.length > 0 && (
               <div className="px-5 py-3">
-                <p className="text-[10px] font-bold text-primary uppercase tracking-wider mb-1">1. Specific Learning Outcomes</p>
+                <p className="text-[10px] font-bold text-primary uppercase tracking-wider mb-1">1. Learning Outcomes</p>
                 <ul className="space-y-0.5">
                   {plan.outcomes.map((o, i) => (
                     <li key={i} className="text-xs text-muted-foreground flex gap-2">
@@ -138,11 +138,30 @@ export function LivePreview({
               </div>
             )}
 
-            {(plan.competencies.length > 0 || plan.values.length > 0 || plan.pcis.length > 0) && (
+            {(plan.successCriteria.length > 0 || plan.keyInquiryQuestion || plan.competencies.length > 0 || plan.values.length > 0 || plan.pcis.length > 0) && (
               <div className="px-5 py-3 space-y-2">
+                {plan.successCriteria.length > 0 && (
+                  <div>
+                    <p className="text-[10px] font-bold uppercase tracking-wider mb-1">2. Success Criteria</p>
+                    <ul className="space-y-0.5">
+                      {plan.successCriteria.map((s, i) => (
+                        <li key={i} className="text-[10px] text-muted-foreground flex gap-2">
+                          <span className="shrink-0 mt-0.5">\u2022</span>
+                          <span>{s}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {plan.keyInquiryQuestion && (
+                  <div>
+                    <p className="text-[10px] font-bold uppercase tracking-wider mb-1">3. Key Inquiry Question</p>
+                    <p className="text-[10px] text-muted-foreground italic">{plan.keyInquiryQuestion}</p>
+                  </div>
+                )}
                 {plan.competencies.length > 0 && (
                   <div>
-                    <p className="text-[10px] font-bold text-blue-600 uppercase tracking-wider mb-1">2. Core Competencies</p>
+                    <p className="text-[10px] font-bold text-blue-600 uppercase tracking-wider mb-1">4. Core Competencies</p>
                     <div className="flex flex-wrap gap-1">
                       {plan.competencies.map((c) => (
                         <span key={c} className="px-1.5 py-0.5 rounded bg-blue-500/10 text-blue-600 text-[10px]">{c}</span>
@@ -152,7 +171,7 @@ export function LivePreview({
                 )}
                 {plan.values.length > 0 && (
                   <div>
-                    <p className="text-[10px] font-bold text-green-600 uppercase tracking-wider mb-1">3. Values</p>
+                    <p className="text-[10px] font-bold text-green-600 uppercase tracking-wider mb-1">5. Values</p>
                     <div className="flex flex-wrap gap-1">
                       {plan.values.map((v) => (
                         <span key={v} className="px-1.5 py-0.5 rounded bg-green-500/10 text-green-600 text-[10px]">{v}</span>
@@ -162,7 +181,7 @@ export function LivePreview({
                 )}
                 {plan.pcis.length > 0 && (
                   <div>
-                    <p className="text-[10px] font-bold text-purple-600 uppercase tracking-wider mb-1">4. PCIs</p>
+                    <p className="text-[10px] font-bold text-purple-600 uppercase tracking-wider mb-1">6. Pertinent and Contemporary Issues (PCIs)</p>
                     <div className="flex flex-wrap gap-1">
                       {plan.pcis.map((p) => (
                         <span key={p} className="px-1.5 py-0.5 rounded bg-purple-500/10 text-purple-600 text-[10px]">{p}</span>
@@ -173,51 +192,11 @@ export function LivePreview({
               </div>
             )}
 
-            {(plan.teacherActivities.length > 0 || plan.learnerActivities.length > 0) && (
-              <div className="px-5 py-3">
-                <p className="text-[10px] font-bold text-amber-600 uppercase tracking-wider mb-1">5. Learning Activities</p>
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <p className="text-[9px] font-semibold text-muted-foreground mb-0.5">Teacher</p>
-                    <ul className="space-y-0.5">
-                      {plan.teacherActivities.slice(0, 3).map((a, i) => (
-                        <li key={i} className="text-[10px] text-muted-foreground">{a}</li>
-                      ))}
-                      {plan.teacherActivities.length > 3 && (
-                        <li className="text-[9px] text-muted-foreground/60">+{plan.teacherActivities.length - 3} more</li>
-                      )}
-                    </ul>
-                  </div>
-                  <div>
-                    <p className="text-[9px] font-semibold text-muted-foreground mb-0.5">Learner</p>
-                    <ul className="space-y-0.5">
-                      {plan.learnerActivities.slice(0, 3).map((a, i) => (
-                        <li key={i} className="text-[10px] text-muted-foreground">{a}</li>
-                      ))}
-                      {plan.learnerActivities.length > 3 && (
-                        <li className="text-[9px] text-muted-foreground/60">+{plan.learnerActivities.length - 3} more</li>
-                      )}
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {(plan.assessmentMethods.length > 0 || plan.resources.length > 0 || plan.remarks) && (
-              <div className="px-5 py-3">
-                {plan.assessmentMethods.length > 0 && (
-                  <div className="mb-2">
-                    <p className="text-[10px] font-bold text-red-600 uppercase tracking-wider mb-1">6. Assessment Methods</p>
-                    <div className="flex flex-wrap gap-1">
-                      {plan.assessmentMethods.map((a) => (
-                        <span key={a} className="px-1.5 py-0.5 rounded bg-red-500/10 text-red-600 text-[10px]">{a}</span>
-                      ))}
-                    </div>
-                  </div>
-                )}
+            {(plan.resources.length > 0 || plan.lessonDevelopment.trim() || plan.assessmentMethods.length > 0 || plan.remarks) && (
+              <div className="px-5 py-3 space-y-2">
                 {plan.resources.length > 0 && (
-                  <div className="mb-2">
-                    <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-1">Resources</p>
+                  <div>
+                    <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-1">7. Learning Resources</p>
                     <ul className="space-y-0.5">
                       {plan.resources.map((r, i) => (
                         <li key={i} className="text-[10px] text-muted-foreground">{r}</li>
@@ -225,39 +204,35 @@ export function LivePreview({
                     </ul>
                   </div>
                 )}
-                {plan.remarks && (
+                {plan.lessonDevelopment.trim() && (
                   <div>
-                    <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-1">Remarks</p>
-                    <p className="text-xs text-muted-foreground italic">&ldquo;{plan.remarks}&rdquo;</p>
+                    <p className="text-[10px] font-bold text-emerald-600 uppercase tracking-wider mb-1">8. Lesson Development</p>
+                    <div className="space-y-1.5 text-[10px] text-muted-foreground leading-relaxed">
+                      {plan.lessonDevelopment.split("\n").filter(l => l.trim()).map((line, i) => {
+                        const t = line.trim()
+                        const isPhase = /^(Introduction|Lesson Development|Conclusion)/i.test(t)
+                        return isPhase
+                          ? <p key={i} className="font-semibold text-foreground/80">{t}</p>
+                          : <p key={i} className="text-justify">{t}</p>
+                      })}
+                    </div>
                   </div>
                 )}
-              </div>
-            )}
-
-            {/* Biblical Reflection */}
-            {biblicalVerseEnabled && biblicalVerse && (
-              <div className="px-5 py-3 border-t-2 border-amber-200/30">
-                <p className="text-[10px] font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wider mb-1">
-                  Biblical Reflection (Optional)
-                </p>
-                <p className="text-xs font-bold text-amber-900 dark:text-amber-200 mt-1">
-                  {biblicalVerse.split(" \u2014 ")[0]}
-                </p>
-                <p className="text-xs italic text-amber-700 dark:text-amber-300 leading-relaxed mt-0.5">
-                  &ldquo;{biblicalVerse.split(" \u2014 ").slice(1).join(" \u2014 ")}&rdquo;
-                </p>
-                {curriculumConnection && (
-                  <p className="text-[11px] text-amber-700/80 dark:text-amber-300/80 mt-1">
-                    <span className="font-semibold">Curriculum Connection:</span> {curriculumConnection}
-                  </p>
+                {plan.assessmentMethods.length > 0 && (
+                  <div>
+                    <p className="text-[10px] font-bold text-red-600 uppercase tracking-wider mb-1">9. Assessment</p>
+                    <div className="flex flex-wrap gap-1">
+                      {plan.assessmentMethods.map((a) => (
+                        <span key={a} className="px-1.5 py-0.5 rounded bg-red-500/10 text-red-600 text-[10px]">{a}</span>
+                      ))}
+                    </div>
+                  </div>
                 )}
-                {verseExplanation && (
-                  <p className="text-[11px] text-amber-600/70 dark:text-amber-400/70 italic mt-0.5">
-                    {verseExplanation}
-                  </p>
-                )}
-                {teacherReflectionNotes && (
-                  <p className="text-[11px] text-muted-foreground italic mt-0.5">\u2014 {teacherReflectionNotes}</p>
+                {plan.remarks && (
+                  <div>
+                    <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-1">10. Reflection</p>
+                    <p className="text-xs text-muted-foreground italic">&ldquo;{plan.remarks}&rdquo;</p>
+                  </div>
                 )}
               </div>
             )}

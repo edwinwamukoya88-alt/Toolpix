@@ -486,7 +486,7 @@ export function getSubStrands(grade: string, learningArea: string, strand: strin
 }
 
 export const PROMPT_TEMPLATES: Record<string, string> = {
-  "lesson-planner": "Generate a detailed KICD-compliant CBC lesson plan for {grade} {learningArea} on the topic: ",
+  "lesson-planner": "Generate a KICD-compliant CBC lesson plan (11-section structure, paragraph-form Lesson Development) for {grade} {learningArea} on the topic: ",
   "assessment": "Design a competency-based assessment for {grade} {learningArea} - {strand}. Include: ",
   "comment-generator": "Write professional CBC report card comments for a {grade} student in {learningArea}. ",
   "scheme-of-work": "Create a termly scheme of work for {grade} {learningArea} covering: ",

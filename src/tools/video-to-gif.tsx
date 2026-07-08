@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef } from "react"
-import { Upload, Download, Image, Loader2 } from "lucide-react"
+import { Upload, Download, Image as ImageIcon, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { fetchFile } from "@ffmpeg/util"
@@ -94,7 +94,7 @@ export default function VideoToGif() {
       </div>
 
       {!loaded && !ffLoading && (
-        <Button onClick={load} className="w-full"><Image className="h-4 w-4 mr-2" /> Load FFmpeg Engine</Button>
+        <Button onClick={load} className="w-full"><ImageIcon className="h-4 w-4 mr-2" /> Load FFmpeg Engine</Button>
       )}
 
       {ffLoading && (

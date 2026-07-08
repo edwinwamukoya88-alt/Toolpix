@@ -3,15 +3,18 @@ import { getAllBlogs, getFeaturedPost } from "@/lib/blog"
 import BlogHomeClient from "./blog-home-client"
 import type { BlogMeta } from "@/lib/blog-types"
 
+const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://smart-tools-kit.vercel.app"
+
 export const metadata: Metadata = {
   title: "Blog",
   description: "Read guides on CBC education, productivity techniques, privacy tips, and tool tutorials. All content from the ToolForge team.",
   openGraph: {
     title: "Blog - ToolForge",
     description: "Guides on CBC education, productivity, privacy, and more.",
-    url: "https://smart-tools-kit.vercel.app/blog",
+    url: `${siteUrl}/blog`,
     siteName: "ToolForge",
     type: "website",
+    images: [{ url: `${siteUrl}/api/og?title=ToolForge+Blog&category=Productivity&type=site`, width: 1200, height: 630, alt: "ToolForge Blog" }],
   },
   twitter: {
     card: "summary_large_image",
@@ -19,7 +22,7 @@ export const metadata: Metadata = {
     description: "Guides on CBC education, productivity, privacy, and more.",
   },
   alternates: {
-    canonical: "https://smart-tools-kit.vercel.app/blog",
+    canonical: `${siteUrl}/blog`,
   },
 }
 

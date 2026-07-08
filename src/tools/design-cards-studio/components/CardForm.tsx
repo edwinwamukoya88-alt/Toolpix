@@ -76,6 +76,7 @@ export default function CardForm({ cardType, formData, onChange, onTypeChange, o
             </Button>
           ) : (
             <div className="flex items-center gap-2 w-full">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={logo} alt="Logo" className="h-8 w-auto rounded border border-border" />
               <Button variant="ghost" size="sm" className="h-7 text-xs text-muted-foreground" onClick={clearLogo}>
                 Remove

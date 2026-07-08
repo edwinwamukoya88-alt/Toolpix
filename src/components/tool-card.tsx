@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
-import { Palette, TextQuote, Image, Frame, QrCode, Scan, ImageDown, Link as LinkIcon, StickyNote, CheckSquare, Timer, Calendar, Columns3, Clock, Target, Key, Mail, Eraser, FileCode, Link2, Shuffle, Braces, Regex, Ruler, FileText, File, ImagePlus, FileArchive, Music, DollarSign, TrendingUp, Landmark, Percent, BookOpen, ClipboardList, MessageSquare, CalendarDays, FileSpreadsheet, GraduationCap, Film, Clapperboard, Scissors, Camera, Layers, Crop, Subtitles, Box, Gauge, Globe, MapPin, Activity, Server } from "lucide-react"
+import { Palette, TextQuote, Image, Frame, QrCode, Scan, ImageDown, Link as LinkIcon, StickyNote, CheckSquare, Timer, Calendar, Columns3, Clock, Target, Key, Mail, Eraser, FileCode, Link2, Shuffle, Braces, Regex, Ruler, FileText, File, ImagePlus, FileArchive, Music, DollarSign, TrendingUp, Landmark, Percent, BookOpen, ClipboardList, MessageSquare, CalendarDays, FileSpreadsheet, GraduationCap, Film, Clapperboard, Scissors, Camera, Layers, Crop, Subtitles, Box, Gauge, Globe, MapPin, Activity, Server, Sparkles, CreditCard, Pen, PenTool, Unlock, RotateCw, FileDown, Home, BarChart3, Receipt, Weight } from "lucide-react"
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Palette, TextQuote, Image, Frame, QrCode, Scan, ImageDown, Link: LinkIcon,
@@ -10,7 +10,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   File, ImagePlus, FileArchive, Music, DollarSign, TrendingUp, Landmark,
   Percent, BookOpen, ClipboardList, MessageSquare, CalendarDays, FileSpreadsheet,
   Film, Clapperboard, Scissors, Camera, Layers, Crop, Subtitles,
-  Gauge, Globe, MapPin, Activity, Server,
+  Gauge, Globe, MapPin, Activity, Server, Sparkles, CreditCard, Pen, PenTool, Unlock, RotateCw, FileDown, Home, BarChart3, Receipt, Weight, GraduationCap,
 }
 
 interface ToolCardProps {
@@ -25,6 +25,7 @@ const badgeColors: Record<string, string> = {
   Free: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
   Fast: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
   Secure: "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400",
+  New: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400",
 }
 
 const gradientMap: Record<string, string> = {

@@ -28,6 +28,7 @@ export default function AdminSidebar() {
   return (
     <>
       <button
+        type="button"
         onClick={() => setMobileOpen(!mobileOpen)}
         className="fixed bottom-4 left-4 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg lg:hidden"
         aria-label="Toggle navigation"
@@ -57,8 +58,9 @@ export default function AdminSidebar() {
             </Link>
           )}
           <button
+            type="button"
             onClick={() => setCollapsed(!collapsed)}
-            className="hidden lg:flex h-8 w-8 items-center justify-center rounded-lg hover:bg-muted transition-colors shrink-0"
+            className="hidden lg:flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg hover:bg-muted transition-colors shrink-0"
             aria-label="Collapse sidebar"
           >
             <ChevronRight className={`h-4 w-4 transition-transform ${collapsed ? "" : "rotate-180"}`} />

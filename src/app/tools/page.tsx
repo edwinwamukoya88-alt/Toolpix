@@ -52,28 +52,28 @@ function ToolsContent() {
   return (
     <div className="container py-8 space-y-8">
       <div>
-        <h1 className="text-3xl font-bold">All Tools</h1>
+        <h1 className="text-3xl font-bold tracking-tight">All Tools</h1>
         <p className="text-muted-foreground mt-1">{tools.length} free utilities at your fingertips</p>
       </div>
 
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="flex-1">
-          <SearchBar value={search} onChange={handleSearch} placeholder="Search 39+ utility tools..." />
+          <SearchBar value={search} onChange={handleSearch} placeholder="Search 44+ utility tools..." />
         </div>
-        <div className="flex gap-2 flex-wrap">
+        <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none -mx-3 px-3 sm:mx-0 sm:px-0 flex-nowrap">
           {["All", ...categories].map((cat) => (
             <Button
               key={cat}
               variant={activeCat === cat ? "default" : "outline"}
               size="sm"
               onClick={() => {
-                if (cat === "AI Workspace") {
+                if (cat === "AI Assistant") {
                   router.push("/tools/ai-workspace")
                 } else {
                   setActiveCat(cat)
                 }
               }}
-              className="text-xs"
+              className="text-xs shrink-0 min-h-[44px]"
             >
               {cat}
             </Button>

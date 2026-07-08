@@ -138,6 +138,7 @@ export default function ThumbnailGenerator() {
 
       {thumbUrl && (
         <div className="space-y-2">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={thumbUrl} alt="Thumbnail preview" className="w-full max-h-80 rounded-xl object-contain bg-black" />
           <Button onClick={() => {
             const a = document.createElement("a"); a.href = thumbUrl; const fmt = formats.find((f) => f.value === format)!; a.download = "thumbnail" + fmt.ext; a.click()

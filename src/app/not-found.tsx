@@ -21,13 +21,13 @@ export default function NotFound() {
         <div className="flex items-center justify-center gap-3">
           <Link href="/">
             <Button>
-              <Home className="h-4 w-4 mr-1.5" />
+              <Home className="h-4 w-4" />
               Back to Home
             </Button>
           </Link>
           <Link href="/tools">
             <Button variant="outline">
-              <ArrowLeft className="h-4 w-4 mr-1.5" />
+              <ArrowLeft className="h-4 w-4" />
               Browse Tools
             </Button>
           </Link>

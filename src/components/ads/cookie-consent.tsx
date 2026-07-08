@@ -1,27 +1,35 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState, useEffect } from "react"
 import { Cookie, X } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
+import { buttonVariants } from "@/components/ui/button"
+
+const CONSENT_KEY = "toolpix_ad_consent"
 
 export default function CookieConsent() {
-  const [show, setShow] = useState(false)
+  const [show, setShow] = useState(true)
 
   useEffect(() => {
-    if (localStorage.getItem("toolpix_ad_consent") === null) {
-      setShow(true)
-    }
+    try {
+      if (localStorage.getItem(CONSENT_KEY) !== null) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setShow(false)
+      }
+    } catch {}
   }, [])
 
   function accept(consent: boolean) {
-    localStorage.setItem("toolpix_ad_consent", consent ? "true" : "false")
+    try {
+      localStorage.setItem(CONSENT_KEY, consent ? "true" : "false")
+    } catch {}
     window.location.reload()
   }
 
   if (!show) return null
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-[100] border-t bg-background/95 backdrop-blur-sm p-4 shadow-lg">
+    <div role="dialog" aria-modal="true" aria-label="Cookie consent" className="fixed bottom-0 left-0 right-0 z-[100] border-t bg-background/95 backdrop-blur-sm p-4 shadow-lg">
       <div className="container max-w-4xl mx-auto flex flex-col sm:flex-row items-start sm:items-center gap-4">
         <div className="flex items-start gap-3 flex-1">
           <Cookie className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
@@ -34,15 +42,24 @@ export default function CookieConsent() {
           </div>
         </div>
         <div className="flex items-center gap-2 flex-shrink-0">
-          <Button variant="outline" size="sm" onClick={() => accept(false)}>
-            Decline
-          </Button>
-          <Button size="sm" onClick={() => accept(true)}>
-            Accept All
-          </Button>
           <button
+            type="button"
+            className={cn(buttonVariants({ variant: "outline", size: "sm" }))}
+            onClick={() => accept(false)}
+          >
+            Decline
+          </button>
+          <button
+            type="button"
+            className={cn(buttonVariants({ variant: "default", size: "sm" }))}
+            onClick={() => accept(true)}
+          >
+            Accept All
+          </button>
+          <button
+            type="button"
             onClick={() => setShow(false)}
-            className="p-1 rounded-md hover:bg-muted transition-colors"
+            className="min-h-[44px] min-w-[44px] flex items-center justify-center rounded-md hover:bg-muted transition-colors"
             aria-label="Close"
           >
             <X className="h-4 w-4" />

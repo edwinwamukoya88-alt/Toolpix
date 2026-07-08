@@ -1,6 +1,7 @@
 "use client"
 
 import { useCallback } from "react"
+import { Sparkles } from "lucide-react"
 import { useWorkspace } from "./hooks/useWorkspace"
 import Header from "./components/Header"
 import CategoryTabs from "./components/CategoryTabs"
@@ -28,14 +29,14 @@ export default function AIWorkspace() {
   const catFeaturesAll = ws.activeCategory === "education" ? EDUCATION_FEATURES : ws.activeCategory === "writing" ? WRITING_FEATURES : DESIGN_FEATURES
 
   return (
-    <div className="flex h-[calc(100vh-4rem)] flex-col bg-background pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
+    <div className="flex h-full flex-col bg-background safe-bottom safe-top">
       <Header
         feature={ws.feature}
         onHistoryClick={() => ws.setHistoryOpen(true)}
       />
 
       <main className="flex-1 overflow-y-auto">
-        <div className="mx-auto w-full max-w-3xl p-3 sm:p-4 md:p-6 space-y-4">
+        <div className="mx-auto w-full max-w-3xl px-3 sm:px-4 md:px-6 py-3 sm:py-4 space-y-3 sm:space-y-4">
           <CategoryTabs
             activeCategory={ws.activeCategory}
             onCategoryChange={ws.handleCategoryChange}
@@ -84,8 +85,14 @@ export default function AIWorkspace() {
           )}
 
           {!ws.feature && (
-            <div className="flex flex-col items-center justify-center py-16 text-center">
-              <p className="text-sm text-muted-foreground">Select a feature to get started</p>
+            <div className="flex flex-col items-center justify-center py-12 sm:py-16 text-center">
+              <div className="rounded-full bg-muted/20 p-4 mb-4">
+                <Sparkles className="h-6 w-6 text-muted-foreground/30" />
+              </div>
+              <p className="text-sm font-semibold text-foreground/80">Start by typing a question or pasting text.</p>
+              <p className="text-xs text-muted-foreground/50 mt-2 max-w-[280px] leading-relaxed">
+                AI Assistant can write, improve, translate, summarize, humanize and generate professional content.
+              </p>
             </div>
           )}
 

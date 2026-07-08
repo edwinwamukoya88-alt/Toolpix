@@ -14,7 +14,8 @@ export default function UrlShortener() {
   function shorten() {
     if (!url.trim()) return
     const id = Math.random().toString(36).slice(2, 7)
-    setShort(`https://smart-tools-kit.vercel.app/${id}`)
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://smart-tools-kit.vercel.app"
+    setShort(`${baseUrl}/${id}`)
     toast.success("Short URL generated (local demo)")
   }
 

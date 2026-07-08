@@ -323,7 +323,7 @@ function CbcTimeline({ phases }: { phases: { name: string; time: string; content
             <div className="relative z-10 mt-0.5 flex h-14 w-14 shrink-0 items-center justify-center rounded-full border-2 border-primary/20 bg-card text-primary shadow-sm">
               <span className="text-base font-bold leading-none">{idx + 1}</span>
             </div>
-            <div className="flex-1 min-w-0 rounded-xl border border-white/[0.06] bg-card/50 p-4">
+            <div className="flex-1 min-w-0 rounded-xl border border-border/30 bg-card/50 p-4">
               <div className="flex items-center justify-between gap-2 mb-1.5">
                 <span className="text-lg font-semibold text-foreground/90">{phase.name}</span>
                 {phase.time && (
@@ -344,22 +344,22 @@ function CbcTimeline({ phases }: { phases: { name: string; time: string; content
 function CbcTable({ headers, rows }: ParsedTable) {
   if (headers.length === 0 && rows.length === 0) return null
   return (
-    <div className="overflow-x-auto my-3 rounded-xl border border-white/[0.06]">
+    <div className="overflow-x-auto my-3 rounded-xl border border-border/30">
       <table className="w-full border-collapse">
         {headers.length > 0 && (
           <thead>
             <tr className="bg-card/40">
               {headers.map((h, i) => (
-                <th key={i} className="border-b border-r border-white/[0.06] px-4 py-3 text-left font-bold text-foreground/85 text-base last:border-r-0">{h}</th>
+                <th key={i} className="border-b border-r border-border/30 px-4 py-3 text-left font-bold text-foreground/85 text-base last:border-r-0">{h}</th>
               ))}
             </tr>
           </thead>
         )}
         <tbody>
           {rows.map((row, ri) => (
-            <tr key={ri} className="border-b border-white/[0.04] last:border-b-0 hover:bg-card/20 transition-colors">
+            <tr key={ri} className="border-b border-border/20 last:border-b-0 hover:bg-card/20 transition-colors">
               {row.map((cell, ci) => (
-                <td key={ci} className="border-r border-white/[0.04] px-4 py-3 text-muted-foreground/70 text-base leading-[1.7] last:border-r-0">{cell}</td>
+                <td key={ci} className="border-r border-border/20 px-4 py-3 text-muted-foreground/70 text-base leading-[1.7] last:border-r-0">{cell}</td>
               ))}
             </tr>
           ))}
@@ -519,7 +519,7 @@ function DocumentHeader({ title }: { title: string }) {
     <div className="text-center mb-8 pb-5 border-b-2 border-gray-200">
       <div className="flex items-center justify-center gap-2 mb-2">
         <Sparkles className="h-5 w-5 text-primary/60" />
-        <span className="text-sm font-semibold uppercase tracking-[0.2em] text-primary/60">ToolForge AI Workspace</span>
+        <span className="text-sm font-semibold uppercase tracking-[0.2em] text-primary/60">ToolForge AI Assistant</span>
       </div>
       <h1 className="text-3xl font-bold text-gray-900 tracking-tight">{title}</h1>
     </div>
@@ -536,7 +536,7 @@ function CurriculumInfoCard({ info }: { info: CurriculumInfo[] }) {
     return items.map((item, i) => {
       const Icon = item.icon
       return (
-        <div key={i} className="flex items-center gap-3 rounded-lg border border-white/[0.06] bg-card/40 px-4 py-3">
+        <div key={i} className="flex items-center gap-3 rounded-lg border border-border/30 bg-card/40 px-4 py-3">
           <Icon className="h-5 w-5 shrink-0 text-primary/50" />
           <div className="min-w-0 flex-1">
             <p className="text-sm font-medium uppercase tracking-wider text-muted-foreground/50">{item.label}</p>
@@ -548,8 +548,8 @@ function CurriculumInfoCard({ info }: { info: CurriculumInfo[] }) {
   }
 
   return (
-    <div className="mb-6 rounded-xl border border-white/[0.06] bg-card/20 p-5">
-      <div className="flex items-center gap-2 mb-4 pb-3 border-b border-white/[0.05]">
+    <div className="mb-6 rounded-xl border border-border/30 bg-card/20 p-5">
+      <div className="flex items-center gap-2 mb-4 pb-3 border-b border-border/25">
         <BookOpen className="h-5 w-5 text-primary/60" />
         <h2 className="text-base font-semibold text-foreground/80 uppercase tracking-wider">Curriculum Information</h2>
       </div>
@@ -578,8 +578,8 @@ function SectionCard({ section }: { section: ParsedSection }) {
   if (!rendered) return null
 
   return (
-    <div className={`mb-5 rounded-xl border border-white/[0.06] ${meta?.color || "bg-card/20"} overflow-hidden`}>
-      <div className="flex items-center gap-3 px-5 py-4 border-b border-white/[0.04]">
+    <div className={`mb-5 rounded-xl border border-border/30 ${meta?.color || "bg-card/20"} overflow-hidden`}>
+      <div className="flex items-center gap-3 px-5 py-4 border-b border-border/20">
         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
           <Icon className="h-5 w-5 text-primary/70" />
         </div>
@@ -598,8 +598,8 @@ function SectionCard({ section }: { section: ParsedSection }) {
 function DocumentFooter() {
   return (
     <div className="mt-8 pt-6 border-t-2 border-gray-200">
-      <div className="mb-6 rounded-xl border border-white/[0.06] bg-card/20 p-5">
-        <div className="flex items-center gap-2 mb-4 pb-3 border-b border-white/[0.05]">
+      <div className="mb-6 rounded-xl border border-border/30 bg-card/20 p-5">
+        <div className="flex items-center gap-2 mb-4 pb-3 border-b border-border/25">
           <RotateCcw className="h-5 w-5 text-primary/60" />
           <h2 className="text-lg font-semibold text-foreground/80">Teacher Reflection</h2>
         </div>
@@ -717,7 +717,7 @@ export function CbcDocument({ text, featureLabel, onCopy, onEdit, onRegenerate, 
       {/* White Paper */}
       <div
         ref={paperRef}
-        className="mx-auto max-w-[850px] rounded-2xl border border-white/[0.06] bg-white shadow-xl dark:bg-white transition-all duration-300"
+        className="mx-auto max-w-[850px] rounded-2xl border border-border/30 bg-white shadow-xl dark:bg-white transition-all duration-300"
         style={{ fontFamily: "'Inter', system-ui, -apple-system, sans-serif" }}
       >
         <div ref={contentRef} className={`px-10 py-8 sm:px-14 sm:py-10 text-gray-900 transition-all duration-300 ${!expanded && needsCollapse ? 'max-h-[1000px] overflow-hidden relative' : ''}`}>

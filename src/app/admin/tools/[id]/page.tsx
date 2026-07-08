@@ -55,7 +55,7 @@ export default function ToolDetailPage() {
                 <Wrench className="h-8 w-8 text-primary" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold">{tool.name}</h1>
+                <h1 className="text-2xl font-bold tracking-tight">{tool.name}</h1>
                 <p className="text-sm text-muted-foreground mt-1">{tool.description}</p>
               </div>
             </div>

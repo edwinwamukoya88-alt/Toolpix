@@ -1,10 +1,13 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/db"
+import { requireApiAuth } from "@/lib/auth-guard"
 
 export async function GET(
   _request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const authResponse = await requireApiAuth()
+  if (authResponse) return authResponse
   try {
     const { id } = await params
     const draft = await prisma.blogDraft.findUnique({ where: { id } })
@@ -21,6 +24,8 @@ export async function PUT(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const authResponse = await requireApiAuth()
+  if (authResponse) return authResponse
   try {
     const { id } = await params
     const body = await request.json()
@@ -54,6 +59,8 @@ export async function DELETE(
   _request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const authResponse = await requireApiAuth()
+  if (authResponse) return authResponse
   try {
     const { id } = await params
     await prisma.blogDraft.delete({ where: { id } })

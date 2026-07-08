@@ -66,6 +66,7 @@ export default function BlogArticleClient({ post, relatedPosts, toolSlugs }: Blo
                   },
                   img: ({ src, alt, ...props }) => (
                     <div className="rounded-xl overflow-hidden border bg-background/40">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={src} alt={alt || ""} className="w-full h-auto" {...props} />
                     </div>
                   ),
@@ -117,7 +118,7 @@ export default function BlogArticleClient({ post, relatedPosts, toolSlugs }: Blo
           <section className="rounded-2xl bg-gradient-to-br from-primary/10 via-primary/5 to-purple-500/10 border p-8 md:p-10 text-center space-y-4 relative overflow-hidden">
             <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
             <div className="relative">
-              <h2 className="text-xl md:text-2xl font-bold">Need a Specific Tool?</h2>
+              <h2 className="text-xl md:text-2xl font-bold tracking-tight">Need a Specific Tool?</h2>
               <p className="text-muted-foreground max-w-md mx-auto">
                 Browse all 39+ privacy-first tools. No signup required.
               </p>

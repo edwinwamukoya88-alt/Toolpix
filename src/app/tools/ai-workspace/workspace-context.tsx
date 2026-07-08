@@ -1,10 +1,17 @@
 "use client"
 
-import { createContext, useContext, useState, useCallback, useRef, useEffect, ReactNode } from "react"
+import { createContext, useContext, useState, useCallback, useRef, useEffect, useSyncExternalStore, ReactNode } from "react"
 import { toast } from "sonner"
 import { getRemaining, incrementUsage } from "@/tools/ai-workspace/usage-tracker"
 import { processAI } from "@/tools/ai-workspace/modules/ai-processor"
-import { subscribe, cancelRequest, type QueueItem } from "@/lib/ai/queue-manager"
+import { subscribe, cancelRequest, getQueueState, type QueueItem, type QueueState } from "@/lib/ai/queue-manager"
+
+const EMPTY_QUEUE_STATE: QueueState = Object.freeze({
+  items: [],
+  processing: false,
+  queuedCount: 0,
+  activeItem: null,
+})
 
 export interface SettingDef {
   key: string
@@ -21,7 +28,6 @@ interface WorkspaceContextType {
   outputHtml: string | undefined
   setOutputHtml: (v: string | undefined) => void
   processing: boolean
-  setProcessing: (v: boolean) => void
   activeFeature: string
   setActiveFeature: (v: string) => void
   featureSettings: Record<string, string>
@@ -54,26 +60,34 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
   const [input, setInput] = useState("")
   const [output, setOutput] = useState("")
   const [outputHtml, setOutputHtml] = useState<string | undefined>()
-  const [processing, setProcessing] = useState(false)
   const [activeFeature, setActiveFeature] = useState("humanize")
   const [featureSettings, setFeatureSettings] = useState<Record<string, string>>({})
   const [remaining, setRemaining] = useState(DAILY_LIMIT)
-  const [mounted, setMounted] = useState(false)
-  const [settingsDefs, setSettingsDefs] = useState<SettingDef[]>([])
-  const [queueItems, setQueueItems] = useState<QueueItem[]>([])
-  const outputRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setMounted(true)
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setRemaining(getRemaining())
-    const unsub = subscribe((state) => {
-      setQueueItems(state.items)
-      setProcessing(state.processing || state.queuedCount > 0)
-    })
-    return unsub
   }, [])
+  const [settingsDefs, setSettingsDefs] = useState<SettingDef[]>([])
+  const outputRef = useRef<HTMLDivElement>(null)
+
+  const queueStateRef = useRef<QueueState>(EMPTY_QUEUE_STATE)
+
+  const queueState = useSyncExternalStore(
+    useCallback((onStoreChange: () => void) => {
+      queueStateRef.current = getQueueState()
+      const unsub = subscribe((state) => {
+        queueStateRef.current = state
+        onStoreChange()
+      })
+      return unsub
+    }, []),
+    useCallback(() => queueStateRef.current, []),
+    useCallback(() => EMPTY_QUEUE_STATE, []),
+  )
+
+  const queueItems = queueState.items
+  const processing = queueState.processing || queueState.queuedCount > 0
 
   const wordCount = input.trim() ? input.trim().split(/\s+/).length : 0
   const charCount = input.length
@@ -92,7 +106,6 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
   }
 
   const handleProcess = useCallback(async () => {
-    if (!mounted) return
     if (remaining <= 0) {
       toast.error("Daily limit reached. Come back tomorrow!")
       return
@@ -113,25 +126,26 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
       setRemaining(getRemaining())
     } catch (err) {
       const msg = err instanceof Error ? err.message : "AI processing failed"
-      if (msg === "DAILY_COST_LIMIT_REACHED") {
-        toast.error("Cost limit reached. Try simpler requests.")
-      } else if (msg === "RATE_LIMITED") {
-        toast.error("Service is busy. Please wait a moment.")
-      } else if (msg.startsWith("MODEL_NOT_AVAILABLE")) {
-        toast.error("AI model unavailable. Please contact support.")
-      } else if (msg.startsWith("QUOTA_EXCEEDED")) {
-        toast.error("API quota exceeded. Try again later.")
-      } else if (msg.startsWith("API_KEY_INVALID")) {
-        toast.error("AI service not configured. Contact support.")
-      } else if (msg.startsWith("SAFETY_BLOCKED")) {
-        toast.error("Request blocked by content safety filters.")
+      if (msg === "CANCELLED" || msg === "") return
+      const errorMessages: Record<string, string> = {
+        DAILY_COST_LIMIT_REACHED: "Cost limit reached. Try simpler requests.",
+        RATE_LIMITED: "Service is busy. Please wait a moment.",
+        MODEL_NOT_AVAILABLE: "AI model unavailable. Please try again later.",
+        QUOTA_EXCEEDED: "API quota exceeded. Try again later.",
+        API_KEY_INVALID: "AI service not configured. Please contact support.",
+        SAFETY_BLOCKED: "Request blocked by content safety filters.",
+        TOKEN_FETCH_FAILED: "Authentication failed. Please refresh and try again.",
+      }
+      const matchedPrefix = Object.keys(errorMessages).find((key) => msg.startsWith(key))
+      if (matchedPrefix) {
+        toast.error(errorMessages[matchedPrefix])
       } else if (msg.startsWith("GEMINI_ERROR")) {
         toast.error(msg.replace("GEMINI_ERROR: ", "AI error: "))
-      } else if (msg !== "CANCELLED") {
+      } else {
         toast.error(msg || "AI processing failed. Please try again.")
       }
     }
-  }, [activeFeature, input, featureSettings, mounted, remaining])
+  }, [activeFeature, input, featureSettings, remaining])
 
   const handleCopy = useCallback(async () => {
     const text = outputRef.current?.textContent || output
@@ -166,7 +180,7 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
   return (
     <WorkspaceContext.Provider value={{
       input, setInput, output, setOutput, outputHtml, setOutputHtml,
-      processing, setProcessing, activeFeature, setActiveFeature,
+      processing, activeFeature, setActiveFeature,
       featureSettings, remaining, settingsDefs, registerSettings, updateSetting,
       wordCount, charCount, handleProcess, handleCopy, handleDownload, handleClear,
       outputRef, queueItems, cancelQueued,

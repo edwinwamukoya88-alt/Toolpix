@@ -270,6 +270,7 @@ export default function BlogCoverImage({ coverImage, title, className, size = "c
         )}
         style={{ aspectRatio: "16/9" }}
       >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={coverImage} alt={title || "Cover image"} className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-t from-background/60 to-transparent" />
       </div>

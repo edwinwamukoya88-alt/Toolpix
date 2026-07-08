@@ -1,12 +1,11 @@
 "use client"
 
-import { useCallback, useEffect } from "react"
+import { useCallback, useEffect, memo } from "react"
 import {
   Sparkles, CreditCard, Share2, Image, Printer,
   FileText, AlertCircle, Loader2,
 } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+import { cn } from "@/lib/utils"
 import { useWorkspace, type SettingDef } from "../workspace-context"
 
 interface DesignFeature {
@@ -73,7 +72,7 @@ function getSettings(featureId: string): SettingDef[] {
   return settingsMap[featureId] || []
 }
 
-export default function DesignPage() {
+function DesignPage() {
   const {
     input, setInput, output, outputHtml, processing, activeFeature,
     setActiveFeature, remaining, registerSettings, handleProcess,
@@ -90,11 +89,12 @@ export default function DesignPage() {
 
   useEffect(() => {
     registerSettings(getSettings(activeFeature))
-  }, [])
+  }, [activeFeature, registerSettings])
 
   return (
-    <>
-      <div className="flex flex-wrap gap-2">
+    <div className="space-y-4 sm:space-y-5">
+      {/* Feature grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
         {features.map((feat) => {
           const Icon = feat.icon
           const isActive = activeFeature === feat.id
@@ -103,54 +103,72 @@ export default function DesignPage() {
               key={feat.id}
               type="button"
               onClick={() => handleFeatureChange(feat.id)}
-              className={`flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-medium transition-all ${
-                isActive ? "bg-primary/10 text-primary" : "bg-card/30 text-muted-foreground/60 hover:bg-card/50 hover:text-muted-foreground"
-              }`}
+              className={cn(
+                "flex items-center gap-2 rounded-xl px-3 py-3 text-xs sm:text-sm font-medium transition-all min-h-[48px] touch-manipulation border active:scale-[0.97]",
+                isActive
+                  ? "bg-primary/12 text-primary border-primary/25 shadow-sm ring-1 ring-primary/20"
+                  : "bg-card/50 text-muted-foreground/70 hover:text-foreground hover:bg-card/80 hover:border-border/60 border-border/30"
+              )}
+              aria-pressed={isActive}
             >
-              <Icon className="h-3.5 w-3.5" />
-              <span className="truncate">{feat.label}</span>
+              <Icon className={cn("h-4 w-4 shrink-0", isActive ? "text-primary" : "text-muted-foreground/60")} />
+              <span className="truncate leading-tight">{feat.label}</span>
             </button>
           )
         })}
       </div>
 
-      <div className="rounded-2xl border border-white/[0.06] bg-card/30 p-6 text-center">
-        <p className="text-sm text-muted-foreground/50">Configure settings in the right panel, then click Generate</p>
+      <div className="rounded-2xl border border-dashed border-border/20 bg-card/20 p-8 sm:p-10 text-center space-y-3">
+        <div className="inline-flex items-center justify-center h-9 w-9 rounded-xl bg-primary/[0.06]">
+          <Sparkles className="h-4 w-4 text-primary/40" />
+        </div>
+        <div className="space-y-1">
+          <p className="text-sm font-medium text-muted-foreground/70">Configure settings in the panel, then click Generate</p>
+          <p className="text-xs text-muted-foreground/40">Your generated content will appear here.</p>
+        </div>
       </div>
 
       {remaining > 0 ? (
-        <Button className="w-full" size="lg" onClick={handleProcess} disabled={processing}>
+        <button
+          type="button"
+          onClick={handleProcess}
+          disabled={processing}
+          className="relative w-full flex items-center justify-center gap-2.5 rounded-xl py-3 text-sm font-semibold transition-all min-h-[52px] touch-manipulation border bg-primary text-primary-foreground hover:bg-primary/90 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100 shadow-lg shadow-primary/25"
+          aria-label={processing ? "Generating..." : "Generate"}
+        >
           {processing ? (
-            <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Generating...</>
+            <><Loader2 className="h-5 w-5 animate-spin" /> Generating...</>
           ) : (
-            <><Sparkles className="h-4 w-4 mr-2" /> Generate</>
+            <><Sparkles className="h-5 w-5" /> Generate</>
           )}
-        </Button>
+        </button>
       ) : (
-        <Card className="border-primary/20 bg-primary/[0.03]">
-          <CardContent className="p-6 text-center space-y-2">
-            <AlertCircle className="h-8 w-8 text-primary/40 mx-auto" />
-            <p className="font-semibold">Daily Limit Reached</p>
-            <p className="text-xs text-muted-foreground/70 max-w-sm mx-auto">
+        <div className="rounded-2xl border border-primary/15 bg-primary/[0.03] p-6 sm:p-8 text-center space-y-3">
+          <div className="inline-flex items-center justify-center h-10 w-10 rounded-xl bg-primary/[0.08]">
+            <AlertCircle className="h-5 w-5 text-primary/50" />
+          </div>
+          <div className="space-y-1">
+            <p className="font-semibold text-sm text-foreground/80">Daily Limit Reached</p>
+            <p className="text-xs text-muted-foreground/60 max-w-xs mx-auto leading-relaxed">
               You&apos;ve used all 5 free AI requests today. Come back tomorrow for more free usage or contact us for higher limits.
             </p>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       )}
 
       {(output || outputHtml) && (
-        <Card className="border-primary/10">
-          <CardContent className="p-4">
-            <div ref={outputRef}>
-              {outputHtml ? (
-                <div dangerouslySetInnerHTML={{ __html: outputHtml }} />
-              ) : (
-                <pre className="whitespace-pre-wrap text-sm font-sans leading-relaxed">{output}</pre>
-              )}
-            </div>
-          </CardContent>
-        </Card>
+        <div className="rounded-2xl border border-border/20 bg-card shadow-sm overflow-hidden">
+          <div ref={outputRef} className="p-4 sm:p-6 text-sm leading-relaxed text-foreground/85">
+            {outputHtml ? (
+              <div dangerouslySetInnerHTML={{ __html: outputHtml }} />
+            ) : (
+              <pre className="whitespace-pre-wrap font-sans leading-[1.75] m-0">{output}</pre>
+            )}
+          </div>
+        </div>
       )}
-    </>
+    </div>
   )
 }
+
+export default memo(DesignPage)

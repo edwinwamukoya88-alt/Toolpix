@@ -121,6 +121,7 @@ function CardContentRenderer({
     if (logo) {
       return (
         <div className={cn("mb-2", design.logoPosition === "center" ? "flex justify-center" : "flex justify-start")}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={logo} alt="Logo" className="h-8 w-auto object-contain" />
         </div>
       )

@@ -177,7 +177,7 @@ export function InfoBox({ children, variant = "info" }: { children: React.ReactN
     error: "bg-destructive/10 border-destructive/20 text-destructive",
   }
   return (
-    <div className={`flex items-center gap-2 rounded-lg border p-3 text-sm ${styles[variant]}`}>
+    <div className={`flex items-center gap-2 rounded-xl border p-3 text-sm ${styles[variant]}`}>
       {children}
     </div>
   )

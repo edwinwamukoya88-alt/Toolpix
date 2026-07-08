@@ -9,7 +9,7 @@ interface ReadingTimeBadgeProps {
 export default function ReadingTimeBadge({ minutes, className }: ReadingTimeBadgeProps) {
   return (
     <span className={cn("inline-flex items-center gap-1 text-xs text-muted-foreground", className)}>
-      <Clock className="h-3 w-3" />
+      <Clock className="h-3 w-3" aria-hidden="true" />
       {minutes} min read
     </span>
   )

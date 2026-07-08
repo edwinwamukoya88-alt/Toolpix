@@ -47,6 +47,7 @@ export function MultiSelect({ label, options, selected, onChange, description }:
           type="button"
           onClick={() => setOpen(!open)}
           className="flex w-full items-center gap-1.5 rounded-xl border border-border/60 bg-muted/20 px-3 py-2.5 text-sm text-left min-h-11 transition-all hover:bg-muted/30 hover:border-primary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+          aria-label={`${label}${selected.length > 0 ? ` (${selected.length} selected)` : ''}`}
         >
           <div className="flex-1 flex flex-wrap gap-1">
             {selected.length === 0 ? (

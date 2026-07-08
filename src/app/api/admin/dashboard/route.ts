@@ -2,8 +2,11 @@ import { NextResponse } from "next/server"
 import { prisma } from "@/lib/db"
 import { getAllPosts } from "@/lib/blog"
 import { tools } from "@/lib/tools-data"
+import { requireApiAuth } from "@/lib/auth-guard"
 
 export async function GET() {
+  const authResponse = await requireApiAuth()
+  if (authResponse) return authResponse
   try {
     const blogPosts = getAllPosts().length
     const publishedTools = tools.length

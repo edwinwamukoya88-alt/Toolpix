@@ -2,7 +2,7 @@
 
 import { useCallback } from "react"
 import { Button } from "@/components/ui/button"
-import { Image, FileText, Copy, MessageSquare, Globe, ZoomIn } from "lucide-react"
+import { Image as ImageIcon, FileText, Copy, MessageSquare, Globe, ZoomIn } from "lucide-react"
 import { toast } from "sonner"
 import type { CardType, FormData } from "./cardTypes"
 import { cardTypeConfigs } from "./cardTypes"
@@ -72,10 +72,10 @@ export default function ExportPanel({ cardType, formData, onFullscreen }: Export
 
       <div className="grid grid-cols-2 gap-1.5">
         <Button variant="outline" size="sm" className="h-7 gap-1 text-[10px]" onClick={handleExport2x}>
-          <Image className="w-3 h-3" /> PNG 2x
+          <ImageIcon className="w-3 h-3" /> PNG 2x
         </Button>
         <Button variant="outline" size="sm" className="h-7 gap-1 text-[10px]" onClick={handleExport4x}>
-          <Image className="w-3 h-3" /> PNG 4x
+          <ImageIcon className="w-3 h-3" /> PNG 4x
         </Button>
         <Button variant="outline" size="sm" className="h-7 gap-1 text-[10px]" onClick={handleExportPDF}>
           <FileText className="w-3 h-3" /> Print PDF

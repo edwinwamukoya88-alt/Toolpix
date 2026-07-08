@@ -134,6 +134,7 @@ function ZenithTimer({ onSessionComplete, onInterruption, onModeChange, classNam
     }
     window.addEventListener("keydown", handleKeyDown)
     return () => window.removeEventListener("keydown", handleKeyDown)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode, seconds, running])
 
   function toggle() {

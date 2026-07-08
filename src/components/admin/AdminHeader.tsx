@@ -36,15 +36,19 @@ export default function AdminHeader({ user }: AdminHeaderProps) {
 
         <div className="relative" ref={menuRef}>
           <button
+            type="button"
             onClick={() => setMenuOpen(!menuOpen)}
             className="flex items-center gap-3 rounded-lg border border-border/50 px-3 py-2 hover:bg-muted/50 transition-colors"
           >
             {user?.image ? (
-              <img
-                src={user.image}
-                alt={user?.name ?? ""}
-                className="h-8 w-8 rounded-full object-cover ring-2 ring-border"
-              />
+              <>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={user.image}
+                  alt={user?.name ?? ""}
+                  className="h-8 w-8 rounded-full object-cover ring-2 ring-border"
+                />
+              </>
             ) : (
               <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center">
                 <User className="h-4 w-4 text-muted-foreground" />

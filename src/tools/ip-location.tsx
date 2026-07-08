@@ -48,13 +48,9 @@ export default function IPLocation() {
   const [data, setData] = useState<IPLocation | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
-  const [recent, setRecent] = useState<string[]>([])
+  const [recent, setRecent] = useState<string[]>(() => loadHistory())
   const mapRef = useRef<HTMLDivElement>(null)
   const mapInstance = useRef<any>(null)
-
-  useEffect(() => {
-    setRecent(loadHistory())
-  }, [])
 
   useEffect(() => {
     return () => {
@@ -222,11 +218,14 @@ ASN: ${data.as}`
                   </div>
                   <span className="text-sm font-medium flex items-center gap-1.5">
                     {data.countryCode && (
-                      <img
-                        src={`https://flagcdn.com/16x12/${data.countryCode.toLowerCase()}.png`}
-                        alt={data.countryCode}
-                        className="inline-block w-4 h-3 rounded"
-                      />
+                      <>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={`https://flagcdn.com/16x12/${data.countryCode.toLowerCase()}.png`}
+                          alt={data.countryCode}
+                          className="inline-block w-4 h-3 rounded"
+                        />
+                      </>
                     )}
                     {data.country}
                   </span>

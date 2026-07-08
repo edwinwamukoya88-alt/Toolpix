@@ -12,7 +12,6 @@ export interface EnvCheckResult {
   branch: boolean
 }
 
-/** Describes the state of a single env var. */
 function envState(key: string): "set" | "empty" | "missing" {
   const val = process.env[key]
   if (val === undefined) return "missing"
@@ -20,7 +19,6 @@ function envState(key: string): "set" | "empty" | "missing" {
   return "set"
 }
 
-/** Same as checkGitHubEnv but returns richer metadata for diagnostics. */
 export function checkGitHubEnvVerbose() {
   return {
     GITHUB_TOKEN: envState("GITHUB_TOKEN"),
@@ -30,10 +28,6 @@ export function checkGitHubEnvVerbose() {
   }
 }
 
-/**
- * Returns a snapshot of which GITHUB_* env vars are present (have a non-empty value).
- * Never exposes actual values — only booleans.
- */
 export function checkGitHubEnv(): EnvCheckResult {
   return {
     token: !!process.env.GITHUB_TOKEN,
@@ -43,11 +37,6 @@ export function checkGitHubEnv(): EnvCheckResult {
   }
 }
 
-/**
- * Reads and validates GITHUB_* env vars at runtime.
- * Throws a clear error listing every missing or empty variable.
- * Works in Node.js runtime (Next.js App Router API routes).
- */
 export function getGitHubConfig(): GitHubConfig {
   const token = process.env.GITHUB_TOKEN
   const owner = process.env.GITHUB_OWNER
@@ -94,9 +83,28 @@ function startupWarning(): void {
       `   → See .env.example for documentation.`
     )
   }
+
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL
+  if (!appUrl) {
+    console.warn(
+      `⚠️  NEXT_PUBLIC_APP_URL not set — using fallback "https://smart-tools-kit.vercel.app"\n` +
+      `   → Set NEXT_PUBLIC_APP_URL in .env.local for correct canonical URLs and SEO.`
+    )
+  }
+
+  const adClient = process.env.NEXT_PUBLIC_ADSENSE_CLIENT
+  if (!adClient) {
+    console.warn(
+      `⚠️  NEXT_PUBLIC_ADSENSE_CLIENT not set — using fallback AdSense client ID.\n` +
+      `   → Set NEXT_PUBLIC_ADSENSE_CLIENT in .env.local to your own AdSense publisher ID.`
+    )
+  }
 }
 
-startupWarning()
+// Only warn during Node.js runtime, not during Turbopack module evaluation
+if (typeof process !== "undefined" && process?.release?.name === "node") {
+  startupWarning()
+}
 
 export class MissingEnvError extends Error {
   public readonly missing: string[]

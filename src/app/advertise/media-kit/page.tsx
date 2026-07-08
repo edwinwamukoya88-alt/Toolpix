@@ -146,7 +146,7 @@ export default function MediaKitPage() {
           <div className="inline-flex items-center justify-center h-12 w-12 rounded-xl bg-primary/10 mx-auto">
             <Mail className="h-6 w-6 text-primary" />
           </div>
-          <h2 className="text-xl md:text-2xl font-bold">Get In Touch</h2>
+          <h2 className="text-xl md:text-2xl font-bold tracking-tight">Get In Touch</h2>
           <p className="text-sm text-muted-foreground max-w-sm mx-auto">
             Ready to start advertising? Reach out to our team for customized
             sponsorship packages and media kit inquiries.

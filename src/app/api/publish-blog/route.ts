@@ -127,7 +127,7 @@ export async function POST(request: Request) {
     console.log(`[publish-blog] GitHub publish succeeded: path=${result.path}, sha=${result.sha}`)
 
     const protocol = request.headers.get("x-forwarded-proto") || "https"
-    const host = request.headers.get("host") || "smart-tools-kit.vercel.app"
+    const host = request.headers.get("host") || process.env.NEXT_PUBLIC_APP_URL || "smart-tools-kit.vercel.app"
     const baseUrl = `${protocol}://${host}`
 
     try {

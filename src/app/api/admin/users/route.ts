@@ -1,7 +1,10 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/db"
+import { requireApiAuth } from "@/lib/auth-guard"
 
 export async function GET() {
+  const authResponse = await requireApiAuth()
+  if (authResponse) return authResponse
   try {
     const users = await prisma.adminUser.findMany({
       orderBy: { email: "asc" },
@@ -13,6 +16,8 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  const authResponse = await requireApiAuth()
+  if (authResponse) return authResponse
   try {
     const body = await request.json()
     const existing = await prisma.adminUser.findUnique({ where: { email: body.email } })
@@ -37,6 +42,8 @@ export async function POST(request: Request) {
 }
 
 export async function PUT(request: Request) {
+  const authResponse = await requireApiAuth()
+  if (authResponse) return authResponse
   try {
     const body = await request.json()
     if (body.email === "edwinwamukoya88@gmail.com" && body.role) {
@@ -61,6 +68,8 @@ export async function PUT(request: Request) {
 }
 
 export async function DELETE(request: Request) {
+  const authResponse = await requireApiAuth()
+  if (authResponse) return authResponse
   try {
     const body = await request.json()
     if (body.email === "edwinwamukoya88@gmail.com") {

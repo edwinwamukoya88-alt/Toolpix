@@ -20,8 +20,8 @@ const geistMono = Geist_Mono({
   display: "swap",
 })
 
-const AD_CLIENT = "ca-pub-2606064008386995"
-const SITE_URL = "https://smart-tools-kit.vercel.app"
+import { APP_URL, AD_CLIENT } from "@/lib/constants"
+const SITE_URL = APP_URL
 
 export const viewport: Viewport = {
   themeColor: "#0a0a0a",
@@ -57,6 +57,7 @@ export const metadata: Metadata = {
     title: "ToolForge — 39+ Free Privacy-First Online Tools",
     description: "39+ free browser-based tools for teachers, students, developers, creators, and businesses. Privacy-first, no login required.",
     locale: "en_US",
+    images: [{ url: `${SITE_URL}/api/og?title=ToolForge&category=Productivity&type=site`, width: 1200, height: 630, alt: "ToolForge" }],
   },
   twitter: {
     card: "summary_large_image",
@@ -97,6 +98,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              name: "ToolForge",
+              url: SITE_URL,
+              logo: `${SITE_URL}/favicon.svg`,
+              description: "39+ free browser-based tools for teachers, students, developers, creators, and businesses. Privacy-first, no login required, 100% client-side processing.",
+              sameAs: [],
+            }),
+          }}
         />
       </head>
       <body className="min-h-screen flex flex-col antialiased">

@@ -20,6 +20,7 @@ export default function FaqSection({ items, title = "Frequently Asked Questions"
           return (
             <div key={i} className="rounded-lg border bg-card">
               <button
+                type="button"
                 onClick={() => setOpenIndex(isOpen ? null : i)}
                 className="flex items-center justify-between w-full px-4 py-3 text-sm font-medium text-left hover:bg-muted/50 transition-colors rounded-lg"
                 aria-expanded={isOpen}

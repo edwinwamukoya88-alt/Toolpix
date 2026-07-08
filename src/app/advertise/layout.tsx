@@ -1,5 +1,7 @@
 import type { Metadata } from "next"
 
+const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://smart-tools-kit.vercel.app"
+
 export const metadata: Metadata = {
   title: "Advertise With ToolForge — Reach Productivity-Focused Users",
   description:
@@ -8,10 +10,17 @@ export const metadata: Metadata = {
     title: "Advertise With ToolForge",
     description:
       "Reach thousands of users using privacy-first productivity tools. Premium brand placements that respect user privacy.",
-    url: "https://smart-tools-kit.vercel.app/advertise",
+    url: `${siteUrl}/advertise`,
+    images: [{ url: `${siteUrl}/api/og?title=Advertise+With+ToolForge&category=Business&type=site`, width: 1200, height: 630, alt: "Advertise With ToolForge" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Advertise With ToolForge",
+    description:
+      "Reach thousands of users using privacy-first productivity tools. Premium brand placements that respect user privacy.",
   },
   alternates: {
-    canonical: "https://smart-tools-kit.vercel.app/advertise",
+    canonical: `${siteUrl}/advertise`,
   },
 }
 

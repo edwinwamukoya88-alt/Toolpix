@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { tools } from "@/lib/tools-data"
 import { notFound } from "next/navigation"
+import { getAppUrl } from "@/lib/app-url"
 import ToolPageClient from "./tool-client"
 
 const slugAliases: Record<string, string> = {
@@ -16,14 +17,16 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const resolvedSlug = slugAliases[slug] || slug
   const tool = tools.find((t) => t.slug === resolvedSlug)
   if (!tool) return {}
-  const ogImageUrl = `https://smart-tools-kit.vercel.app/api/og?title=${encodeURIComponent(tool.name)}&category=${encodeURIComponent(tool.category)}&type=tool`
+  const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://smart-tools-kit.vercel.app"
+  const ogImageUrl = `${siteUrl}/api/og?title=${encodeURIComponent(tool.name)}&category=${encodeURIComponent(tool.category)}&type=tool`
+  const canonicalUrl = getAppUrl(`/tools/${tool.slug}`)
   return {
     title: tool.name,
     description: tool.description,
     openGraph: {
       title: `${tool.name} - ToolForge`,
       description: tool.description,
-      url: `https://smart-tools-kit.vercel.app/tools/${tool.slug}`,
+      url: canonicalUrl,
       images: [{ url: ogImageUrl, width: 1200, height: 630, alt: tool.name }],
     },
     twitter: {
@@ -33,7 +36,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       images: [ogImageUrl],
     },
     alternates: {
-      canonical: `https://smart-tools-kit.vercel.app/tools/${tool.slug}`,
+      canonical: canonicalUrl,
     },
   }
 }
@@ -44,13 +47,15 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
   const tool = tools.find((t) => t.slug === resolvedSlug)
   if (!tool) notFound()
 
+  const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://smart-tools-kit.vercel.app"
+
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: "https://smart-tools-kit.vercel.app" },
-      { "@type": "ListItem", position: 2, name: "Tools", item: "https://smart-tools-kit.vercel.app/tools" },
-      { "@type": "ListItem", position: 3, name: tool.name, item: `https://smart-tools-kit.vercel.app/tools/${tool.slug}` },
+      { "@type": "ListItem", position: 1, name: "Home", item: siteUrl },
+      { "@type": "ListItem", position: 2, name: "Tools", item: `${siteUrl}/tools` },
+      { "@type": "ListItem", position: 3, name: tool.name, item: `${siteUrl}/tools/${tool.slug}` },
     ],
   }
 

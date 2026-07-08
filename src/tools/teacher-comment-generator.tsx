@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useCallback, useRef } from "react"
-import { Sparkles, Copy, RefreshCw, FileDown, FileText, Printer, ChevronDown, ChevronUp, Star, Target, BookOpen, Users, Lightbulb, Globe, Monitor, Brain, Heart, AlignLeft } from "lucide-react"
+import { Sparkles, Copy, RefreshCw, FileDown, FileText, Printer, ChevronDown, Star, Target, BookOpen, Users, Brain, Heart, AlignLeft } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
@@ -1369,7 +1369,7 @@ ${breakdownHTML ? `<h2>Competency Breakdown</h2>${breakdownHTML}<hr>` : ""}
       </Card>
 
       {/* Generated Comment Panel */}
-      {generatedComment && (
+      {generatedComment ? (
         <>
           <Card className="border-primary/30 print:border-2">
             <CardContent className="p-5 space-y-3">
@@ -1495,6 +1495,16 @@ ${breakdownHTML ? `<h2>Competency Breakdown</h2>${breakdownHTML}<hr>` : ""}
             </div>
           </div>
         </>
+      ) : (
+        <div className="flex flex-col items-center justify-center py-16 text-center">
+          <div className="rounded-full bg-muted/30 p-4 mb-4">
+            <BookOpen className="h-8 w-8 text-muted-foreground/30" />
+          </div>
+          <p className="text-sm font-medium text-muted-foreground">No comment generated yet</p>
+          <p className="text-xs text-muted-foreground/60 mt-1.5 max-w-[280px]">
+            Configure options above and click Generate to create a report card comment
+          </p>
+        </div>
       )}
     </div>
   )

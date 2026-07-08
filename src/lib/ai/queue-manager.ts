@@ -247,8 +247,18 @@ interface FetchResult {
 }
 
 async function acquireToken(): Promise<string> {
-  const res = await fetch("/api/ai/token")
-  if (!res.ok) throw new Error("TOKEN_FETCH_FAILED")
+  let res: Response
+  try {
+    res = await fetch("/api/ai/token")
+  } catch (err) {
+    console.error("[Queue] Token fetch network error:", err)
+    throw new Error("TOKEN_FETCH_FAILED")
+  }
+  if (!res.ok) {
+    const body = await res.text().catch(() => "(no body)")
+    console.error(`[Queue] Token fetch failed: ${res.status} ${res.statusText}`, body)
+    throw new Error("TOKEN_FETCH_FAILED")
+  }
   const data = await res.json()
   return data.token
 }

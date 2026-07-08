@@ -30,7 +30,8 @@ export default function MortgageCalculator() {
   const loanAmount = Math.max(0, hp - dp)
   const annualRate = parseNum(rate)
   const monthlyRate = annualRate / 100 / 12
-  const n = Math.max(1, parseNum(term) * 12)
+  const termYears = parseNum(term)
+  const n = Math.max(1, termYears * 12)
   const annualTax = parseNum(propertyTax)
   const annualInsurance = parseNum(insurance)
 
@@ -43,7 +44,7 @@ export default function MortgageCalculator() {
   const totalMonthly = monthlyPi + monthlyTax + monthlyInsurance
   const totalPaid = monthlyPi * n
   const totalInterest = totalPaid - loanAmount
-  const totalWithTaxAndInsurance = totalPaid + annualTax * parseNum(term) + annualInsurance * parseNum(term)
+  const totalWithTaxAndInsurance = totalPaid + annualTax * termYears + annualInsurance * termYears
 
   const schedule = useMemo<YearData[]>(() => {
     if (loanAmount <= 0 || monthlyRate <= 0) return []
@@ -51,7 +52,7 @@ export default function MortgageCalculator() {
     let balance = loanAmount
     let cumPrincipal = 0
     let cumInterest = 0
-    for (let year = 1; year <= parseNum(term); year++) {
+    for (let year = 1; year <= termYears; year++) {
       for (let m = 0; m < 12; m++) {
         const interestPaid = balance * monthlyRate
         const principalPaid = monthlyPi - interestPaid
@@ -67,7 +68,7 @@ export default function MortgageCalculator() {
       })
     }
     return rows
-  }, [loanAmount, monthlyRate, monthlyPi, parseNum(term)])
+  }, [loanAmount, monthlyRate, monthlyPi, termYears])
 
   const principalPct = totalPaid > 0 ? (loanAmount / totalPaid) * 100 : 0
   const interestPct = totalPaid > 0 ? (totalInterest / totalPaid) * 100 : 0

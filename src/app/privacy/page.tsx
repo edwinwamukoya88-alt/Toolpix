@@ -3,16 +3,24 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
 
+const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://smart-tools-kit.vercel.app"
+
 export const metadata: Metadata = {
   title: "Privacy Policy",
   description: "ToolForge does not collect, store, or transmit any personal data. All tools run entirely in your browser. Privacy-first by design.",
   openGraph: {
     title: "Privacy Policy - ToolForge",
     description: "Your privacy matters. ToolForge does not collect, store, or transmit any personal data.",
-    url: "https://smart-tools-kit.vercel.app/privacy",
+    url: `${siteUrl}/privacy`,
+    images: [{ url: `${siteUrl}/api/og?title=Privacy+Policy&category=Security&type=site`, width: 1200, height: 630, alt: "Privacy Policy - ToolForge" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Privacy Policy - ToolForge",
+    description: "Your privacy matters. ToolForge does not collect, store, or transmit any personal data.",
   },
   alternates: {
-    canonical: "https://smart-tools-kit.vercel.app/privacy",
+    canonical: `${siteUrl}/privacy`,
   },
   robots: { index: true, follow: true },
 }

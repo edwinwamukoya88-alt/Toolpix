@@ -91,7 +91,7 @@ export function StepPreview({
           })}
         </div>
       ) : (
-        <div className="rounded-xl border border-border/60 bg-white dark:bg-zinc-900/80 p-5 text-sm space-y-3 leading-relaxed font-serif">
+        <div className="rounded-xl border border-border/60 bg-white dark:bg-zinc-900/80 p-5 text-sm space-y-3 leading-relaxed">
           <div className="text-center">
             <div className="text-[9px] font-semibold tracking-[0.2em] text-blue-600/60 dark:text-blue-400/60 uppercase">Republic of Kenya</div>
             <div className="font-bold text-base text-blue-700 dark:text-blue-300 mt-0.5">KICD COMPETENCY-BASED LESSON PLAN</div>
@@ -127,14 +127,28 @@ export function StepPreview({
           <Separator />
 
           <div>
-            <span className="font-bold text-xs text-primary font-sans">1. Specific Learning Outcomes</span>
+            <span className="font-bold text-xs text-primary font-sans">1. Learning Outcomes</span>
             <ul className="list-disc list-inside text-muted-foreground mt-0.5 space-y-0.5">
               {plan.outcomes.length ? plan.outcomes.map((o, i) => <li key={i} className="text-xs">{o}</li>) : <li className="list-none text-muted-foreground text-xs">\u2014</li>}
             </ul>
           </div>
 
           <div>
-            <span className="font-bold text-xs text-blue-600 font-sans">2. Core Competencies</span>
+            <span className="font-bold text-xs font-sans">2. Success Criteria</span>
+            {plan.successCriteria.length ? (
+              <ul className="list-disc list-inside text-muted-foreground mt-0.5 space-y-0.5">
+                {plan.successCriteria.map((s, i) => <li key={i} className="text-xs">{s}</li>)}
+              </ul>
+            ) : <span className="text-xs text-muted-foreground">\u2014</span>}
+          </div>
+
+          <div>
+            <span className="font-bold text-xs font-sans">3. Key Inquiry Question</span>
+            <p className="text-xs text-muted-foreground mt-0.5 italic">{plan.keyInquiryQuestion || "\u2014"}</p>
+          </div>
+
+          <div>
+            <span className="font-bold text-xs text-blue-600 font-sans">4. Core Competencies</span>
             <div className="flex flex-wrap gap-1 mt-0.5">
               {plan.competencies.length
                 ? plan.competencies.map((c) => <span key={c} className="px-2 py-0.5 rounded bg-primary/10 text-xs font-sans">{c}</span>)
@@ -143,7 +157,7 @@ export function StepPreview({
           </div>
 
           <div>
-            <span className="font-bold text-xs text-green-600 font-sans">3. Values</span>
+            <span className="font-bold text-xs text-green-600 font-sans">5. Values</span>
             <div className="flex flex-wrap gap-1 mt-0.5">
               {plan.values.length
                 ? plan.values.map((v) => <span key={v} className="px-2 py-0.5 rounded bg-green-500/10 text-xs font-sans">{v}</span>)
@@ -152,7 +166,7 @@ export function StepPreview({
           </div>
 
           <div>
-            <span className="font-bold text-xs text-purple-600 font-sans">4. PCIs</span>
+            <span className="font-bold text-xs text-purple-600 font-sans">6. Pertinent and Contemporary Issues (PCIs)</span>
             <div className="flex flex-wrap gap-1 mt-0.5">
               {plan.pcis.length
                 ? plan.pcis.map((p) => <span key={p} className="px-2 py-0.5 rounded bg-purple-500/10 text-xs font-sans">{p}</span>)
@@ -161,25 +175,7 @@ export function StepPreview({
           </div>
 
           <div>
-            <span className="font-bold text-xs text-amber-600 font-sans">5. Learning Activities</span>
-            <div className="mt-0.5">
-              <p className="font-medium text-xs text-muted-foreground font-sans">Teacher:</p>
-              <ul className="list-disc list-inside text-muted-foreground space-y-0.5">
-                {plan.teacherActivities.length
-                  ? plan.teacherActivities.map((a, i) => <li key={i} className="text-xs">{a}</li>)
-                  : <li className="list-none text-muted-foreground text-xs">\u2014</li>}
-              </ul>
-              <p className="font-medium text-xs text-muted-foreground mt-1 font-sans">Learner:</p>
-              <ul className="list-disc list-inside text-muted-foreground space-y-0.5">
-                {plan.learnerActivities.length
-                  ? plan.learnerActivities.map((a, i) => <li key={i} className="text-xs">{a}</li>)
-                  : <li className="list-none text-muted-foreground text-xs">\u2014</li>}
-              </ul>
-            </div>
-          </div>
-
-          <div>
-            <span className="font-bold text-xs text-muted-foreground font-sans">6. Resources</span>
+            <span className="font-bold text-xs text-muted-foreground font-sans">7. Learning Resources</span>
             <ul className="list-disc list-inside text-muted-foreground mt-0.5 space-y-0.5">
               {plan.resources.length
                 ? plan.resources.map((r, i) => <li key={i} className="text-xs">{r}</li>)
@@ -188,7 +184,24 @@ export function StepPreview({
           </div>
 
           <div>
-            <span className="font-bold text-xs text-red-600 font-sans">7. Assessment Methods</span>
+            <span className="font-bold text-xs text-emerald-600 font-sans">8. Lesson Development</span>
+            {plan.lessonDevelopment ? (
+              <div className="mt-1 space-y-2 text-xs text-muted-foreground leading-relaxed">
+                {plan.lessonDevelopment.split("\n").filter(l => l.trim()).map((line, i) => {
+                  const trimmed = line.trim()
+                  const isPhase = /^(Introduction|Lesson Development|Conclusion)/i.test(trimmed)
+                  return isPhase
+                    ? <p key={i} className="font-semibold text-foreground/80">{trimmed}</p>
+                    : <p key={i} className="text-justify">{trimmed}</p>
+                })}
+              </div>
+            ) : (
+              <span className="text-muted-foreground text-xs">\u2014</span>
+            )}
+          </div>
+
+          <div>
+            <span className="font-bold text-xs text-red-600 font-sans">9. Assessment</span>
             <ul className="list-disc list-inside text-muted-foreground mt-0.5 space-y-0.5">
               {plan.assessmentMethods.length
                 ? plan.assessmentMethods.map((a, i) => <li key={i} className="text-xs">{a}</li>)
@@ -197,42 +210,9 @@ export function StepPreview({
           </div>
 
           <div>
-            <span className="font-bold text-xs font-sans">8. Remarks:</span> <span className="text-xs">{plan.remarks || "\u2014"}</span>
+            <span className="font-bold text-xs font-sans">10. Reflection</span>
+            <p className="text-xs text-muted-foreground mt-0.5 italic">{plan.remarks || "\u2014"}</p>
           </div>
-
-          {biblicalVerseEnabled && biblicalVerse && (
-            <div className="border-t-2 border-amber-200/40 pt-3 mt-3">
-              <div className="flex items-center gap-1 mb-1.5">
-                <span className="text-amber-500 text-[10px]">{"\u2618"}</span>
-                <span className="font-bold text-xs text-amber-700 dark:text-amber-400 font-sans">Biblical Reflection (Optional)</span>
-              </div>
-              <div className="rounded-xl border border-amber-200/30 dark:border-amber-800/30 bg-amber-50/30 dark:bg-amber-950/30 p-3 space-y-1.5">
-                <p className="text-[10px] font-semibold text-amber-600 dark:text-amber-500 font-sans">Scripture</p>
-                <p className="text-xs font-bold text-amber-900 dark:text-amber-200">{biblicalVerse.split(" — ")[0]}</p>
-                <p className="text-xs italic text-amber-800 dark:text-amber-300 leading-relaxed">&ldquo;{biblicalVerse.split(" — ").slice(1).join(" — ")}&rdquo;</p>
-                {curriculumConnection && (
-                  <div className="rounded bg-amber-100/60 dark:bg-amber-900/30 px-2 py-1.5">
-                    <p className="text-[8px] font-semibold uppercase tracking-wider text-amber-600 dark:text-amber-500 font-sans">Curriculum Connection</p>
-                    <p className="text-[9px] text-amber-800/90 dark:text-amber-300/90 leading-relaxed">{curriculumConnection}</p>
-                  </div>
-                )}
-                {verseExplanation && (
-                  <div>
-                    <p className="text-[8px] font-semibold uppercase tracking-wider text-amber-600 dark:text-amber-500 font-sans">Verse Explanation</p>
-                    <p className="text-[9px] text-amber-700/80 dark:text-amber-300/80 italic leading-relaxed">{verseExplanation}</p>
-                  </div>
-                )}
-                {teacherReflectionNotes && (
-                  <>
-                    <div className="h-px bg-amber-200/30 dark:bg-amber-800/30" />
-                    <p className="text-[9px] font-semibold text-amber-600 dark:text-amber-500 font-sans">Teacher Reflection</p>
-                    <p className="text-[9px] text-amber-700/80 dark:text-amber-300/80 italic">— {teacherReflectionNotes}</p>
-                  </>
-                )}
-              </div>
-              <p className="text-[8px] text-amber-500/60 mt-1 italic">Optional for Christian teachers</p>
-            </div>
-          )}
 
           {includeNotesInExport && teacherPrivateNotes.trim() && (
             <div className="border-t pt-2 mt-2">
@@ -247,13 +227,14 @@ export function StepPreview({
 
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <label className="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
+          <label htmlFor="teacher-private-notes" className="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
             <StickyNote className="h-3 w-3" />
             Teacher Reflection Notes (Private)
           </label>
           <span className="text-[9px] text-muted-foreground italic border px-1.5 py-0.5 rounded font-sans">PRIVATE</span>
         </div>
         <textarea
+          id="teacher-private-notes"
           value={teacherPrivateNotes}
           onChange={(e) => setTeacherPrivateNotes(e.target.value)}
           placeholder="Jot down your personal reflections, observations, or notes for improvement. These are not part of the KICD plan."
@@ -282,29 +263,29 @@ export function StepPreview({
       <div className="space-y-2.5">
         <label className="text-xs font-medium text-muted-foreground">Export Options</label>
         <div className="flex flex-wrap gap-2">
-          <Button variant="outline" size="sm" onClick={handleCopy}>
+          <Button variant="outline" size="sm" onClick={handleCopy} className="min-h-[44px]">
             <Copy className="h-3.5 w-3.5" /> Copy
           </Button>
-          <Button variant="outline" size="sm" onClick={handlePDF}>
+          <Button variant="outline" size="sm" onClick={handlePDF} className="min-h-[44px]">
             <FileDown className="h-3.5 w-3.5" /> PDF
           </Button>
-          <Button variant="outline" size="sm" onClick={handleDOCX}>
+          <Button variant="outline" size="sm" onClick={handleDOCX} className="min-h-[44px]">
             <FileText className="h-3.5 w-3.5" /> DOCX
           </Button>
-          <Button variant="outline" size="sm" onClick={handlePrint}>
+          <Button variant="outline" size="sm" onClick={handlePrint} className="min-h-[44px]">
             <Printer className="h-3.5 w-3.5" /> Print
           </Button>
         </div>
       </div>
 
       <div className="flex flex-wrap gap-2 pt-2">
-        <Button variant="default" size="sm" onClick={() => setSaveDialogOpen(true)}>
+        <Button variant="default" size="sm" onClick={() => setSaveDialogOpen(true)} className="min-h-[44px]">
           <Save className="h-3.5 w-3.5" /> Save Plan
         </Button>
-        <Button variant="outline" size="sm" onClick={() => setLoadDialogOpen(true)}>
+        <Button variant="outline" size="sm" onClick={() => setLoadDialogOpen(true)} className="min-h-[44px]">
           <Upload className="h-3.5 w-3.5" /> Load Saved
         </Button>
-        <Button variant="outline" size="sm" onClick={duplicatePlan}>
+        <Button variant="outline" size="sm" onClick={duplicatePlan} className="min-h-[44px]">
           <Sparkles className="h-3.5 w-3.5" /> Duplicate
         </Button>
       </div>

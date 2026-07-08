@@ -103,14 +103,10 @@ export default function CurrencyConverter() {
   const [toOpen, setToOpen] = useState(false)
   const [fromSearch, setFromSearch] = useState("")
   const [toSearch, setToSearch] = useState("")
-  const [history, setHistory] = useState<HistoryItem[]>([])
+  const [history, setHistory] = useState<HistoryItem[]>(() => loadHistory())
 
   const fromRef = useRef<HTMLDivElement>(null)
   const toRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    setHistory(loadHistory())
-  }, [])
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -165,7 +161,9 @@ export default function CurrencyConverter() {
   }
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (result != null) addToHistory()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [result])
 
   function copyResult() {

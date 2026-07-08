@@ -123,5 +123,6 @@ export function getBlogCategoryStyle(category: string): BlogCategoryStyle {
 }
 
 export function getBlogCoverUrl(title: string, category: string): string {
-  return `https://smart-tools-kit.vercel.app/api/og?title=${encodeURIComponent(title)}&category=${encodeURIComponent(category)}&type=blog`
+  const base = process.env.NEXT_PUBLIC_APP_URL || "https://smart-tools-kit.vercel.app"
+  return `${base}/api/og?title=${encodeURIComponent(title)}&category=${encodeURIComponent(category)}&type=blog`
 }

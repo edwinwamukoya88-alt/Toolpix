@@ -1,4 +1,5 @@
-import { createHmac, timingSafeEqual, randomUUID } from "crypto"
+import crypto from "crypto"
+const { createHmac, timingSafeEqual, randomUUID } = crypto
 
 const TOKEN_TTL_MS = 300_000
 const DAILY_LIMIT = 5

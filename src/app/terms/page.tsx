@@ -3,16 +3,24 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
 
+const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://smart-tools-kit.vercel.app"
+
 export const metadata: Metadata = {
   title: "Terms of Service",
   description: "Terms of service for using ToolForge. By accessing or using ToolForge, you agree to be bound by these terms.",
   openGraph: {
     title: "Terms of Service - ToolForge",
     description: "Terms of service for using the ToolForge privacy-first online tools suite.",
-    url: "https://smart-tools-kit.vercel.app/terms",
+    url: `${siteUrl}/terms`,
+    images: [{ url: `${siteUrl}/api/og?title=Terms+of+Service&category=Productivity&type=site`, width: 1200, height: 630, alt: "Terms of Service - ToolForge" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Terms of Service - ToolForge",
+    description: "Terms of service for using the ToolForge privacy-first online tools suite.",
   },
   alternates: {
-    canonical: "https://smart-tools-kit.vercel.app/terms",
+    canonical: `${siteUrl}/terms`,
   },
 }
 
