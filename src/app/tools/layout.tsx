@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 
-const toolsUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zilita.com"
+import { SITE_URL as siteUrl } from "@/lib/constants"
 
 export const metadata: Metadata = {
   title: "All Tools",
@@ -8,8 +8,8 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Free Online Tools - Zilita",
     description: "Browse 50+ free online tools across 11 categories. All privacy-first, no login required.",
-    url: `${toolsUrl}/tools`,
-    images: [{ url: `${toolsUrl}/api/og?title=Free+Online+Tools&category=Productivity&type=site`, width: 1200, height: 630, alt: "All Tools - Zilita" }],
+    url: `${siteUrl}/tools`,
+    images: [{ url: `${siteUrl}/api/og?title=Free+Online+Tools&category=Productivity&type=site`, width: 1200, height: 630, alt: "All Tools - Zilita" }],
   },
   twitter: {
     card: "summary_large_image",
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     description: "Browse 50+ free online tools across 11 categories. All privacy-first, no login required.",
   },
   alternates: {
-    canonical: `${toolsUrl}/tools`,
+    canonical: `${siteUrl}/tools`,
   },
 }
 

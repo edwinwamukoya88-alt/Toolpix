@@ -3,7 +3,7 @@ import { CheckCircle, Cpu, Lock, Sparkles, Shield, Zap, Asterisk, Globe } from "
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 
-const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zilita.com"
+import { SITE_URL as siteUrl } from "@/lib/constants"
 
 export const metadata: Metadata = {
   title: "About",

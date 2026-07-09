@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 
-const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zilita.com"
+import { SITE_URL as siteUrl } from "@/lib/constants"
 
 export const metadata: Metadata = {
   title: "Advertise With Zilita — Reach Productivity-Focused Users",

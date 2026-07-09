@@ -1,8 +1,9 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
+import Image from "next/image"
 import { signOutAction } from "@/app/admin/actions"
-import { LogOut, ChevronDown, LayoutDashboard, User } from "lucide-react"
+import { LogOut, ChevronDown, User } from "lucide-react"
 
 interface AdminHeaderProps {
   user: {
@@ -30,7 +31,7 @@ export default function AdminHeader({ user }: AdminHeaderProps) {
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-xl">
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-3">
-          <LayoutDashboard className="h-5 w-5 text-primary" />
+          <Image src="/logo-icon.svg" alt="Zilita" width={24} height={24} className="h-6 w-6" />
           <span className="font-semibold text-sm">Admin Dashboard</span>
         </div>
 

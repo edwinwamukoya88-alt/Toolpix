@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { usePathname } from "next/navigation"
 import {
   LayoutDashboard, BarChart3, FileText, Wrench, DollarSign, Users,
@@ -48,13 +49,13 @@ export default function AdminSidebar() {
         <div className="flex h-16 items-center justify-between border-b border-border/40 px-4 shrink-0">
           {!collapsed && (
             <Link href="/admin" className="flex items-center gap-2 font-semibold text-sm">
-              <LayoutDashboard className="h-5 w-5 text-primary shrink-0" />
+              <Image src="/logo-icon.svg" alt="Zilita" width={24} height={24} className="h-6 w-6 shrink-0" />
               <span>Zilita</span>
             </Link>
           )}
           {collapsed && (
             <Link href="/admin" className="mx-auto">
-              <LayoutDashboard className="h-5 w-5 text-primary" />
+              <Image src="/logo-icon.svg" alt="Zilita" width={24} height={24} className="h-6 w-6" />
             </Link>
           )}
           <button

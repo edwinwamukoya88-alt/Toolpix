@@ -1,7 +1,8 @@
 import type { Metadata } from "next"
+import Image from "next/image"
 import { auth, signIn } from "@/auth"
 import { redirect } from "next/navigation"
-import { LogIn } from "lucide-react"
+
 
 export const metadata: Metadata = {
   title: "Admin Login",
@@ -21,7 +22,7 @@ export default async function AdminLoginPage() {
       <div className="max-w-sm w-full text-center space-y-8">
         <div className="space-y-3">
           <div className="mx-auto h-16 w-16 rounded-2xl bg-primary/10 flex items-center justify-center">
-            <LogIn className="h-8 w-8 text-primary" />
+            <Image src="/logo-icon.svg" alt="Zilita" width={32} height={32} className="h-8 w-8" />
           </div>
           <h1 className="text-3xl font-bold tracking-tight">Admin Login</h1>
           <p className="text-muted-foreground text-base">

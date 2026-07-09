@@ -20,11 +20,10 @@ const geistMono = Geist_Mono({
   display: "swap",
 })
 
-import { APP_URL, AD_CLIENT } from "@/lib/constants"
-const SITE_URL = APP_URL
+import { SITE_URL, AD_CLIENT } from "@/lib/constants"
 
 export const viewport: Viewport = {
-  themeColor: "#0a0a0a",
+  themeColor: "#111827",
   colorScheme: "dark",
   width: "device-width",
   initialScale: 1,
@@ -33,10 +32,10 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Zilita — 39+ Free Privacy-First Online Tools",
+    default: "Zilita",
     template: "%s | Zilita",
   },
-  description: "39+ free browser-based tools for teachers, students, developers, creators, and businesses. Privacy-first, no login required, 100% client-side processing.",
+  description: "The Privacy-First AI Browser Workspace. Productivity • Education • Business • Creativity • Developers",
   keywords: [
     "free online tools", "privacy-first tools", "CBC grade calculator", "lesson plan generator",
     "pomodoro timer", "QR code generator", "JSON formatter", "unit converter", "color picker",
@@ -50,19 +49,28 @@ export const metadata: Metadata = {
   alternates: {
     canonical: SITE_URL,
   },
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon-32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon-16.png", sizes: "16x16", type: "image/png" },
+    ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
+  },
   openGraph: {
     type: "website",
     url: SITE_URL,
     siteName: "Zilita",
-    title: "Zilita — 39+ Free Privacy-First Online Tools",
-    description: "39+ free browser-based tools for teachers, students, developers, creators, and businesses. Privacy-first, no login required.",
+    title: "Zilita",
+    description: "The Privacy-First AI Browser Workspace. Productivity • Education • Business • Creativity • Developers",
     locale: "en_US",
-    images: [{ url: `${SITE_URL}/api/og?title=Zilita&category=Productivity&type=site`, width: 1200, height: 630, alt: "Zilita" }],
+    images: [{ url: `${SITE_URL}/og-image.png`, width: 1200, height: 630, alt: "Zilita" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Zilita — 39+ Free Privacy-First Online Tools",
-    description: "39+ free browser-based tools for teachers, students, developers, creators, and businesses. Privacy-first, no login required.",
+    title: "Zilita",
+    description: "The Privacy-First AI Browser Workspace. Productivity • Education • Business • Creativity • Developers",
+    images: [`${SITE_URL}/og-image.png`],
   },
   verification: {
     google: "Yf_ARcBmjbT5feBZyLpphBnqruYoo4mEscLeFeteMrM",
@@ -75,7 +83,7 @@ const jsonLd = {
   "@type": "WebSite",
   name: "Zilita",
   url: SITE_URL,
-  description: "39+ free browser-based tools for teachers, students, developers, creators, and businesses. Privacy-first, no login required.",
+  description: "70+ free browser-based tools for teachers, students, developers, creators, and businesses. Privacy-first, no login required.",
   potentialAction: {
     "@type": "SearchAction",
     target: {
@@ -107,8 +115,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               "@type": "Organization",
               name: "Zilita",
               url: SITE_URL,
-              logo: `${SITE_URL}/favicon.svg`,
-              description: "39+ free browser-based tools for teachers, students, developers, creators, and businesses. Privacy-first, no login required, 100% client-side processing.",
+              logo: `${SITE_URL}/logo-dark.svg`,
+              description: "70+ free browser-based tools for teachers, students, developers, creators, and businesses. Privacy-first, no login required, 100% client-side processing.",
               sameAs: [],
             }),
           }}
@@ -120,7 +128,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </a>
         <BiblicalThemeProvider>
           <Header />
-          <main id="main-content" className="flex-1 focus:outline-none" tabIndex={-1}>
+          <main id="main-content" className="flex-1 focus:outline-none" tabIndex={0}>
             {children}
           </main>
           <Footer />

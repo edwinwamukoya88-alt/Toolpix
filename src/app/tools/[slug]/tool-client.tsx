@@ -8,6 +8,7 @@ import type { Tool } from "@/lib/tools-data"
 import dynamic from "next/dynamic"
 import { Suspense } from "react"
 import AdBanner from "@/components/ads/ad-banner"
+import ErrorBoundary from "@/components/ErrorBoundary"
 import { trackToolOpen } from "@/lib/analytics"
 
 const toolComponents: Record<string, React.ComponentType> = {
@@ -112,9 +113,11 @@ export default function ToolPageClient({ slug, tool }: { slug: string; tool: Too
 
           <AdBanner slot="4567890123" format="horizontal" className="mx-auto" />
 
-          <Suspense fallback={<ToolPageSkeleton />}>
-            {Component ? <Component /> : <ToolPageSkeleton />}
-          </Suspense>
+          <ErrorBoundary>
+            <Suspense fallback={<ToolPageSkeleton />}>
+              {Component ? <Component /> : <ToolPageSkeleton />}
+            </Suspense>
+          </ErrorBoundary>
 
           <AdBanner slot="5678901234" format="responsive" />
         </div>
@@ -131,10 +134,11 @@ export default function ToolPageClient({ slug, tool }: { slug: string; tool: Too
 
 function ToolPageSkeleton() {
   return (
-    <div className="container py-8 space-y-4 animate-pulse">
+    <div className="space-y-4 animate-pulse" role="status" aria-label="Loading tool">
       <div className="h-8 w-48 bg-muted rounded" />
       <div className="h-4 w-96 bg-muted rounded" />
       <div className="h-96 bg-muted rounded-xl" />
+      <span className="sr-only">Loading tool...</span>
     </div>
   )
 }

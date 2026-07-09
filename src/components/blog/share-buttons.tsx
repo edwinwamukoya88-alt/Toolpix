@@ -3,16 +3,15 @@
 import { Link2, X, ExternalLink } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { toast } from "sonner"
+import { SITE_URL } from "@/lib/constants"
 
 interface ShareButtonsProps {
   title: string
   slug: string
 }
 
-const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://zilita.com"
-
 export default function ShareButtons({ title, slug }: ShareButtonsProps) {
-  const blogUrl = `${BASE_URL}/blog/${slug}`
+  const blogUrl = `${SITE_URL}/blog/${slug}`
   const encodedUrl = encodeURIComponent(blogUrl)
   const encodedTitle = encodeURIComponent(title)
 

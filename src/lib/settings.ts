@@ -13,7 +13,7 @@ const defaultSettings: SiteSettings = {
   defaultDescription: "Free online tools for students, teachers, and professionals. Privacy-first, no sign-up required.",
   keywords: "productivity tools, cbc tools, education tools, free online tools",
   ogImage: "/og-image.png",
-  logo: "/logo.png",
+  logo: "/logo-dark.svg",
   favicon: "/favicon.ico",
   twitterUrl: "https://twitter.com/zilita",
   githubUrl: "https://github.com/edwinwamukoya88-alt",

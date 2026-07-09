@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { tools } from "@/lib/tools-data"
 import { notFound } from "next/navigation"
 import { getAppUrl } from "@/lib/app-url"
+import { SITE_URL } from "@/lib/constants"
 import ToolPageClient from "./tool-client"
 
 const slugAliases: Record<string, string> = {
@@ -17,8 +18,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const resolvedSlug = slugAliases[slug] || slug
   const tool = tools.find((t) => t.slug === resolvedSlug)
   if (!tool) return {}
-  const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zilita.com"
-  const ogImageUrl = `${siteUrl}/api/og?title=${encodeURIComponent(tool.name)}&category=${encodeURIComponent(tool.category)}&type=tool`
+  const ogImageUrl = `${SITE_URL}/api/og?title=${encodeURIComponent(tool.name)}&category=${encodeURIComponent(tool.category)}&type=tool`
   const canonicalUrl = getAppUrl(`/tools/${tool.slug}`)
   return {
     title: tool.name,
@@ -47,15 +47,13 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
   const tool = tools.find((t) => t.slug === resolvedSlug)
   if (!tool) notFound()
 
-  const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://zilita.com"
-
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: siteUrl },
-      { "@type": "ListItem", position: 2, name: "Tools", item: `${siteUrl}/tools` },
-      { "@type": "ListItem", position: 3, name: tool.name, item: `${siteUrl}/tools/${tool.slug}` },
+      { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+      { "@type": "ListItem", position: 2, name: "Tools", item: `${SITE_URL}/tools` },
+      { "@type": "ListItem", position: 3, name: tool.name, item: `${SITE_URL}/tools/${tool.slug}` },
     ],
   }
 

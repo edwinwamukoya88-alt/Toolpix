@@ -1,6 +1,7 @@
+import { SITE_URL } from "@/lib/constants"
+
 export function getAppUrl(path = ""): string {
-  const base = process.env.NEXT_PUBLIC_APP_URL || "https://zilita.com"
-  if (!path) return base
+  if (!path) return SITE_URL
   const normalized = path.startsWith("/") ? path : `/${path}`
-  return `${base}${normalized}`
+  return `${SITE_URL}${normalized}`
 }

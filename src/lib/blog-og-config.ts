@@ -122,7 +122,8 @@ export function getBlogCategoryStyle(category: string): BlogCategoryStyle {
   return defaultStyle
 }
 
+import { SITE_URL } from "@/lib/constants"
+
 export function getBlogCoverUrl(title: string, category: string): string {
-  const base = process.env.NEXT_PUBLIC_APP_URL || "https://zilita.com"
-  return `${base}/api/og?title=${encodeURIComponent(title)}&category=${encodeURIComponent(category)}&type=blog`
+  return `${SITE_URL}/api/og?title=${encodeURIComponent(title)}&category=${encodeURIComponent(category)}&type=blog`
 }

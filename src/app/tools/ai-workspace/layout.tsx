@@ -6,7 +6,7 @@ import { useState } from "react"
 import {
   Pen, GraduationCap, Palette, Sparkles,
   Copy, Download, Trash2, Type, FileText, X, Loader2, Clock,
-  Settings2,
+  Settings2, Menu,
 } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
@@ -235,17 +235,17 @@ export default function AiWorkspaceLayout({ children }: { children: React.ReactN
             <button
               type="button"
               onClick={() => setSidebarOpen(true)}
-              className="flex h-10 w-10 items-center justify-center rounded-lg hover:bg-muted/50"
-              aria-label="Open sidebar"
+              className="flex h-10 w-10 items-center justify-center rounded-lg hover:bg-muted/50 transition-colors"
+              aria-label="Open navigation menu"
             >
-              <Pen className="h-4 w-4 text-muted-foreground" />
+              <Menu className="h-4 w-4 text-muted-foreground" />
             </button>
             <span className="text-sm font-semibold">AI Assistant</span>
             <div className="flex-1" />
             <button
               type="button"
               onClick={() => setSettingsOpen(true)}
-              className="flex h-10 w-10 items-center justify-center rounded-lg hover:bg-muted/50"
+              className="flex h-10 w-10 items-center justify-center rounded-lg hover:bg-muted/50 transition-colors"
               aria-label="Open settings"
             >
               <Settings2 className="h-4 w-4 text-muted-foreground" />

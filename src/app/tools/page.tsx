@@ -57,15 +57,17 @@ function ToolsContent() {
       </div>
 
       <div className="flex flex-col sm:flex-row gap-4">
-        <div className="flex-1">
-          <SearchBar value={search} onChange={handleSearch} placeholder="Search 44+ utility tools..." />
+        <div className="flex-1 min-w-0">
+          <SearchBar value={search} onChange={handleSearch} placeholder="Search tools..." />
         </div>
-        <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none -mx-3 px-3 sm:mx-0 sm:px-0 flex-nowrap">
+        <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none -mx-3 px-3 sm:mx-0 sm:px-0 flex-nowrap snap-x snap-mandatory" role="tablist" aria-label="Tool categories">
           {["All", ...categories].map((cat) => (
             <Button
               key={cat}
               variant={activeCat === cat ? "default" : "outline"}
               size="sm"
+              role="tab"
+              aria-selected={activeCat === cat}
               onClick={() => {
                 if (cat === "AI Assistant") {
                   router.push("/tools/ai-workspace")
@@ -73,7 +75,7 @@ function ToolsContent() {
                   setActiveCat(cat)
                 }
               }}
-              className="text-xs shrink-0 min-h-[44px]"
+              className="text-xs shrink-0 min-h-[44px] snap-start"
             >
               {cat}
             </Button>
@@ -82,9 +84,15 @@ function ToolsContent() {
       </div>
 
       {filtered.length === 0 ? (
-        <div className="text-center py-20 space-y-3">
+        <div className="text-center py-20 space-y-3" role="status">
+          <div className="text-4xl mb-4 opacity-20">🔍</div>
           <p className="text-muted-foreground text-lg">No tools found</p>
           <p className="text-sm text-muted-foreground">Try a different search or category</p>
+          {activeCat !== "All" && (
+            <Button variant="outline" size="sm" onClick={() => { setActiveCat("All"); setSearch("") }}>
+              Clear Filters
+            </Button>
+          )}
         </div>
       ) : isFiltering ? (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-4">

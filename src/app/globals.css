@@ -32,6 +32,29 @@
   }
 }
 
+/* ─── Subtle Background Grid ────────────────── */
+@utility bg-grid {
+  background-image: 
+    linear-gradient(hsl(var(--border) / 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, hsl(var(--border) / 0.04) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+@utility bg-grid-sm {
+  background-image: 
+    linear-gradient(hsl(var(--border) / 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, hsl(var(--border) / 0.03) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+@utility bg-grid-glow {
+  background-image: 
+    radial-gradient(ellipse 80% 50% at 50% -20%, hsl(var(--primary) / 0.08), transparent),
+    linear-gradient(hsl(var(--border) / 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, hsl(var(--border) / 0.04) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
 /* ─── Premium Animations ──────────────────────── */
 
 @keyframes breathing-glow {
@@ -370,7 +393,7 @@ body {
 
 @utility container {
   margin-inline: auto;
-  padding-inline: 1rem;
+  padding-inline: max(1rem, env(safe-area-inset-right, 0px)) max(1rem, env(safe-area-inset-left, 0px));
   @media (width >= 40rem) {
     padding-inline: 1.5rem;
   }

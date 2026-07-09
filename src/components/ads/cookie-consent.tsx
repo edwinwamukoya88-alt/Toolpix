@@ -23,13 +23,13 @@ export default function CookieConsent() {
     try {
       localStorage.setItem(CONSENT_KEY, consent ? "true" : "false")
     } catch {}
-    window.location.reload()
+    setShow(false)
   }
 
   if (!show) return null
 
   return (
-    <div role="dialog" aria-modal="true" aria-label="Cookie consent" className="fixed bottom-0 left-0 right-0 z-[100] border-t bg-background/95 backdrop-blur-sm p-4 shadow-lg">
+    <div role="region" aria-label="Cookie consent" className="fixed bottom-0 left-0 right-0 z-[100] border-t bg-background/95 backdrop-blur-sm p-4 shadow-lg">
       <div className="container max-w-4xl mx-auto flex flex-col sm:flex-row items-start sm:items-center gap-4">
         <div className="flex items-start gap-3 flex-1">
           <Cookie className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />

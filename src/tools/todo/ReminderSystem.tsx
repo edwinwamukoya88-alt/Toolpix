@@ -51,7 +51,7 @@ export default function ReminderSystem() {
               try {
                 const n = new Notification("Task Reminder", {
                   body: `"${todo.title}" is due soon!`,
-                  icon: "/favicon.svg",
+                  icon: "/logo-icon.svg",
                 })
                 setTimeout(() => n.close(), 10000)
               } catch {
