@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next"
+import Script from "next/script"
 import { Geist, Geist_Mono } from "next/font/google"
 import "./globals.css"
 import GoogleAnalytics from "@/components/GoogleAnalytics"
@@ -6,7 +7,6 @@ import Header from "@/components/header"
 import Footer from "@/components/footer"
 import ToastProvider from "@/components/toast-provider"
 import CookieConsent from "@/components/ads/cookie-consent"
-import AdSenseLoader from "@/components/ads/adsense-loader"
 import { BiblicalThemeProvider } from "@/contexts/biblical-theme-context"
 
 const geistSans = Geist({
@@ -135,7 +135,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <CookieConsent />
           <ToastProvider />
         </BiblicalThemeProvider>
-        <AdSenseLoader />
+        <Script
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${AD_CLIENT}`}
+          strategy="beforeInteractive"
+          crossOrigin="anonymous"
+        />
         <GoogleAnalytics />
       </body>
     </html>
