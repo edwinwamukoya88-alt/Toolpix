@@ -1,5 +1,5 @@
 /* ─── Server-Side Analytics Database Layer ─────────────────────────
- * Provides optimized queries against the analytics tables in SQLite.
+ * Provides optimized queries against the analytics tables in PostgreSQL.
  * Used by API routes to power dashboard metrics.
  * ────────────────────────────────────────────────────────────────── */
 
@@ -79,8 +79,39 @@ export function getPreviousDateRange(range: AnalyticsDateRange): DateRangeDates 
 }
 
 function dateToEndOfDay(dateStr: string): Date {
-  const d = new Date(dateStr + "T23:59:59.999Z")
-  return d
+  return new Date(dateStr + "T23:59:59.999Z")
+}
+
+/* ─── Structured Logging ────────────────────────── */
+
+function logError(context: string, error: unknown): void {
+  const message = error instanceof Error ? error.message : String(error)
+  const stack = error instanceof Error ? error.stack : undefined
+  console.error(JSON.stringify({
+    level: "error",
+    context,
+    message,
+    stack,
+    timestamp: new Date().toISOString(),
+  }))
+}
+
+function logInfo(context: string, data: Record<string, unknown>): void {
+  console.log(JSON.stringify({
+    level: "info",
+    context,
+    ...data,
+    timestamp: new Date().toISOString(),
+  }))
+}
+
+/* ─── Custom Errors ─────────────────────────────── */
+
+export class AnalyticsPersistenceError extends Error {
+  constructor(message: string, public cause?: unknown) {
+    super(message)
+    this.name = "AnalyticsPersistenceError"
+  }
 }
 
 /* ─── Event Ingestion ───────────────────────────── */
@@ -102,22 +133,10 @@ export interface IncomingEvent {
   value?: number
 }
 
-const BATCH_SIZE = 50
-const eventBuffer: IncomingEvent[] = []
-let flushTimer: ReturnType<typeof setTimeout> | null = null
-
-export async function ingestEvent(event: IncomingEvent): Promise<void> {
-  eventBuffer.push(event)
-  if (eventBuffer.length >= BATCH_SIZE) {
-    await flushEvents()
-  } else if (!flushTimer) {
-    flushTimer = setTimeout(() => { flushEvents() }, 5000)
-  }
-}
-
 export async function ingestEvents(events: IncomingEvent[]): Promise<{ ingested: number }> {
   if (events.length === 0) return { ingested: 0 }
   const limited = events.slice(0, 100)
+
   try {
     await prisma.analyticsEvent.createMany({
       data: limited.map(e => ({
@@ -143,18 +162,12 @@ export async function ingestEvents(events: IncomingEvent[]): Promise<{ ingested:
     await aggregateDailyMetrics(limited)
     await aggregateHourlyMetrics(limited)
 
+    logInfo("ingestEvents", { count: limited.length })
     return { ingested: limited.length }
   } catch (e) {
-    console.error("[analytics-db] ingestEvents failed:", e)
-    return { ingested: 0 }
+    logError("ingestEvents", e)
+    throw new AnalyticsPersistenceError("Failed to persist analytics events", e)
   }
-}
-
-async function flushEvents(): Promise<void> {
-  if (eventBuffer.length === 0) return
-  const batch = eventBuffer.splice(0, BATCH_SIZE)
-  if (flushTimer) { clearTimeout(flushTimer); flushTimer = null }
-  await ingestEvents(batch)
 }
 
 async function updateSessionFromEvents(events: IncomingEvent[]): Promise<void> {
@@ -192,7 +205,9 @@ async function updateSessionFromEvents(events: IncomingEvent[]): Promise<void> {
           blogEvents: { increment: blogEventCount },
         },
       })
-    } catch {}
+    } catch (e) {
+      logError("updateSessionFromEvents", e)
+    }
   }
 }
 
@@ -235,7 +250,9 @@ async function updateVisitorFromEvents(events: IncomingEvent[]): Promise<void> {
           },
         })
       }
-    } catch {}
+    } catch (e) {
+      logError("updateVisitorFromEvents", e)
+    }
   }
 }
 
@@ -268,7 +285,9 @@ async function aggregateDailyMetrics(events: IncomingEvent[]): Promise<void> {
       const existingSet = new Set(existing.map(v => v.visitorId))
       newVisitors = visitorIds.filter(id => !existingSet.has(id as string)).length
     }
-  } catch {}
+  } catch (e) {
+    logError("aggregateDailyMetrics-countNewVisitors", e)
+  }
 
   try {
     await prisma.analyticsDailyMetric.upsert({
@@ -297,7 +316,9 @@ async function aggregateDailyMetrics(events: IncomingEvent[]): Promise<void> {
         newVisitors: { increment: newVisitors },
       },
     })
-  } catch {}
+  } catch (e) {
+    logError("aggregateDailyMetrics-upsert", e)
+  }
 }
 
 async function aggregateHourlyMetrics(events: IncomingEvent[]): Promise<void> {
@@ -333,7 +354,9 @@ async function aggregateHourlyMetrics(events: IncomingEvent[]): Promise<void> {
         blogViews: { increment: blogViews },
       },
     })
-  } catch {}
+  } catch (e) {
+    logError("aggregateHourlyMetrics", e)
+  }
 }
 
 /* ─── Dashboard Query Functions ─────────────────── */

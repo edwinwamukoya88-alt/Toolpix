@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { ingestEvents } from "@/lib/analytics-db"
+import { ingestEvents, AnalyticsPersistenceError } from "@/lib/analytics-db"
 
 export const runtime = "nodejs"
 export const dynamic = "force-dynamic"
@@ -80,6 +80,13 @@ export async function POST(request: NextRequest) {
     const result = await ingestEvents(sanitized)
     return NextResponse.json({ ingested: result.ingested })
   } catch (e) {
+    if (e instanceof AnalyticsPersistenceError) {
+      console.error("[analytics/events] Persistence failed:", e.message, e.cause)
+      return NextResponse.json(
+        { error: "Failed to store analytics events", detail: e.message },
+        { status: 500 }
+      )
+    }
     console.error("[analytics/events] Error:", e)
     return NextResponse.json({ error: "Invalid request" }, { status: 400 })
   }

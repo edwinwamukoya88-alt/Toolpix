@@ -83,6 +83,9 @@ export async function GET(request: NextRequest) {
     }
   } catch (e) {
     console.error("[analytics/dashboard] Error:", e)
-    return NextResponse.json({ error: "Failed to load analytics" }, { status: 500 })
+    return NextResponse.json(
+      { error: "Failed to load analytics", detail: e instanceof Error ? e.message : String(e) },
+      { status: 500 }
+    )
   }
 }
