@@ -1,42 +1,34 @@
 import { NextResponse } from "next/server"
 import { BetaAnalyticsDataClient } from "@google-analytics/data"
+import { requireApiAuth } from "@/lib/auth-guard"
 
 export const runtime = "nodejs"
 
 export async function GET() {
-  console.log("=== GA4 ANALYTICS DEBUG ===")
-  console.log("GA_CLIENT_EMAIL:", !!process.env.GA_CLIENT_EMAIL)
-  console.log("GA_PRIVATE_KEY:", !!process.env.GA_PRIVATE_KEY)
-  const rawId = process.env.GA_PROPERTY_ID
-  console.log("GA_PROPERTY_ID (raw):", rawId)
-  console.log("GA_PROPERTY_ID is numeric:", /^\d+$/.test(rawId ?? ""))
+  const authResponse = await requireApiAuth()
+  if (authResponse) return authResponse
+
+  console.log("[Analytics] GET request")
 
   const clientEmail = process.env.GA_CLIENT_EMAIL
   const rawPrivateKey = process.env.GA_PRIVATE_KEY
   const propertyId = process.env.GA_PROPERTY_ID
 
   if (!clientEmail || !rawPrivateKey || !propertyId) {
-    console.error("FAIL: one or more env vars are undefined")
     return NextResponse.json(
-      { error: "Missing required environment variables: GA_CLIENT_EMAIL, GA_PRIVATE_KEY, GA_PROPERTY_ID" },
+      { error: "Analytics not configured" },
       { status: 500 },
     )
   }
 
   if (!/^\d+$/.test(propertyId)) {
-    console.error("FAIL: GA_PROPERTY_ID is not a numeric ID:", propertyId)
     return NextResponse.json(
-      {
-        error: "Invalid GA_PROPERTY_ID format",
-        detail: `Expected a numeric GA4 property ID (e.g. "123456789"), got: "${propertyId}". Update your .env.local with the numeric ID from GA4 admin → Property Settings.`,
-      },
+      { error: "Invalid analytics configuration" },
       { status: 500 },
     )
   }
 
   const privateKey = rawPrivateKey.replace(/\\n/g, "\n")
-  console.log("Private key starts with:", privateKey.substring(0, 30) + "...")
-  console.log("Private key ends with:", "..." + privateKey.substring(privateKey.length - 20))
 
   console.log("Step 1: Creating BetaAnalyticsDataClient...")
   let analyticsDataClient: BetaAnalyticsDataClient
@@ -101,17 +93,8 @@ export async function GET() {
     }
 
     const message = error instanceof Error ? error.message : String(error)
-    const isDev = process.env.NODE_ENV !== "production"
     return NextResponse.json(
-      {
-        error: message,
-        ...(isDev
-          ? {
-              detail: error instanceof Error ? error.stack : String(error),
-              type: error instanceof Error ? error.constructor.name : typeof error,
-            }
-          : {}),
-      },
+      { error: "Analytics request failed" },
       { status: 500 },
     )
   }

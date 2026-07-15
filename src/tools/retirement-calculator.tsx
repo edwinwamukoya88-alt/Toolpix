@@ -4,7 +4,7 @@ import { CalculatorHeader, CalculatorCard, NumberInput, ResultCard, ActionBar, I
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { parseNum, fmt, fmtCompact } from "@/lib/calculator/format"
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts"
 import ChartContainer from "@/components/chart-container"
 import { Heart, TrendingUp, PiggyBank, Users, Calendar, Clock, DollarSign, AlertTriangle } from "lucide-react"
 import { useMemo, useState } from "react"
@@ -136,26 +136,24 @@ export default function RetirementCalculator() {
               <TrendingUp className="h-5 w-5 text-muted-foreground" />
               <h3 className="text-sm font-semibold">Growth Projection</h3>
             </div>
-            <ChartContainer>
-              <ResponsiveContainer width="100%" height={300}>
-                <AreaChart data={chartData}>
-                  <defs>
-                    <linearGradient id="portfolioGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" style={{ stopColor: "hsl(var(--primary))", stopOpacity: 0.3 }} />
-                      <stop offset="95%" style={{ stopColor: "hsl(var(--primary))", stopOpacity: 0 }} />
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" className="stroke-muted-foreground/20" />
-                  <XAxis dataKey="age" tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }} tickLine={false} axisLine={false} />
-                  <YAxis tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }} tickLine={false} axisLine={false} tickFormatter={(v: number) => `$${fmtCompact(v)}`} />
-                  <Tooltip
-                    contentStyle={{ backgroundColor: "hsl(var(--popover))", border: "1px solid hsl(var(--border))", borderRadius: "8px", color: "hsl(var(--popover-foreground))" }}
-                    formatter={(value: any) => [`$${fmtCompact(value)}`, "Portfolio"]}
-                    labelFormatter={(label: any) => `Age ${label}`}
-                  />
-                  <Area type="monotone" dataKey="portfolio" stroke="hsl(var(--primary))" fill="url(#portfolioGrad)" strokeWidth={2} />
-                </AreaChart>
-              </ResponsiveContainer>
+            <ChartContainer height={300}>
+              <AreaChart data={chartData}>
+                <defs>
+                  <linearGradient id="portfolioGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" style={{ stopColor: "hsl(var(--primary))", stopOpacity: 0.3 }} />
+                    <stop offset="95%" style={{ stopColor: "hsl(var(--primary))", stopOpacity: 0 }} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" className="stroke-muted-foreground/20" />
+                <XAxis dataKey="age" tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }} tickLine={false} axisLine={false} />
+                <YAxis tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }} tickLine={false} axisLine={false} tickFormatter={(v: number) => `$${fmtCompact(v)}`} />
+                <Tooltip
+                  contentStyle={{ backgroundColor: "hsl(var(--popover))", border: "1px solid hsl(var(--border))", borderRadius: "8px", color: "hsl(var(--popover-foreground))" }}
+                  formatter={(value: any) => [`$${fmtCompact(value)}`, "Portfolio"]}
+                  labelFormatter={(label: any) => `Age ${label}`}
+                />
+                <Area type="monotone" dataKey="portfolio" stroke="hsl(var(--primary))" fill="url(#portfolioGrad)" strokeWidth={2} />
+              </AreaChart>
             </ChartContainer>
           </CardContent>
         </Card>

@@ -79,10 +79,10 @@ export default function SEODashboard({
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-        <MetricCard icon={MousePointerClick} label="Organic Clicks" value={metrics.organicClicks.toLocaleString()} trend={12} direction="up" />
-        <MetricCard icon={Eye} label="Impressions" value={metrics.impressions.toLocaleString()} trend={8} direction="up" />
+        <MetricCard icon={MousePointerClick} label="Organic Clicks" value={metrics.organicClicks.toLocaleString()} />
+        <MetricCard icon={Eye} label="Impressions" value={metrics.impressions.toLocaleString()} />
         <MetricCard icon={BarChart3} label="Avg CTR" value={`${metrics.avgCtr}%`} sub="click-through rate" />
-        <MetricCard icon={TrendingUp} label="Avg Position" value={metrics.avgPosition.toFixed(1)} trend={5} direction="down" />
+        <MetricCard icon={TrendingUp} label="Avg Position" value={metrics.avgPosition.toFixed(1)} />
         <MetricCard icon={FileText} label="Indexed Pages" value={metrics.indexedPages.toString()} sub="in search console" />
       </div>
 

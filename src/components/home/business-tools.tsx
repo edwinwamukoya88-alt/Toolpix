@@ -66,8 +66,11 @@ export default function BusinessToolsSection() {
             <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
               Business Tools
             </h2>
-            <p className="text-muted-foreground text-lg leading-relaxed mb-6">
+            <p className="text-muted-foreground text-lg leading-relaxed mb-4">
               From invoicing to AI-powered proposals, run your business smarter with tools designed for entrepreneurs and teams.
+            </p>
+            <p className="text-sm text-muted-foreground/70 leading-relaxed mb-6">
+              Generate professional invoices in seconds, draft business proposals with AI assistance, calculate profit margins and loan payments, and organize meeting notes — all without creating an account or uploading sensitive financial data to external servers.
             </p>
             <div className="flex flex-wrap items-center gap-4 mb-8">
               <Link href="/tools?category=Essential+Calculators">

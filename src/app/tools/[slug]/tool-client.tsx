@@ -9,7 +9,7 @@ import dynamic from "next/dynamic"
 import { Suspense } from "react"
 import AdBanner from "@/components/ads/ad-banner"
 import ErrorBoundary from "@/components/ErrorBoundary"
-import { trackToolOpen } from "@/lib/analytics"
+import { trackToolOpened } from "@/lib/analytics-client"
 
 const toolComponents: Record<string, React.ComponentType> = {
   "color-picker": dynamic(() => import("@/tools/color-picker")),
@@ -94,7 +94,7 @@ export default function ToolPageClient({ slug, tool }: { slug: string; tool: Too
   const Component = toolComponents[slug]
 
   useEffect(() => {
-    trackToolOpen(tool.slug, tool.category)
+    trackToolOpened(tool.slug, tool.name, tool.category)
   }, [tool])
 
   return (

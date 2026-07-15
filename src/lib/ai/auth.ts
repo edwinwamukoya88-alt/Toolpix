@@ -14,16 +14,8 @@ const usageStore = new Map<string, UsageRecord>()
 function getSecret(): string {
   const secret = process.env.AI_GATEWAY_SECRET
   if (!secret) {
-    const env = process.env.NODE_ENV || "unknown"
-    const diag = JSON.stringify({
-      route: "auth",
-      variable: "AI_GATEWAY_SECRET",
-      present: false,
-      runtime: "nodejs",
-      NODE_ENV: env,
-    })
-    console.error(`[Auth] Missing environment variable: ${diag}`)
-    throw new Error("AI_GATEWAY_SECRET is not configured")
+    console.error("[Auth] Missing AI_GATEWAY_SECRET")
+    throw new Error("AI Gateway is not configured")
   }
   return secret
 }

@@ -1,5 +1,6 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import { FileText, Wrench, CheckCircle, Scan, Search, StickyNote, Timer, DollarSign, Repeat, type LucideIcon } from "lucide-react"
 import type { ActivityEvent } from "@/lib/analytics-utils"
 
@@ -8,13 +9,24 @@ const iconMap: Record<string, LucideIcon> = {
 }
 
 function TimeAgo({ timestamp }: { timestamp: string }) {
-  const diff = Date.now() - new Date(timestamp).getTime()
-  const mins = Math.floor(diff / 60000)
-  if (mins < 1) return "Just now"
-  if (mins < 60) return `${mins}m ago`
-  const hours = Math.floor(mins / 60)
-  if (hours < 24) return `${hours}h ago`
-  return `${Math.floor(hours / 24)}d ago`
+  const [text, setText] = useState("Just now")
+
+  useEffect(() => {
+    const update = () => {
+      const diff = Date.now() - new Date(timestamp).getTime()
+      const mins = Math.floor(diff / 60000)
+      if (mins < 1) return setText("Just now")
+      if (mins < 60) return setText(`${mins}m ago`)
+      const hours = Math.floor(mins / 60)
+      if (hours < 24) return setText(`${hours}h ago`)
+      setText(`${Math.floor(hours / 24)}d ago`)
+    }
+    update()
+    const id = setInterval(update, 60000)
+    return () => clearInterval(id)
+  }, [timestamp])
+
+  return <>{text}</>
 }
 
 export default function RecentActivityFeed({

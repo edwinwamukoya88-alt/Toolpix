@@ -33,16 +33,22 @@ export default function TermsPage() {
           <p className="text-muted-foreground max-w-md mx-auto">
             By using Zilita, you agree to these terms.
           </p>
+          <p className="text-xs text-muted-foreground">Last updated: July 10, 2026</p>
         </div>
       </section>
 
       <section className="container py-12">
         <div className="max-w-3xl mx-auto prose prose-invert prose-sm md:prose-base">
+          <p className="text-xs text-muted-foreground">Effective date: January 1, 2026. Last updated: January 1, 2026.</p>
+
           <h2>Acceptance of Terms</h2>
           <p>By accessing or using Zilita, you agree to be bound by these terms. If you do not agree, do not use the service.</p>
 
           <h2>Use of Service</h2>
           <p>Zilita provides free, browser-based utility tools for personal and commercial use. You agree not to misuse the tools or attempt to disrupt the service.</p>
+
+          <h2>Advertising</h2>
+          <p>Zilita displays advertisements provided by Google AdSense. By using the site, you acknowledge that third-party ads may be served on pages. You can manage your ad preferences through the cookie consent banner or by visiting <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer">Google Ad Settings</a>.</p>
 
           <h2>No Data Collection</h2>
           <p>All tools run client-side. Zilita does not collect, store, or transmit your data. Your use of the tools is private and self-contained within your browser.</p>

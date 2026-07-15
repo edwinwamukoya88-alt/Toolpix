@@ -67,7 +67,7 @@ export default function ToolCard({ slug, name, description, icon, badge }: ToolC
           "flex h-10 w-10 items-center justify-center rounded-xl transition-all duration-300 group-hover:scale-110",
           "bg-gradient-to-br from-primary/20 to-primary/5",
         )}>
-          <Icon className="h-5 w-5 text-primary transition-transform duration-300 group-hover:scale-110" />
+          <Icon className="h-5 w-5 text-primary transition-transform duration-300 group-hover:scale-110" aria-hidden="true" />
         </div>
         <Badge variant="secondary" className={cn("text-[10px] font-medium", badgeColors[badge])}>
           {badge}

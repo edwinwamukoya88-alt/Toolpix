@@ -48,8 +48,11 @@ function defaultWeekData(): WeekTasks {
 
 export default function DayPlanner() {
   const [weekData, setWeekData] = useLocalStorage<WeekTasks>("zilita_weekly_planner", defaultWeekData())
-  const [activeDay, setActiveDay] = useState<DayKey>(getTodayKey)
-  const [now, setNow] = useState(() => Date.now())
+  const [activeDay, setActiveDay] = useState<DayKey>(() => {
+    if (typeof window === "undefined") return "monday"
+    return getTodayKey()
+  })
+  const [now, setNow] = useState(() => typeof window === "undefined" ? 0 : Date.now())
 
   useEffect(() => {
     const id = setInterval(() => setNow(Date.now()), 30_000)

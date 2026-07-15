@@ -67,12 +67,10 @@ export default function AdBanner({ slot, format = "responsive", className = "", 
     if (!visible || loaded || error || consent === null) return
 
     try {
-      const timeout = setTimeout(() => {
+        const timeout = setTimeout(() => {
         if (typeof (window as any).adsbygoogle !== "undefined") {
           try {
             ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({
-              google_ad_client: AD_CLIENT,
-              enable_page_level_ads: true,
               non_personalized_ads: !consent,
             })
           } catch {
@@ -90,10 +88,12 @@ export default function AdBanner({ slot, format = "responsive", className = "", 
 
   if (IS_DEV) {
     return (
-      <div
-        className={`relative flex items-center justify-center rounded-xl border bg-muted/10 text-muted-foreground ${cfg.className} ${className}`}
-        style={style}
-      >
+    <div
+      className={`relative flex items-center justify-center rounded-xl border bg-muted/10 text-muted-foreground ${cfg.className} ${className}`}
+      style={style}
+      role="complementary"
+      aria-label="Advertisement placeholder"
+    >
         <span className="absolute top-1.5 left-2 text-[10px] font-medium text-muted-foreground/40 uppercase tracking-wider">Sponsored</span>
         <div className="text-center text-xs px-4 py-6">
           <div className="h-6 w-24 mx-auto rounded-md bg-muted/20" />
@@ -111,6 +111,8 @@ export default function AdBanner({ slot, format = "responsive", className = "", 
       ref={containerRef}
       className={`ad-container ${cfg.className} ${className}`}
       style={{ minHeight: cfg.height || 90, ...style }}
+      role="complementary"
+      aria-label="Advertisement"
     >
       {!loaded && !error && (
         <div className="flex items-center justify-center h-full rounded-lg bg-muted/20 animate-pulse">

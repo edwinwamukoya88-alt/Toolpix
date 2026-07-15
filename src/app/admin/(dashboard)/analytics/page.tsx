@@ -42,7 +42,8 @@ function AnalyticsDashboard() {
   const {
     loading, error, refresh, kpiData, trafficData, acquisitionData, toolPerfData,
     categoryPerfData, funnelData, liveActivity, seoMetrics, seoTrend, seoLandingPages,
-    seoQueries, blogPerfData, trendingData, searchConsoleData, scKpiData, scTrafficData,
+    seoQueries, blogPerfData, publishedBlogCount, publishedToolCount, trendingData,
+    searchConsoleData, scKpiData, scTrafficData,
     heatmapData, activityData, insightsData, alerts, activeAlertCount, dismissAlert, dismissAllAlerts,
     sources, state,
   } = useAnalytics()
@@ -62,21 +63,29 @@ function AnalyticsDashboard() {
   return (
     <div className="min-h-screen">
       <div className="container py-6 md:py-8">
-        <DashboardOverviewCards
-          data={{
-            totalUsers: 0,
-            activeUsers: 0,
-            blogPosts: 13,
-            publishedTools: 39,
-            totalPageViews: 0,
-            sessions: 0,
-            searchClicks: 0,
-            searchImpressions: 0,
-            avgPosition: 0,
-            ctr: 0,
-          }}
-          loading={false}
-        />
+        {(() => {
+          const totalUsers = kpiData?.find(k => k.label === "Total Users")
+          const sessions = kpiData?.find(k => k.label === "Sessions")
+          const pageViews = kpiData?.find(k => k.label === "Page Views")
+
+          return (
+            <DashboardOverviewCards
+              data={{
+                totalUsers: totalUsers?.rawValue ?? 0,
+                activeUsers: liveActivity?.activeUsers ?? 0,
+                blogPosts: publishedBlogCount ?? blogPerfData?.length ?? 0,
+                publishedTools: publishedToolCount ?? toolPerfData?.length ?? 0,
+                totalPageViews: pageViews?.rawValue ?? 0,
+                sessions: sessions?.rawValue ?? 0,
+                searchClicks: seoMetrics?.organicClicks ?? 0,
+                searchImpressions: seoMetrics?.impressions ?? 0,
+                avgPosition: seoMetrics?.avgPosition ?? 0,
+                ctr: seoMetrics?.avgCtr ?? 0,
+              }}
+              loading={loading}
+            />
+          )
+        })()}
 
         <div className="space-y-6">
         <div className="flex items-start justify-between gap-4">
@@ -316,7 +325,7 @@ function SourcePanel({ activeSource, kpiData, trafficData, acquisitionData, seoM
           <MetricCard icon={Activity} label="Sessions" value={kpiData?.[1]?.value?.toLocaleString() ?? "—"} status={sources.ga4.status} />
           <MetricCard icon={Eye} label="Pageviews" value={kpiData?.[2]?.value?.toLocaleString() ?? "—"} status={sources.ga4.status} />
           <MetricCard icon={Globe} label="Acquisition" value={acquisitionData?.length ? `${acquisitionData.length} sources` : "—"} status={sources.ga4.status} />
-          <MetricCard icon={TrendingUp} label="Engagement" value={kpiData?.[3]?.value ? `${kpiData[3].value}%` : "—"} status={sources.ga4.status} />
+          <MetricCard icon={TrendingUp} label="Engagement" value={kpiData?.find((k: any) => k.label === "Engagement Rate")?.value ? `${kpiData.find((k: any) => k.label === "Engagement Rate")!.value}%` : "—"} status={sources.ga4.status} />
         </div>
       )}
       {activeSource === "searchConsole" && (
@@ -360,17 +369,17 @@ function SourcePanel({ activeSource, kpiData, trafficData, acquisitionData, seoM
       )}
       {activeSource === "firstParty" && (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <MetricCard icon={MousePointerClick} label="Tool Launches" value={toolPerfData?.reduce?.((s: number, t: any) => s + (t.launches ?? t.totalClicks ?? 0), 0)?.toLocaleString() ?? "—"} status={sources.firstParty.status} />
-          <MetricCard icon={Heart} label="Favorites" value={toolPerfData?.filter?.((t: any) => (t.favorites ?? 0) > 0)?.length ?? "—"} status={sources.firstParty.status} />
-          <MetricCard icon={Database} label="Local Analytics" value={blogPerfData?.length ? `${blogPerfData.length} posts` : "—"} status={sources.firstParty.status} />
+          <MetricCard icon={MousePointerClick} label="Tool Launches" value={toolPerfData?.reduce?.((s: number, t: any) => s + (t.launches ?? 0), 0)?.toLocaleString() ?? "—"} status={sources.firstParty.status} />
+          <MetricCard icon={Heart} label="Blog Posts" value={blogPerfData?.length ? `${blogPerfData.length} posts` : "—"} status={sources.firstParty.status} />
           <MetricCard icon={Globe} label="Browser Metrics" value={activityData?.length ? `${activityData.length} events` : "—"} status={sources.firstParty.status} />
+          <MetricCard icon={Database} label="Analytics Events" value={activityData?.length ? `${activityData.length} tracked` : "—"} status={sources.firstParty.status} />
         </div>
       )}
       {activeSource === "realtime" && (
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
           <MetricCard icon={UserCircle} label="Active Users" value={liveActivity?.activeUsers?.toLocaleString() ?? "—"} status={sources.realtime.status} />
           <MetricCard icon={Eye} label="Live Page Views" value={liveActivity?.pages?.length ? `${liveActivity.pages.length} pages` : "—"} status={sources.realtime.status} />
-          <MetricCard icon={Clock} label="Current Sessions" value={liveActivity?.activeUsers != null ? `${liveActivity.activeUsers}` : "—"} status={sources.realtime.status} />
+          <MetricCard icon={Clock} label="Active Tools" value={liveActivity?.activeTools?.length ? `${liveActivity.activeTools.length} tools` : "—"} status={sources.realtime.status} />
         </div>
       )}
     </div>

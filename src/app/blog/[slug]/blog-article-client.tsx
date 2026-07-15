@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import { useEffect, useRef, useCallback } from "react"
 import { ChevronRight } from "lucide-react"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
@@ -11,6 +12,7 @@ import TableOfContents from "@/components/blog/table-of-contents"
 import ShareButtons from "@/components/blog/share-buttons"
 import RelatedArticles from "@/components/blog/related-articles"
 import RelatedTools from "@/components/blog/related-tools"
+import { trackBlogArticleView, trackBlogScrollDepth, trackBlogExit, trackBlogBounce } from "@/lib/analytics-client"
 
 interface BlogArticleClientProps {
   post: BlogPost
@@ -19,6 +21,43 @@ interface BlogArticleClientProps {
 }
 
 export default function BlogArticleClient({ post, relatedPosts, toolSlugs }: BlogArticleClientProps) {
+  const startTime = useRef<number>(0)
+  const hasScrolled = useRef(false)
+  const trackedView = useRef(false)
+
+  useEffect(() => {
+    startTime.current = Date.now()
+    if (trackedView.current) return
+    trackedView.current = true
+    trackBlogArticleView(post.slug, post.title)
+  }, [post])
+
+  const handleScroll = useCallback(() => {
+    if (hasScrolled.current) return
+    const scrollPercent = Math.round(
+      (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100
+    )
+    if (scrollPercent >= 25) {
+      hasScrolled.current = true
+      trackBlogScrollDepth(post.slug, post.title, scrollPercent)
+    }
+  }, [post])
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll, { passive: true })
+    const start = startTime.current
+    return () => {
+      window.removeEventListener("scroll", handleScroll)
+      const readTime = Math.round((Date.now() - start) / 1000)
+      if (readTime > 3) {
+        trackBlogExit(post.slug, post.title, readTime)
+      }
+      if (!hasScrolled.current && readTime < 10) {
+        trackBlogBounce(post.slug, post.title)
+      }
+    }
+  }, [post, handleScroll])
+
   return (
     <div className="min-h-screen">
       <article>

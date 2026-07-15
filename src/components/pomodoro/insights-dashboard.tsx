@@ -223,41 +223,43 @@ export default function InsightsDashboard({
         ))}
       </div>
 
-      <div
-        id="panel-overview"
-        role="tabpanel"
-        aria-label="Overview"
-        className={activeTab !== "overview" ? "hidden" : undefined}
-      >
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {cards.map((card, i) => (
-            <InsightCard key={card.id} data={card} index={i} />
-          ))}
+      {activeTab === "overview" && (
+        <div
+          id="panel-overview"
+          role="tabpanel"
+          aria-label="Overview"
+        >
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {cards.map((card, i) => (
+              <InsightCard key={card.id} data={card} index={i} />
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
-      <div
-        id="panel-charts"
-        role="tabpanel"
-        aria-label="Charts"
-        className={activeTab !== "charts" ? "hidden" : undefined}
-      >
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <Suspense fallback={<div className="rounded-2xl border bg-card p-6 h-[320px] animate-pulse" />}>
-            <FocusTrendChart weeklyData={weeklyTrend} monthlyData={monthlyTrend} />
-          </Suspense>
-          <Suspense fallback={<div className="rounded-2xl border bg-card p-6 h-[320px] animate-pulse" />}>
-            <HeatmapPreview data={heatmapData} />
-          </Suspense>
+      {activeTab === "charts" && (
+        <div
+          id="panel-charts"
+          role="tabpanel"
+          aria-label="Charts"
+        >
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Suspense fallback={<div className="rounded-2xl border bg-card p-6 h-[320px] animate-pulse" />}>
+              <FocusTrendChart weeklyData={weeklyTrend} monthlyData={monthlyTrend} />
+            </Suspense>
+            <Suspense fallback={<div className="rounded-2xl border bg-card p-6 h-[320px] animate-pulse" />}>
+              <HeatmapPreview data={heatmapData} />
+            </Suspense>
+          </div>
         </div>
-      </div>
+      )}
 
-      <div
-        id="panel-achievements"
-        role="tabpanel"
-        aria-label="Achievements"
-        className={activeTab !== "achievements" ? "hidden" : undefined}
-      >
+      {activeTab === "achievements" && (
+        <div
+          id="panel-achievements"
+          role="tabpanel"
+          aria-label="Achievements"
+        >
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <Suspense fallback={<div className="rounded-2xl border bg-card p-6 h-[400px] animate-pulse" />}>
             <GamificationCard data={gamification} />
@@ -317,17 +319,19 @@ export default function InsightsDashboard({
           </div>
         </div>
       </div>
+      )}
 
-      <div
-        id="panel-insights"
-        role="tabpanel"
-        aria-label="Insights"
-        className={activeTab !== "insights" ? "hidden" : undefined}
-      >
-        <Suspense fallback={<div className="rounded-2xl border bg-card p-6 h-[200px] animate-pulse" />}>
-          <AIInsightsPanel insights={insights} />
-        </Suspense>
-      </div>
+      {activeTab === "insights" && (
+        <div
+          id="panel-insights"
+          role="tabpanel"
+          aria-label="Insights"
+        >
+          <Suspense fallback={<div className="rounded-2xl border bg-card p-6 h-[200px] animate-pulse" />}>
+            <AIInsightsPanel insights={insights} />
+          </Suspense>
+        </div>
+      )}
     </div>
   )
 }

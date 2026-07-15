@@ -75,7 +75,7 @@ export default function TestimonialsSection() {
                   t.gradient
                 )} />
                 <div className="relative">
-                  <Quote className="h-8 w-8 text-primary/20 mb-4" />
+                  <Quote className="h-8 w-8 text-primary/20 mb-4" aria-hidden="true" />
                   <p className="text-sm text-muted-foreground leading-relaxed mb-6 italic">
                     &ldquo;{t.quote}&rdquo;
                   </p>

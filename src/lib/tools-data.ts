@@ -113,17 +113,3 @@ export const categories = [
   "Network Monitoring",
   "Multimedia",
 ]
-
-export const categoryIcons: Record<string, string> = {
-  "AI Assistant": "Sparkles",
-  Productivity: "Zap",
-  "Education & CBC Tools": "GraduationCap",
-  "Security & Text": "Shield",
-  "QR & Connectivity": "QrCode",
-  "File Conversion": "FileUp",
-  "Developer Tools": "Code",
-  "Design & Creative": "Palette",
-  "Essential Calculators": "Calculator",
-  "Network Monitoring": "Activity",
-  Multimedia: "Film",
-}

@@ -7,7 +7,6 @@ import {
   XAxis,
   YAxis,
   Tooltip,
-  ResponsiveContainer,
   Area,
   AreaChart,
 } from "recharts"
@@ -86,50 +85,48 @@ function FocusTrendChart({ weeklyData, monthlyData, className = "" }: FocusTrend
       </div>
 
       <ChartContainer height={240}>
-        <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={chartData} margin={{ top: 5, right: 5, left: -20, bottom: 0 }}>
-            <defs>
-              <linearGradient id="focusGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity={0.3} />
-                <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity={0} />
-              </linearGradient>
-            </defs>
-            <XAxis
-              dataKey="date"
-              tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
-              tickLine={false}
-              axisLine={false}
-              interval="preserveStartEnd"
-            />
-            <YAxis
-              tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
-              tickLine={false}
-              axisLine={false}
-              allowDecimals={false}
-            />
-            <Tooltip content={<CustomTooltip />} />
-            <Area
-              type="monotone"
-              dataKey="focus"
-              name="Focus Score"
-              stroke="hsl(var(--primary))"
-              strokeWidth={2}
-              fill="url(#focusGradient)"
-              dot={{ r: 3, fill: "hsl(var(--primary))" }}
-              activeDot={{ r: 5, strokeWidth: 0 }}
-            />
-            <Area
-              type="monotone"
-              dataKey="sessions"
-              name="Sessions"
-              stroke="hsl(var(--chart-2))"
-              strokeWidth={1.5}
-              fill="none"
-              strokeDasharray="4 4"
-              dot={false}
-            />
-          </AreaChart>
-        </ResponsiveContainer>
+        <AreaChart data={chartData} margin={{ top: 5, right: 5, left: -20, bottom: 0 }}>
+          <defs>
+            <linearGradient id="focusGradient" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity={0.3} />
+              <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity={0} />
+            </linearGradient>
+          </defs>
+          <XAxis
+            dataKey="date"
+            tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
+            tickLine={false}
+            axisLine={false}
+            interval="preserveStartEnd"
+          />
+          <YAxis
+            tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
+            tickLine={false}
+            axisLine={false}
+            allowDecimals={false}
+          />
+          <Tooltip content={<CustomTooltip />} />
+          <Area
+            type="monotone"
+            dataKey="focus"
+            name="Focus Score"
+            stroke="hsl(var(--primary))"
+            strokeWidth={2}
+            fill="url(#focusGradient)"
+            dot={{ r: 3, fill: "hsl(var(--primary))" }}
+            activeDot={{ r: 5, strokeWidth: 0 }}
+          />
+          <Area
+            type="monotone"
+            dataKey="sessions"
+            name="Sessions"
+            stroke="hsl(var(--chart-2))"
+            strokeWidth={1.5}
+            fill="none"
+            strokeDasharray="4 4"
+            dot={false}
+          />
+        </AreaChart>
       </ChartContainer>
 
       <div className="flex items-center gap-4 mt-3 text-xs text-muted-foreground">

@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { Button } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
 import { Home, ArrowLeft } from "lucide-react"
 
 export const metadata: Metadata = {
@@ -21,17 +21,13 @@ export default function NotFound() {
           The page you are looking for does not exist or has been moved.
         </p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-          <Link href="/">
-            <Button className="w-full sm:w-auto min-h-[44px]">
-              <Home className="h-4 w-4 mr-1.5" />
-              Back to Home
-            </Button>
+          <Link href="/" className={buttonVariants({ className: "w-full sm:w-auto min-h-[44px]" })}>
+            <Home className="h-4 w-4 mr-1.5" aria-hidden="true" />
+            Back to Home
           </Link>
-          <Link href="/tools">
-            <Button variant="outline" className="w-full sm:w-auto min-h-[44px]">
-              <ArrowLeft className="h-4 w-4 mr-1.5" />
-              Browse Tools
-            </Button>
+          <Link href="/tools" className={buttonVariants({ variant: "outline", className: "w-full sm:w-auto min-h-[44px]" })}>
+            <ArrowLeft className="h-4 w-4 mr-1.5" aria-hidden="true" />
+            Browse Tools
           </Link>
         </div>
       </div>

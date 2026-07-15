@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { motion } from "framer-motion"
 import { ArrowRight, Sparkles, Brain, BookOpen, Clock, BarChart3, LayoutGrid, Calendar, Code, Palette } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
 
 const features = [
   { icon: Brain, label: "AI Assistant", color: "from-indigo-500/20 to-purple-500/20" },
@@ -36,7 +36,7 @@ export default function HeroSection() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
             >
-              <Sparkles className="h-3.5 w-3.5" />
+              <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
               Privacy-First AI Workspace
             </motion.div>
 
@@ -50,24 +50,20 @@ export default function HeroSection() {
 
             <div className="space-y-4 mb-8">
               <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed">
-                Productivity. Education. Business. Creativity. Developers.
+                70+ free tools for productivity, education, business, and development — all running privately in your browser.
               </p>
               <p className="text-base text-muted-foreground/70">
-                All in one intelligent browser workspace. Everything runs locally. No login. No tracking.
+                No login required. No data uploaded. No tracking. Everything processes locally on your device using client-side JavaScript, so your files and information never leave your browser.
               </p>
             </div>
 
             <div className="flex flex-wrap items-center gap-4 mb-10">
-              <Link href="/tools">
-                <Button variant="primary-gradient" size="lg" className="gap-2 h-12 px-8 text-base rounded-xl">
-                  Start Free
-                  <ArrowRight className="h-4 w-4" />
-                </Button>
+              <Link href="/tools" className={buttonVariants({ variant: "primary-gradient", size: "lg", className: "gap-2 h-12 px-8 text-base rounded-xl" })}>
+                Start Free
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </Link>
-              <Link href="/tools">
-                <Button variant="glass" size="lg" className="h-12 px-8 text-base rounded-xl gap-2">
-                  Explore 70+ Tools
-                </Button>
+              <Link href="/tools" className={buttonVariants({ variant: "glass", size: "lg", className: "h-12 px-8 text-base rounded-xl gap-2" })}>
+                Explore 70+ Tools
               </Link>
             </div>
 
@@ -98,6 +94,7 @@ export default function HeroSection() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.3 }}
+            aria-hidden="true"
           >
             <motion.div
               className="absolute inset-x-0 top-[5%] mx-auto w-[90%] rounded-2xl border border-white/[0.08] bg-gradient-to-b from-card/90 to-card/60 backdrop-blur-xl shadow-2xl overflow-hidden"
@@ -185,7 +182,7 @@ export default function HeroSection() {
                 className="inline-flex items-center gap-1.5 rounded-full border border-white/[0.06] bg-background/50 backdrop-blur-sm px-3 py-1.5 text-xs font-medium text-muted-foreground"
               >
                 <span className={`flex h-5 w-5 items-center justify-center rounded-md bg-gradient-to-br ${f.color}`}>
-                  <Icon className="h-3 w-3 text-white" />
+                  <Icon className="h-3 w-3 text-white" aria-hidden="true" />
                 </span>
                 {f.label}
               </span>

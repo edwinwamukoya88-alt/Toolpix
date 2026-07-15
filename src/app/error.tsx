@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect } from "react"
-import { Button } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import { RefreshCw, Home } from "lucide-react"
 import Link from "next/link"
 
@@ -28,14 +28,12 @@ export default function Error({
         </p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
           <Button onClick={reset} className="w-full sm:w-auto min-h-[44px]">
-            <RefreshCw className="h-4 w-4 mr-1.5" />
+            <RefreshCw className="h-4 w-4 mr-1.5" aria-hidden="true" />
             Try Again
           </Button>
-          <Link href="/">
-            <Button variant="outline" className="w-full sm:w-auto min-h-[44px]">
-              <Home className="h-4 w-4 mr-1.5" />
-              Go Home
-            </Button>
+          <Link href="/" className={buttonVariants({ variant: "outline", className: "w-full sm:w-auto min-h-[44px]" })}>
+            <Home className="h-4 w-4 mr-1.5" aria-hidden="true" />
+            Go Home
           </Link>
         </div>
       </div>

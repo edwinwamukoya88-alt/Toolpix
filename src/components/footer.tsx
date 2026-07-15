@@ -1,5 +1,4 @@
 import Link from "next/link"
-import Image from "next/image"
 import { cn } from "@/lib/utils"
 
 const footerLinks = {
@@ -41,7 +40,8 @@ export default function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8 md:gap-12">
           <div className="col-span-2 md:col-span-1">
             <Link href="/" className="inline-flex items-center mb-5">
-              <Image src="/logo-dark.svg" alt="Zilita" width={120} height={40} className="h-8 w-auto" />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/logo-dark.svg" alt="Zilita" className="h-8 w-auto" />
             </Link>
             <p className="text-sm text-muted-foreground/70 leading-relaxed max-w-xs mb-6">
               The Privacy-First AI Browser Workspace. Productivity, education, business, creativity, and developer tools — all in one place.

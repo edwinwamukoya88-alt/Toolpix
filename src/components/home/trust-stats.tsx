@@ -33,14 +33,14 @@ const stats = [
 ]
 
 const audiences = [
-  { icon: GraduationCap, label: "Teachers", desc: "CBC lesson planning & assessment" },
-  { icon: Users, label: "Students", desc: "Study tools & revision planners" },
-  { icon: Briefcase, label: "Businesses", desc: "Invoicing & proposals" },
-  { icon: Terminal, label: "Developers", desc: "Code utilities & network tools" },
-  { icon: Palette, label: "Designers", desc: "Creative studio & color tools" },
-  { icon: Heart, label: "Privacy-First", desc: "Zero tracking, zero login" },
-  { icon: LayoutGrid, label: "Creators", desc: "Content & productivity tools" },
-  { icon: Sparkles, label: "Everyone", desc: "Free browser tools for all" },
+  { icon: GraduationCap, label: "Teachers", desc: "KICD-aligned CBC lesson plans, assessments, and report cards" },
+  { icon: Users, label: "Students", desc: "Revision planners, Pomodoro timers, and study tools" },
+  { icon: Briefcase, label: "Businesses", desc: "Invoice generation, proposals, and business calculators" },
+  { icon: Terminal, label: "Developers", desc: "JSON formatter, regex tester, DNS lookup, and speed tests" },
+  { icon: Palette, label: "Designers", desc: "Color picker, favicon generator, and design card studio" },
+  { icon: Heart, label: "Privacy Advocates", desc: "Client-side processing, zero data collection, no accounts" },
+  { icon: LayoutGrid, label: "Creators", desc: "AI writing, content tools, and multimedia converters" },
+  { icon: Sparkles, label: "Everyone", desc: "70+ free tools with no sign-up or paywalls" },
 ]
 
 export default function TrustStatsSection() {

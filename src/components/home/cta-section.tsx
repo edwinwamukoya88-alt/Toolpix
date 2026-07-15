@@ -41,7 +41,7 @@ export default function CtaSection() {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
-              Join thousands of users who trust Zilita for their daily productivity, teaching, and development needs.
+              Join users who trust Zilita for their daily productivity, teaching, and development needs.
             </motion.p>
 
             <motion.div

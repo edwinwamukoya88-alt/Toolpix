@@ -8,79 +8,32 @@ import {
   PenSquare, FileEdit, MousePointerClick, Hash,
 } from "lucide-react"
 import { prisma } from "@/lib/db"
+import { getOverviewMetrics, getRealtimeData, getPopularPages, getPopularTools } from "@/lib/analytics-db"
 
-interface GAData {
-  totalUsers: number | null
-  activeUsers: number | null
-  sessions: number | null
-  pageViews: number | null
-}
+export const dynamic = "force-dynamic"
 
-interface SearchConsoleData {
-  clicks: number | null
-  impressions: number | null
-  ctr: number | null
-  avgPosition: number | null
-}
-
-async function fetchGAData(): Promise<GAData> {
-  try {
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"
-    const res = await fetch(`${baseUrl}/api/analytics/ga4?range=last30`, {
-      cache: "no-store",
-    })
-    if (!res.ok) return { totalUsers: null, activeUsers: null, sessions: null, pageViews: null }
-    const data = await res.json()
-    return {
-      totalUsers: data.totalUsers ?? null,
-      activeUsers: data.activeUsers ?? null,
-      sessions: data.sessions ?? null,
-      pageViews: data.pageViews ?? null,
-    }
-  } catch {
-    return { totalUsers: null, activeUsers: null, sessions: null, pageViews: null }
-  }
-}
-
-async function fetchSearchConsoleData(): Promise<SearchConsoleData> {
-  try {
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"
-    const res = await fetch(`${baseUrl}/api/analytics/search-console?range=last30`, {
-      cache: "no-store",
-    })
-    if (!res.ok) return { clicks: null, impressions: null, ctr: null, avgPosition: null }
-    const data = await res.json()
-    if (!data || data.length === 0) return { clicks: null, impressions: null, ctr: null, avgPosition: null }
-    const totals = data.reduce(
-      (acc: any, row: any) => ({
-        clicks: (acc.clicks ?? 0) + (row.clicks ?? 0),
-        impressions: (acc.impressions ?? 0) + (row.impressions ?? 0),
-      }),
-      { clicks: 0, impressions: 0 },
-    )
-    const ctr = totals.impressions > 0 ? ((totals.clicks / totals.impressions) * 100) : null
-    const avgPos = data.length > 0 ? data.reduce((s: number, r: any) => s + (r.position ?? 0), 0) / data.length : null
-    return {
-      clicks: totals.clicks,
-      impressions: totals.impressions,
-      ctr: ctr !== null ? Number(ctr.toFixed(2)) : null,
-      avgPosition: avgPos !== null ? Number(avgPos.toFixed(1)) : null,
-    }
-  } catch {
-    return { clicks: null, impressions: null, ctr: null, avgPosition: null }
-  }
-}
-
-export default async function AdminDashboard() {
-  const session = await auth()
-  const user = session?.user
+export default async function AdminDashboardPage() {
+  const user = await auth().then(s => s?.user ?? null)
   const blogCount = getAllPosts().length
   const toolCount = tools.length
 
-  const [gaData, scData] = await Promise.all([
-    fetchGAData(),
-    fetchSearchConsoleData(),
-  ])
+  let overview = null
+  let realtime = null
+  let popularPages: Array<{ path: string; views: number }> = []
+  let popularTools: Array<{ rank: number; name: string; opens: number; completions: number; completionRate: number }> = []
+
+  try {
+    const [o, r, pp, pt] = await Promise.all([
+      getOverviewMetrics("last7"),
+      getRealtimeData(),
+      getPopularPages(5, "last7"),
+      getPopularTools(5, "last7"),
+    ])
+    overview = o
+    realtime = r
+    popularPages = pp
+    popularTools = pt
+  } catch {}
 
   let draftCount = 0
   let userCount = 1
@@ -99,6 +52,13 @@ export default async function AdminDashboard() {
     { href: "/admin/analytics", label: "Analytics", icon: BarChart3, color: "text-indigo-400" },
     { href: "/admin/system", label: "System", icon: HeartPulse, color: "text-orange-400" },
   ]
+
+  const formatNum = (n: number | null | undefined) => {
+    if (n == null) return "—"
+    if (n >= 1000000) return (n / 1000000).toFixed(1).replace(/\.0$/, "") + "M"
+    if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, "") + "k"
+    return n.toLocaleString()
+  }
 
   return (
     <div className="container py-6 md:py-8 space-y-8">
@@ -137,20 +97,20 @@ export default async function AdminDashboard() {
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
           <StatCard icon={FileText} label="Blog Posts" value={blogCount} />
           <StatCard icon={Wrench} label="Published Tools" value={toolCount} />
-          <StatCard icon={Users} label="Total Users" value={gaData.totalUsers?.toLocaleString() ?? "—"} />
-          <StatCard icon={Activity} label="Sessions" value={gaData.sessions?.toLocaleString() ?? "—"} />
-          <StatCard icon={Eye} label="Page Views" value={gaData.pageViews?.toLocaleString() ?? "—"} />
+          <StatCard icon={Users} label="Total Users (7d)" value={formatNum(overview?.totalUsers.value)} />
+          <StatCard icon={Activity} label="Sessions (7d)" value={formatNum(overview?.sessions.value)} />
+          <StatCard icon={Eye} label="Page Views (7d)" value={formatNum(overview?.pageViews.value)} />
         </div>
       </div>
 
-      {/* SEO Stats */}
+      {/* Tool & AI Stats */}
       <div>
-        <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-4">Search Console</h2>
+        <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-4">Engagement</h2>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          <StatCard icon={MousePointerClick} label="Search Clicks" value={scData.clicks?.toLocaleString() ?? "—"} />
-          <StatCard icon={Eye} label="Impressions" value={scData.impressions?.toLocaleString() ?? "—"} />
-          <StatCard icon={Activity} label="CTR" value={scData.ctr !== null ? `${scData.ctr}%` : "—"} />
-          <StatCard icon={Hash} label="Avg Position" value={scData.avgPosition ?? "—"} />
+          <StatCard icon={Wrench} label="Tool Usage (7d)" value={formatNum(overview?.toolUsage.value)} />
+          <StatCard icon={Sparkles} label="AI Requests (7d)" value={formatNum(overview?.aiRequests.value)} />
+          <StatCard icon={FileText} label="Blog Views (7d)" value={formatNum(overview?.blogViews.value)} />
+          <StatCard icon={Eye} label="Active Now" value={realtime?.activeUsers ?? 0} />
         </div>
       </div>
 
@@ -177,6 +137,12 @@ export default async function AdminDashboard() {
         </div>
       </div>
 
+      {/* Popular Pages + Popular Tools */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <PopularPagesCard pages={popularPages} />
+        <PopularToolsCard toolList={popularTools} />
+      </div>
+
       {/* Bottom Grid: Recent Activity + System Health */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <RecentActivityCard />
@@ -196,6 +162,55 @@ function StatCard({ icon: Icon, label, value }: { icon: any; label: string; valu
         </div>
       </div>
       <div className="text-2xl font-bold tracking-tight">{value}</div>
+    </div>
+  )
+}
+
+function PopularPagesCard({ pages }: { pages: Array<{ path: string; views: number }> }) {
+  return (
+    <div className="rounded-xl border border-border/50 bg-card p-5 space-y-4">
+      <h3 className="text-sm font-semibold flex items-center gap-2">
+        <Eye className="h-4 w-4 text-primary" />
+        Popular Pages (7d)
+      </h3>
+      {pages.length === 0 ? (
+        <p className="text-xs text-muted-foreground py-4 text-center">No page view data yet. Data will appear as visitors browse the site.</p>
+      ) : (
+        <div className="space-y-2">
+          {pages.map((p, i) => (
+            <div key={p.path} className="flex items-center gap-3 text-sm">
+              <span className="text-xs text-muted-foreground w-4">{i + 1}</span>
+              <span className="flex-1 truncate font-mono text-xs">{p.path}</span>
+              <span className="text-xs text-muted-foreground">{p.views.toLocaleString()} views</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+function PopularToolsCard({ toolList }: { toolList: Array<{ rank: number; name: string; opens: number; completionRate: number }> }) {
+  return (
+    <div className="rounded-xl border border-border/50 bg-card p-5 space-y-4">
+      <h3 className="text-sm font-semibold flex items-center gap-2">
+        <Wrench className="h-4 w-4 text-primary" />
+        Popular Tools (7d)
+      </h3>
+      {toolList.length === 0 ? (
+        <p className="text-xs text-muted-foreground py-4 text-center">No tool usage data yet. Data will appear as users interact with tools.</p>
+      ) : (
+        <div className="space-y-2">
+          {toolList.map((t) => (
+            <div key={t.name} className="flex items-center gap-3 text-sm">
+              <span className="text-xs text-muted-foreground w-4">{t.rank}</span>
+              <span className="flex-1 truncate text-xs font-medium">{t.name}</span>
+              <span className="text-xs text-muted-foreground">{t.opens} opens</span>
+              <span className="text-xs text-emerald-500">{t.completionRate}%</span>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   )
 }
@@ -251,7 +266,7 @@ async function SystemHealthCard({ blogCount, toolCount }: { blogCount: number; t
         <HealthRow label="Database" value="SQLite via Prisma" healthy />
         <HealthRow label="Authentication" value="Auth.js v5 · Google OAuth" healthy />
         <HealthRow label="Sessions" value="JWT · Secure" healthy />
-        <HealthRow label="Analytics" value="GA4 + Search Console" healthy />
+        <HealthRow label="Analytics Pipeline" value="Server-side events" healthy />
         <HealthRow label="Deployment" value="Vercel" healthy />
       </div>
       <Link

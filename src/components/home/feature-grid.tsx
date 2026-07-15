@@ -72,7 +72,7 @@ export default function FeatureGrid() {
                       "bg-gradient-to-br from-primary/20 to-primary/5",
                       "group-hover:scale-110 transition-transform duration-300"
                     )}>
-                      <Icon className="h-6 w-6 text-primary" />
+                      <Icon className="h-6 w-6 text-primary" aria-hidden="true" />
                     </div>
                   </div>
 

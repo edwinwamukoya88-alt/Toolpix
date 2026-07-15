@@ -47,7 +47,6 @@ export default function TrafficChart({
 }) {
   const seriesConfig = searchConsole ? scSeriesConfig : ga4SeriesConfig
   const defaultSeries = new Set(seriesConfig.map(s => s.key))
-  const [mounted, setMounted] = useState(false)
   const [activePeriod, setActivePeriod] = useState<"24h" | "7d" | "30d" | "90d">("7d")
   const [visibleSeries, setVisibleSeries] = useState<Set<string>>(defaultSeries)
 

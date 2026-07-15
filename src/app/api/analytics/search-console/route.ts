@@ -1,14 +1,12 @@
 import { NextRequest, NextResponse } from "next/server"
+import { requireApiAuth } from "@/lib/auth-guard"
 
 export const runtime = "nodejs"
 
 export async function GET(request: NextRequest) {
   try {
-    console.log("[Search Console API] Env check:", {
-      GA_CLIENT_EMAIL: !!process.env.GA_CLIENT_EMAIL,
-      GA_PRIVATE_KEY: !!process.env.GA_PRIVATE_KEY,
-      GA_SEARCH_CONSOLE_PROPERTY: !!process.env.GA_SEARCH_CONSOLE_PROPERTY,
-    })
+    const authResponse = await requireApiAuth()
+    if (authResponse) return authResponse
 
     const clientEmail = process.env.GA_CLIENT_EMAIL
     const rawPrivateKey = process.env.GA_PRIVATE_KEY
@@ -17,21 +15,23 @@ export async function GET(request: NextRequest) {
     if (!clientEmail || !rawPrivateKey) {
       return NextResponse.json({
         success: false, source: "search-console",
-        error: "Missing GA4 credentials (required for Search Console auth)",
-        debug: { version: "v2-debug", property: process.env.GA_SEARCH_CONSOLE_PROPERTY },
+        error: "Analytics not configured",
       }, { status: 500 })
     }
 
     if (!configuredSite) {
-      console.error("[Search Console API] GA_SEARCH_CONSOLE_PROPERTY is undefined at runtime. Check Vercel env vars or .env.local.")
       return NextResponse.json({
         success: false,
         source: "search-console",
-        error: "Search Console property not configured. "
-          + "GA_SEARCH_CONSOLE_PROPERTY is undefined at runtime. "
-          + "This variable must be set in Vercel project Environment Variables (it is not deployed from .env.local).",
-        debug: { version: "v2-debug", property: process.env.GA_SEARCH_CONSOLE_PROPERTY },
-      })
+        error: "Search Console property not configured",
+        setupGuide: {
+          steps: [
+            "Verify your website in Google Search Console",
+            "Add your service account email as a user with Read permission",
+            "Set GA_SEARCH_CONSOLE_PROPERTY in your environment variables"
+          ]
+        }
+      }, { status: 500 })
     }
 
     const siteUrl = configuredSite
@@ -52,11 +52,12 @@ export async function GET(request: NextRequest) {
     })
 
     if (!tokenResponse.ok) {
-      const errText = await tokenResponse.text()
-      console.error("[Search Console API] Auth failed:", errText)
+      const authError = await tokenResponse.text().catch(() => "")
+      console.error("[Search Console API] Token exchange failed:", tokenResponse.status, authError)
       return NextResponse.json({
-        success: false, source: "search-console", error: `Auth failed: ${errText}`,
-        debug: { version: "v2-debug", property: process.env.GA_SEARCH_CONSOLE_PROPERTY },
+        success: false, source: "search-console",
+        error: "Service account authentication failed. Verify GA_CLIENT_EMAIL and GA_PRIVATE_KEY are correct.",
+        details: authError,
       }, { status: 500 })
     }
 
@@ -73,9 +74,6 @@ export async function GET(request: NextRequest) {
       dataState: "all",
     }
 
-    console.log("[Search Console API] Request URL:", requestUrl)
-    console.log("[Search Console API] Request body:", JSON.stringify(requestBody))
-
     const scRes = await fetch(requestUrl, {
       method: "POST",
       headers: {
@@ -86,36 +84,20 @@ export async function GET(request: NextRequest) {
     })
 
     if (!scRes.ok) {
-      const errText = await scRes.text()
-      console.error("[Search Console API] HTTP status:", scRes.status)
-      console.error("[Search Console API] Response body:", errText)
-
-      let googleError: object | null = null
-      try {
-        googleError = JSON.parse(errText)
-      } catch {}
+      const errorBody = await scRes.text().catch(() => "")
+      console.error("[Search Console API] HTTP status:", scRes.status, "body:", errorBody)
 
       return NextResponse.json({
         success: false,
         source: "search-console",
-        propertyIdentifier: siteUrl,
-        requestUrl,
-        httpStatus: scRes.status,
-        googleError,
-        googleRawResponse: errText,
-        error:
-          googleError && typeof googleError === "object" && "error" in googleError
-            ? (googleError as any).error.message || errText
-            : errText,
-        debug: { version: "v2-debug", property: process.env.GA_SEARCH_CONSOLE_PROPERTY },
+        error: `Search Console request failed (HTTP ${scRes.status})`,
+        details: errorBody,
       }, { status: scRes.status })
     }
 
     const data = await scRes.json()
 
-    console.log("[Search Console API] Full response:", JSON.stringify(data))
     console.log("[Search Console API] Row count:", data.rows?.length ?? 0)
-    console.log("[Search Console API] responseAggregationType:", data.responseAggregationType)
 
     if (!data.rows || data.rows.length === 0) {
       console.log("[Search Console API] No rows returned. Returning empty array.")
@@ -148,10 +130,9 @@ export async function GET(request: NextRequest) {
     })
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error)
-    console.error("[Search Console API]", message)
+    console.error("[Search Console API] Unhandled error:", message)
     return NextResponse.json({
       success: false, source: "search-console", error: message,
-      debug: { version: "v2-debug", property: process.env.GA_SEARCH_CONSOLE_PROPERTY },
     }, { status: 500 })
   }
 }

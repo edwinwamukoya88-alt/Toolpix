@@ -1,6 +1,6 @@
 "use client"
 
-import { createContext, useContext, useState, useEffect, useCallback, useRef, type ReactNode } from "react"
+import { createContext, useContext, useState, useEffect, useCallback, useMemo, useRef, type ReactNode } from "react"
 import {
   getKpiData,
   getTrafficData,
@@ -68,6 +68,8 @@ export interface AnalyticsContextValue {
   seoLandingPages: SEOLandingPage[]
   seoQueries: SEOQuery[]
   blogPerfData: BlogPerformanceRow[] | null
+  publishedBlogCount: number | null
+  publishedToolCount: number | null
   trendingData: TrendingItem[] | null
   searchConsoleData: SearchConsoleRow[] | null
   scKpiData: KpiData[] | null
@@ -137,6 +139,8 @@ export function AnalyticsProvider({ children }: { children: ReactNode }) {
   const [seoLandingPages, setSeoLandingPages] = useState<SEOLandingPage[]>([])
   const [seoQueries, setSeoQueries] = useState<SEOQuery[]>([])
   const [blogPerfData, setBlogPerfData] = useState<BlogPerformanceRow[] | null>(null)
+  const [publishedBlogCount, setPublishedBlogCount] = useState<number | null>(null)
+  const [publishedToolCount, setPublishedToolCount] = useState<number | null>(null)
   const [trendingData, setTrendingData] = useState<TrendingItem[] | null>(null)
   const [searchConsoleData, setSearchConsoleData] = useState<SearchConsoleRow[] | null>(null)
   const [heatmapData, setHeatmapData] = useState<HeatmapData[] | null>(null)
@@ -191,12 +195,13 @@ export function AnalyticsProvider({ children }: { children: ReactNode }) {
         getAIInsights(range),
       ])
 
-      setKpiData(kpi.data ?? scKpis.data)
+      setKpiData(kpi.data)
       setTrafficData(traffic.data ?? scTraffic.data)
       setScKpiData(scKpis.data)
       setScTrafficData(scTraffic.data)
       setAcquisitionData(acq.data)
       setToolPerfData(tools.data)
+      setPublishedToolCount(tools.publishedCount)
       setCategoryPerfData(cats.data)
       setFunnelData(funnel.data)
       setSeoMetrics(seo.metrics)
@@ -204,6 +209,7 @@ export function AnalyticsProvider({ children }: { children: ReactNode }) {
       setSeoLandingPages(seo.landingPages)
       setSeoQueries(seo.queries)
       setBlogPerfData(blog.data)
+      setPublishedBlogCount(blog.publishedCount)
       setTrendingData(trending.data)
       setSearchConsoleData(sc.data)
       setHeatmapData(heatmap.data)
@@ -248,18 +254,27 @@ export function AnalyticsProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!loadRef.current) {
       loadRef.current = true
-      initAnalytics().then(() => loadAll(dateRange))
+      initAnalytics().then(async () => {
+        await loadAll(dateRange)
+        try {
+          const live = await getLiveActivity()
+          setLiveActivity(live.data)
+          setSources(prev => ({ ...prev, realtime: live.source }))
+        } catch {}
+      })
     }
   }, [dateRange, loadAll])
 
   const refresh = useCallback(async () => {
     await loadAll(dateRange)
-    const live = await getLiveActivity()
-    setLiveActivity(live.data)
-    setSources(prev => ({
-      ...prev,
-      realtime: live.source,
-    }))
+    try {
+      const live = await getLiveActivity()
+      setLiveActivity(live.data)
+      setSources(prev => ({
+        ...prev,
+        realtime: live.source,
+      }))
+    } catch {}
   }, [dateRange, loadAll])
 
   /* Live updates */
@@ -280,11 +295,16 @@ export function AnalyticsProvider({ children }: { children: ReactNode }) {
   /* Alerts evaluation */
   useEffect(() => {
     if (kpiData && kpiData.length > 0) {
+      const parseMetricValue = (v: string): number => {
+        if (!v) return 0
+        if (v.endsWith("k")) return parseFloat(v) * 1000
+        return parseInt(v.replace(/,/g, "")) || 0
+      }
       evaluateAlerts(
         kpiData.map(k => ({
           label: k.label,
-          current: parseInt(k.value) || 0,
-          previous: Math.round(parseInt(k.value) / (1 + k.change / 100)) || 0,
+          current: parseMetricValue(k.value),
+          previous: Math.round(parseMetricValue(k.value) / (1 + k.change / 100)) || 0,
           change: k.direction === "up" ? k.change : -k.change,
           threshold: 15,
         }))
@@ -293,15 +313,26 @@ export function AnalyticsProvider({ children }: { children: ReactNode }) {
     }
   }, [kpiData])
 
-  const value: AnalyticsContextValue = {
+  const dismissAllAlerts = useCallback(() => {
+    dismissAll(); setAlerts([]); setActiveAlertCount(0)
+  }, [])
+
+  const value: AnalyticsContextValue = useMemo(() => ({
     loading, error, dateRange, setDateRange, refresh, comparePrevious, setComparePrevious,
     kpiData, trafficData, acquisitionData, toolPerfData, categoryPerfData, funnelData,
     liveActivity, seoMetrics, seoTrend, seoLandingPages, seoQueries,
-    blogPerfData, trendingData, searchConsoleData, scKpiData, scTrafficData, heatmapData, activityData, insightsData,
+    blogPerfData, publishedBlogCount, publishedToolCount, trendingData, searchConsoleData, scKpiData, scTrafficData, heatmapData, activityData, insightsData,
     sources,
-    alerts, activeAlertCount, dismissAlert, dismissAllAlerts: () => { dismissAll(); setAlerts([]); setActiveAlertCount(0) },
+    alerts, activeAlertCount, dismissAlert, dismissAllAlerts,
     state,
-  }
+  }), [
+    loading, error, dateRange, refresh, comparePrevious,
+    kpiData, trafficData, acquisitionData, toolPerfData, categoryPerfData, funnelData,
+    liveActivity, seoMetrics, seoTrend, seoLandingPages, seoQueries,
+    blogPerfData, publishedBlogCount, publishedToolCount, trendingData, searchConsoleData, scKpiData, scTrafficData, heatmapData, activityData, insightsData,
+    sources, alerts, activeAlertCount, state,
+    dismissAllAlerts,
+  ])
 
   return (
     <AnalyticsContext.Provider value={value}>

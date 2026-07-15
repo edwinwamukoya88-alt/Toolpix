@@ -22,6 +22,11 @@ export default function CookieConsent() {
   function accept(consent: boolean) {
     try {
       localStorage.setItem(CONSENT_KEY, consent ? "true" : "false")
+      if (!consent) {
+        localStorage.setItem("analytics_disabled", "true")
+      } else {
+        localStorage.removeItem("analytics_disabled")
+      }
     } catch {}
     setShow(false)
   }
@@ -32,7 +37,7 @@ export default function CookieConsent() {
     <div role="region" aria-label="Cookie consent" className="fixed bottom-0 left-0 right-0 z-[100] border-t bg-background/95 backdrop-blur-sm p-4 shadow-lg">
       <div className="container max-w-4xl mx-auto flex flex-col sm:flex-row items-start sm:items-center gap-4">
         <div className="flex items-start gap-3 flex-1">
-          <Cookie className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+          <Cookie className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" aria-hidden="true" />
           <div className="text-sm">
             <p className="font-medium mb-0.5">We value your privacy</p>
             <p className="text-muted-foreground text-xs leading-relaxed">

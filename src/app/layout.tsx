@@ -1,8 +1,8 @@
 import type { Metadata, Viewport } from "next"
-import Script from "next/script"
 import { Geist, Geist_Mono } from "next/font/google"
 import "./globals.css"
 import GoogleAnalytics from "@/components/GoogleAnalytics"
+import AnalyticsInit from "@/components/analytics-init"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 import ToastProvider from "@/components/toast-provider"
@@ -98,6 +98,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className="dark">
       <head>
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2606064008386995"
+          crossOrigin="anonymous"
+        />
         <link rel="preconnect" href="https://pagead2.googlesyndication.com" />
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="preconnect" href="https://www.google-analytics.com" />
@@ -117,7 +122,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               url: SITE_URL,
               logo: `${SITE_URL}/logo-dark.svg`,
               description: "70+ free browser-based tools for teachers, students, developers, creators, and businesses. Privacy-first, no login required, 100% client-side processing.",
-              sameAs: [],
+              sameAs: [
+                "https://twitter.com/zilita",
+                "https://github.com/edwinwamukoya88-alt",
+                "https://linkedin.com",
+              ],
             }),
           }}
         />
@@ -128,19 +137,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </a>
         <BiblicalThemeProvider>
           <Header />
-          <main id="main-content" className="flex-1 focus:outline-none" tabIndex={0}>
+          <main id="main-content" className="flex-1">
             {children}
           </main>
           <Footer />
           <CookieConsent />
           <ToastProvider />
         </BiblicalThemeProvider>
-        <Script
-          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${AD_CLIENT}`}
-          strategy="beforeInteractive"
-          crossOrigin="anonymous"
-        />
         <GoogleAnalytics />
+        <AnalyticsInit />
       </body>
     </html>
   )

@@ -31,14 +31,12 @@ export function DashboardOverviewCards({ data, loading }: DashboardOverviewCards
           title="Total Users"
           value={data?.totalUsers.toLocaleString() ?? "—"}
           icon={Users}
-          trend={{ value: 12, positive: true }}
           loading={loading}
         />
         <StatCard
           title="Active Users"
           value={data?.activeUsers.toLocaleString() ?? "—"}
           icon={Activity}
-          trend={{ value: 8, positive: true }}
           loading={loading}
         />
         <StatCard
@@ -59,42 +57,36 @@ export function DashboardOverviewCards({ data, loading }: DashboardOverviewCards
           title="Page Views"
           value={data?.totalPageViews.toLocaleString() ?? "—"}
           icon={Eye}
-          trend={{ value: 15, positive: true }}
           loading={loading}
         />
         <StatCard
           title="Sessions"
           value={data?.sessions.toLocaleString() ?? "—"}
           icon={TrendingUp}
-          trend={{ value: 10, positive: true }}
           loading={loading}
         />
         <StatCard
           title="Search Clicks"
           value={data?.searchClicks.toLocaleString() ?? "—"}
           icon={MousePointerClick}
-          trend={{ value: 5, positive: true }}
           loading={loading}
         />
         <StatCard
           title="Impressions"
           value={data?.searchImpressions.toLocaleString() ?? "—"}
           icon={Search}
-          trend={{ value: 22, positive: true }}
           loading={loading}
         />
         <StatCard
           title="Avg. Position"
           value={data?.avgPosition.toFixed(1) ?? "—"}
           icon={Hash}
-          trend={{ value: 8, positive: true }}
           loading={loading}
         />
         <StatCard
           title="CTR"
-          value={data?.ctr ? `${(data.ctr * 100).toFixed(1)}%` : "—"}
+          value={data?.ctr ? `${data.ctr.toFixed(1)}%` : "—"}
           icon={MousePointerClick}
-          trend={{ value: 3, positive: false }}
           loading={loading}
         />
       </div>

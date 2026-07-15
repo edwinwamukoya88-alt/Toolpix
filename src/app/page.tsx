@@ -1,19 +1,21 @@
 import type { Metadata } from "next"
+import dynamic from "next/dynamic"
 import HeroSection from "@/components/home/hero"
-import TrustStatsSection from "@/components/home/trust-stats"
-import FeatureGrid from "@/components/home/feature-grid"
-import AiWorkspaceSection from "@/components/home/ai-workspace"
-import BentoProductivity from "@/components/home/bento-productivity"
-import CbcEducationSection from "@/components/home/cbc-education"
-import BusinessToolsSection from "@/components/home/business-tools"
-import DevToolsSection from "@/components/home/dev-tools"
-import TestimonialsSection from "@/components/home/testimonials"
-import BlogSection from "@/components/home/blog-section"
 import { getLatestPosts } from "@/lib/blog"
-import CtaSection from "@/components/home/cta-section"
-import AdSlot from "@/components/ads/AdSlot"
-import AdvertiseCTA from "@/components/home/advertise-cta"
 import { SITE_URL as siteUrl } from "@/lib/constants"
+
+const TrustStatsSection = dynamic(() => import("@/components/home/trust-stats"), { loading: () => <div className="h-64" /> })
+const FeatureGrid = dynamic(() => import("@/components/home/feature-grid"), { loading: () => <div className="h-96" /> })
+const AiWorkspaceSection = dynamic(() => import("@/components/home/ai-workspace"), { loading: () => <div className="h-96" /> })
+const BentoProductivity = dynamic(() => import("@/components/home/bento-productivity"), { loading: () => <div className="h-96" /> })
+const CbcEducationSection = dynamic(() => import("@/components/home/cbc-education"), { loading: () => <div className="h-96" /> })
+const BusinessToolsSection = dynamic(() => import("@/components/home/business-tools"), { loading: () => <div className="h-96" /> })
+const DevToolsSection = dynamic(() => import("@/components/home/dev-tools"), { loading: () => <div className="h-96" /> })
+const TestimonialsSection = dynamic(() => import("@/components/home/testimonials"), { loading: () => <div className="h-64" /> })
+const BlogSection = dynamic(() => import("@/components/home/blog-section"), { loading: () => <div className="h-64" /> })
+const CtaSection = dynamic(() => import("@/components/home/cta-section"), { loading: () => <div className="h-64" /> })
+const AdSlot = dynamic(() => import("@/components/ads/AdSlot"), { loading: () => <div className="h-24" /> })
+const AdvertiseCTA = dynamic(() => import("@/components/home/advertise-cta"), { loading: () => <div className="h-48" /> })
 
 export const metadata: Metadata = {
   title: "Zilita — The Privacy-First AI Browser Workspace",

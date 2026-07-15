@@ -1,16 +1,20 @@
 import { NextResponse } from "next/server"
+import { requireApiAuth } from "@/lib/auth-guard"
 
 export const runtime = "nodejs"
 
 export async function GET() {
   try {
+    const authResponse = await requireApiAuth()
+    if (authResponse) return authResponse
+
     const clientEmail = process.env.GA_CLIENT_EMAIL
     const rawPrivateKey = process.env.GA_PRIVATE_KEY
     const propertyId = process.env.GA_PROPERTY_ID
 
     if (!clientEmail || !rawPrivateKey || !propertyId) {
       return NextResponse.json(
-        { success: false, source: "realtime", error: "Missing GA4 environment variables" },
+        { success: false, source: "realtime", error: "Analytics not configured" },
         { status: 500 }
       )
     }
@@ -27,10 +31,9 @@ export async function GET() {
     })
 
     if (!tokenResponse.ok) {
-      const errText = await tokenResponse.text()
-      console.error("[Realtime API] Auth failed:", errText)
+      console.error("[Realtime API] Auth failed")
       return NextResponse.json(
-        { success: false, source: "realtime", error: `Auth failed: ${errText}` },
+        { success: false, source: "realtime", error: "Authentication failed" },
         { status: 500 }
       )
     }
@@ -47,17 +50,16 @@ export async function GET() {
         },
         body: JSON.stringify({
           dimensions: [{ name: "unifiedScreenName" }, { name: "country" }],
-          metrics: [{ name: "activeUsers" }, { name: "screenPageViews" }],
+          metrics: [{ name: "activeUsers" }, { name: "eventCount" }],
           limit: 10,
         }),
       }
     )
 
     if (!realtimeResponse.ok) {
-      const errText = await realtimeResponse.text()
-      console.error("[Realtime API] Request failed:", errText)
+      console.error("[Realtime API] Request failed:", realtimeResponse.status)
       return NextResponse.json(
-        { success: false, source: "realtime", error: `Realtime API failed: ${errText}` },
+        { success: false, source: "realtime", error: "Realtime request failed" },
         { status: 500 }
       )
     }
@@ -68,7 +70,7 @@ export async function GET() {
       screenName: row.dimensionValues?.[0]?.value ?? "",
       country: row.dimensionValues?.[1]?.value ?? "",
       activeUsers: Number(row.metricValues?.[0]?.value ?? 0),
-      screenPageViews: Number(row.metricValues?.[1]?.value ?? 0),
+      eventCount: Number(row.metricValues?.[1]?.value ?? 0),
     })) ?? []
 
     const totalActiveUsers = rows.reduce((sum: number, r: any) => sum + r.activeUsers, 0)

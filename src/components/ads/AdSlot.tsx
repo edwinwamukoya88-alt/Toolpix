@@ -136,6 +136,7 @@ export default function AdSlot({ type, slot, image, title, description, link, cl
           rel="noopener noreferrer"
           onClick={handleClick}
           className="group relative w-full max-w-[728px] rounded-xl border bg-background/40 p-5 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md hover:border-primary/20 block"
+          aria-label={`Sponsored: ${ad.title}`}
         >
           <span className="absolute top-2 left-3 text-[10px] font-medium text-muted-foreground/40 uppercase tracking-wider">Sponsored</span>
           <div className="flex items-center gap-4 pt-4">

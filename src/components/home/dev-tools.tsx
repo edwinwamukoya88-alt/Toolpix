@@ -38,8 +38,11 @@ export default function DevToolsSection() {
             <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
               Developer Power Tools
             </h2>
-            <p className="text-muted-foreground text-lg leading-relaxed mb-6">
+            <p className="text-muted-foreground text-lg leading-relaxed mb-4">
               Format code, test regex, debug networks, encode data — all the utilities developers reach for daily, now in one place.
+            </p>
+            <p className="text-sm text-muted-foreground/70 leading-relaxed mb-6">
+              Validate JSON payloads, test regular expressions with live matching, encode and decode Base64 strings, look up DNS records, measure network latency, and test internet speed. Every tool runs instantly without sign-up, so you can debug and develop without context switching.
             </p>
 
             <div className="flex flex-wrap items-center gap-4">

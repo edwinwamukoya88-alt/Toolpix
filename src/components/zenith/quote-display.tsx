@@ -26,7 +26,7 @@ interface QuoteDisplayProps {
 }
 
 function QuoteDisplay({ className = "", sessionCount = 0 }: QuoteDisplayProps) {
-  const [quoteIndex, setQuoteIndex] = useState(() => Math.floor(Math.random() * QUOTES.length))
+  const [quoteIndex, setQuoteIndex] = useState(0)
 
   useEffect(() => {
     if (sessionCount > 0) {

@@ -4,7 +4,6 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Menu, X, Leaf, Moon } from "lucide-react"
-import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { useBiblicalTheme } from "@/contexts/biblical-theme-context"
 import { cn } from "@/lib/utils"
@@ -51,7 +50,8 @@ export default function Header() {
       <div className="container flex h-16 sm:h-20 items-center justify-between">
         <div className="flex items-center gap-6 sm:gap-12">
           <Link href="/" className="flex items-center shrink-0" aria-label="Zilita Home">
-            <Image src="/logo-dark.svg" alt="Zilita" width={140} height={52} className="h-10 sm:h-[52px] w-auto" priority />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logo-dark.svg" alt="Zilita" className="h-10 sm:h-[52px] w-auto" />
           </Link>
           <nav className="hidden md:flex items-center gap-8 text-sm font-medium" aria-label="Main navigation">
             {navLinks.map((link) => {
@@ -118,7 +118,7 @@ export default function Header() {
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
             aria-expanded={mobileOpen}
           >
-            {mobileOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+            {mobileOpen ? <X className="h-4 w-4" aria-hidden="true" /> : <Menu className="h-4 w-4" aria-hidden="true" />}
           </Button>
         </div>
       </div>

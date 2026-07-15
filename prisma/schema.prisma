@@ -82,3 +82,133 @@ model ActivityLog {
   details   String?
   createdAt DateTime @default(now())
 }
+
+model AnalyticsEvent {
+  id          String   @id @default(cuid())
+  eventType   String
+  category    String   @default("")
+  name        String   @default("")
+  sessionId   String   @default("")
+  visitorId   String   @default("")
+  path        String   @default("")
+  referrer    String   @default("")
+  device      String   @default("unknown")
+  browser     String   @default("unknown")
+  os          String   @default("unknown")
+  country     String   @default("")
+  properties  String   @default("{}")
+  duration    Int      @default(0)
+  value       Float    @default(0)
+  createdAt   DateTime @default(now())
+
+  @@index([eventType])
+  @@index([name])
+  @@index([path])
+  @@index([sessionId])
+  @@index([visitorId])
+  @@index([createdAt])
+  @@index([eventType, createdAt])
+  @@index([name, createdAt])
+  @@index([path, createdAt])
+}
+
+model AnalyticsSession {
+  id              String   @id @default(cuid())
+  sessionId       String   @unique
+  visitorId       String   @default("")
+  startTime       DateTime @default(now())
+  lastActivityAt  DateTime @default(now())
+  pageViews       Int      @default(0)
+  toolEvents      Int      @default(0)
+  aiRequests      Int      @default(0)
+  blogEvents      Int      @default(0)
+  device          String   @default("unknown")
+  browser         String   @default("unknown")
+  os              String   @default("unknown")
+  country         String   @default("")
+  referrer        String   @default("")
+
+  @@index([visitorId])
+  @@index([startTime])
+  @@index([lastActivityAt])
+  @@index([visitorId, startTime])
+}
+
+model AnalyticsVisitor {
+  id              String   @id @default(cuid())
+  visitorId       String   @unique
+  firstVisitAt    DateTime @default(now())
+  lastVisitAt     DateTime @default(now())
+  totalSessions   Int      @default(0)
+  totalPages      Int      @default(0)
+  totalToolEvents Int      @default(0)
+  totalAIRequests Int      @default(0)
+  totalBlogViews  Int      @default(0)
+  device          String   @default("unknown")
+  browser         String   @default("unknown")
+  country         String   @default("")
+
+  @@index([lastVisitAt])
+  @@index([firstVisitAt])
+}
+
+model AnalyticsDailyMetric {
+  id              String   @id @default(cuid())
+  date            String
+  visitors        Int      @default(0)
+  sessions        Int      @default(0)
+  pageViews       Int      @default(0)
+  toolOpens       Int      @default(0)
+  toolCompletions Int      @default(0)
+  aiRequests      Int      @default(0)
+  aiTokensUsed    Int      @default(0)
+  aiEstimatedCost Float    @default(0)
+  blogViews       Int      @default(0)
+  blogReads       Int      @default(0)
+  newVisitors     Int      @default(0)
+  bounceCount     Int      @default(0)
+  createdAt       DateTime @default(now())
+
+  @@unique([date])
+  @@index([date])
+}
+
+model AnalyticsHourlyMetric {
+  id              String   @id @default(cuid())
+  date            String
+  hour            Int
+  visitors        Int      @default(0)
+  sessions        Int      @default(0)
+  pageViews       Int      @default(0)
+  toolOpens       Int      @default(0)
+  aiRequests      Int      @default(0)
+  blogViews       Int      @default(0)
+  createdAt       DateTime @default(now())
+
+  @@unique([date, hour])
+  @@index([date])
+}
+
+model AIUsageLog {
+  id              String   @id @default(cuid())
+  sessionId       String   @default("")
+  visitorId       String   @default("")
+  provider        String   @default("gemini")
+  model           String   @default("")
+  feature         String   @default("")
+  promptTokens    Int      @default(0)
+  completionTokens Int     @default(0)
+  totalTokens     Int      @default(0)
+  estimatedCost   Float    @default(0)
+  latencyMs       Int      @default(0)
+  success         Boolean  @default(true)
+  errorMessage    String   @default("")
+  retryCount      Int      @default(0)
+  rateLimited     Boolean  @default(false)
+  createdAt       DateTime @default(now())
+
+  @@index([feature])
+  @@index([createdAt])
+  @@index([sessionId])
+  @@index([feature, createdAt])
+}

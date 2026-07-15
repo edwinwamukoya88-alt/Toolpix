@@ -1,14 +1,23 @@
-const ContentSecurityPolicy = `
-  default-src 'self';
-  script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://pagead2.googlesyndication.com https://www.googletagmanager.com https://*.google-analytics.com;
-  style-src 'self' 'unsafe-inline';
-  img-src 'self' data: blob: https://*.google-analytics.com https://*.googlesyndication.com https://*.g.doubleclick.net https://*.google.com https://*.googleapis.com https://*.gstatic.com https://*.googleusercontent.com https://flagcdn.com https://*.tile.openstreetmap.org;
-  font-src 'self' data:;
-  connect-src 'self' blob: https://*.google-analytics.com https://*.googlesyndication.com https://analytics.google.com https://*.g.doubleclick.net;
-  frame-src 'self' https://*.googlesyndication.com https://*.google.com;
-  worker-src 'self' blob:;
-  media-src 'self' blob:;
-`;
+const isDev = process.env.NODE_ENV !== "production";
+
+const CSP_DIRECTIVES = [
+  "default-src 'self'",
+  `script-src 'self' 'unsafe-inline' blob: https://pagead2.googlesyndication.com https://tpc.googlesyndication.com https://www.googletagmanager.com https://*.google-analytics.com https://googleads.g.doubleclick.net https://www.googleadservices.com https://adservice.google.com https://unpkg.com${isDev ? " 'unsafe-eval'" : ""}`,
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: blob: https://*.google-analytics.com https://*.googlesyndication.com https://*.g.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googleusercontent.com https://ep1.adtrafficquality.google https://flagcdn.com https://*.tile.openstreetmap.org",
+  "font-src 'self' data:",
+  "connect-src 'self' blob: https://*.google-analytics.com https://analytics.google.com https://*.googlesyndication.com https://*.g.doubleclick.net https://www.googleadservices.com https://ep1.adtrafficquality.google https://unpkg.com",
+  "frame-src 'self' https://*.googlesyndication.com https://*.google.com https://googleads.g.doubleclick.net https://securepubads.g.doubleclick.net",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "frame-ancestors 'none'",
+  "worker-src 'self' blob:",
+  "object-src 'none'",
+  "media-src 'self' blob:",
+  "manifest-src 'self'",
+];
+
+const ContentSecurityPolicy = CSP_DIRECTIVES.join("; ") + ";";
 
 const nextConfig = {
   reactStrictMode: true,
@@ -42,6 +51,12 @@ const nextConfig = {
         source: "/images/(.*)",
         headers: [
           { key: "Cache-Control", value: "public, max-age=86400, stale-while-revalidate=604800" },
+        ],
+      },
+      {
+        source: "/(.*)\\.(ico|png|jpg|jpeg|gif|svg|webp|avif|woff|woff2|ttf|eot)",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
         ],
       },
     ]

@@ -1,8 +1,12 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/db"
+import { requireApiAuth } from "@/lib/auth-guard"
 
 export async function POST(request: Request) {
   try {
+    const authResponse = await requireApiAuth()
+    if (authResponse) return authResponse
+
     const body = await request.json()
     const email = body.email
     if (!email) {
@@ -10,13 +14,7 @@ export async function POST(request: Request) {
     }
     let user = await prisma.adminUser.findUnique({ where: { email } })
     if (!user) {
-      if (email === "edwinwamukoya88@gmail.com") {
-        user = await prisma.adminUser.create({
-          data: { email, role: "admin", status: "active" },
-        })
-      } else {
-        return NextResponse.json({ role: null, isAdmin: false })
-      }
+      return NextResponse.json({ role: null, isAdmin: false })
     }
     if (user.status === "active") {
       await prisma.adminUser.update({
@@ -26,7 +24,7 @@ export async function POST(request: Request) {
     }
     return NextResponse.json({
       role: user.status === "active" ? user.role : null,
-      isAdmin: user.status === "active" && (user.role === "admin" || email === "edwinwamukoya88@gmail.com"),
+      isAdmin: user.status === "active" && user.role === "admin",
     })
   } catch (error) {
     return NextResponse.json({ error: "Auth check failed" }, { status: 500 })

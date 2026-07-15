@@ -1,5 +1,6 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import { Globe, Activity, Zap, MapPin } from "lucide-react"
 import type { LiveActivityData } from "@/lib/analytics-utils"
 
@@ -13,9 +14,20 @@ function LiveDot() {
 }
 
 function TimeAgo({ timestamp }: { timestamp: string }) {
-  const seconds = Math.floor((Date.now() - new Date(timestamp).getTime()) / 1000)
-  if (seconds < 60) return `${seconds}s ago`
-  return `${Math.floor(seconds / 60)}m ago`
+  const [text, setText] = useState("0s ago")
+
+  useEffect(() => {
+    const update = () => {
+      const seconds = Math.floor((Date.now() - new Date(timestamp).getTime()) / 1000)
+      if (seconds < 60) return setText(`${seconds}s ago`)
+      setText(`${Math.floor(seconds / 60)}m ago`)
+    }
+    update()
+    const id = setInterval(update, 10000)
+    return () => clearInterval(id)
+  }, [timestamp])
+
+  return <>{text}</>
 }
 
 export default function LiveActivity({ data }: { data?: LiveActivityData }) {
