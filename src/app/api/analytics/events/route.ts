@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { ingestEvents, AnalyticsPersistenceError } from "@/lib/analytics-db"
 import { validateBatch, sanitizeEvent, VALID_EVENT_TYPE_SET } from "@/lib/analytics-validation"
+import { extractLocationFromRequest } from "@/lib/analytics-location-service"
 
 export const runtime = "nodejs"
 export const dynamic = "force-dynamic"
@@ -47,7 +48,15 @@ export async function POST(request: NextRequest) {
 
     const sanitized = validEvents.map(sanitizeEvent)
 
-    const result = await ingestEvents(sanitized)
+    const location = extractLocationFromRequest(request)
+    const enriched = sanitized.map(event => ({
+      ...event,
+      country: event.country || location.country,
+      region: event.region || location.region,
+      city: event.city || location.city,
+    }))
+
+    const result = await ingestEvents(enriched)
     return NextResponse.json({ ingested: result.ingested })
   } catch (e) {
     if (e instanceof AnalyticsPersistenceError) {
