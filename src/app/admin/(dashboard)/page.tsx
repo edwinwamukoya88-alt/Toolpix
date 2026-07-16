@@ -9,6 +9,7 @@ import {
 } from "lucide-react"
 import { prisma } from "@/lib/db"
 import { getOverviewMetrics, getRealtimeData, getPopularPages, getPopularTools } from "@/lib/analytics-db"
+import { getSystemStatus, type SystemStatusResponse, type ServiceHealth } from "@/lib/system-status"
 
 export const dynamic = "force-dynamic"
 
@@ -21,18 +22,21 @@ export default async function AdminDashboardPage() {
   let realtime = null
   let popularPages: Array<{ path: string; views: number }> = []
   let popularTools: Array<{ rank: number; name: string; opens: number; completions: number; completionRate: number }> = []
+  let systemStatus: SystemStatusResponse | null = null
 
   try {
-    const [o, r, pp, pt] = await Promise.all([
+    const [o, r, pp, pt, status] = await Promise.all([
       getOverviewMetrics("last7"),
       getRealtimeData(),
       getPopularPages(5, "last7"),
       getPopularTools(5, "last7"),
+      getSystemStatus(),
     ])
     overview = o
     realtime = r
     popularPages = pp
     popularTools = pt
+    systemStatus = status
   } catch {}
 
   let draftCount = 0
@@ -146,7 +150,7 @@ export default async function AdminDashboardPage() {
       {/* Bottom Grid: Recent Activity + System Health */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <RecentActivityCard />
-        <SystemHealthCard blogCount={blogCount} toolCount={toolCount} />
+        <SystemHealthCard blogCount={blogCount} toolCount={toolCount} systemStatus={systemStatus} />
       </div>
     </div>
   )
@@ -253,7 +257,13 @@ async function RecentActivityCard() {
   )
 }
 
-async function SystemHealthCard({ blogCount, toolCount }: { blogCount: number; toolCount: number }) {
+async function SystemHealthCard({ blogCount, toolCount, systemStatus }: { blogCount: number; toolCount: number; systemStatus: SystemStatusResponse | null }) {
+  const db = systemStatus?.database
+  const env = systemStatus?.environment
+  const dbLabel = db ? `${db.provider} · ${db.vendor}` : "Checking..."
+  const dbHealthy = db?.status === "connected"
+  const envLabel = env ? `${env.name}${env.vercel ? " (Vercel)" : ""}` : "—"
+
   return (
     <div className="rounded-xl border border-border/50 bg-card p-5 space-y-4">
       <h3 className="text-sm font-semibold flex items-center gap-2">
@@ -263,11 +273,20 @@ async function SystemHealthCard({ blogCount, toolCount }: { blogCount: number; t
       <div className="space-y-3">
         <HealthRow label="Blog Posts" value={`${blogCount} published`} healthy />
         <HealthRow label="Published Tools" value={`${toolCount} available`} healthy />
-        <HealthRow label="Database" value="SQLite via Prisma" healthy />
+        <HealthRow
+          label="Database"
+          value={db ? `${dbLabel}${db.latency != null ? ` · ${db.latency}ms` : ""}` : "Checking..."}
+          healthy={dbHealthy}
+        />
+        <HealthRow label="Environment" value={envLabel} healthy />
         <HealthRow label="Authentication" value="Auth.js v5 · Google OAuth" healthy />
         <HealthRow label="Sessions" value="JWT · Secure" healthy />
-        <HealthRow label="Analytics Pipeline" value="Server-side events" healthy />
-        <HealthRow label="Deployment" value="Vercel" healthy />
+        <HealthRow
+          label="Analytics Pipeline"
+          value={dbHealthy ? "Server-side events" : "Unavailable"}
+          healthy={dbHealthy}
+        />
+        <HealthRow label="Deployment" value={env?.vercel ? `Vercel${env.region ? ` · ${env.region}` : ""}` : "Self-hosted"} healthy />
       </div>
       <Link
         href="/admin/system"

@@ -18,11 +18,27 @@ import {
   getHeatmapData,
   getRecentActivity,
   getAIInsights,
+  getDeviceBreakdown,
+  getGeoBreakdownData,
+  getUTMBreakdownData,
+  getSearchAnalyticsData,
+  getPerformanceData,
+  getSystemHealthData,
+  getAIInsightsEnterprise,
+  getTopLocationsData,
   initAnalytics,
   type DateRange,
   type AnalyticsState,
   type SourceInfo,
   type DataSources,
+  type DeviceBreakdownData,
+  type GeoData,
+  type UTMData,
+  type SearchAnalyticsData,
+  type PerformanceData,
+  type SystemHealthData,
+  type AIInsightData,
+  type TopLocationsData,
 } from "@/lib/analytics-service"
 import { evaluateAlerts, getAlerts, dismissAlert, dismissAll, getActiveAlertCount, type Alert } from "@/lib/alerts"
 import type {
@@ -77,6 +93,15 @@ export interface AnalyticsContextValue {
   heatmapData: HeatmapData[] | null
   activityData: ActivityEvent[] | null
   insightsData: AIInsight[] | null
+
+  deviceData: DeviceBreakdownData | null
+  geoData: GeoData[] | null
+  utmData: UTMData | null
+  searchAnalyticsData: SearchAnalyticsData | null
+  performanceData: PerformanceData | null
+  systemHealthData: SystemHealthData | null
+  enterpriseInsights: AIInsightData[] | null
+  topLocationsData: TopLocationsData | null
 
   sources: DataSources
 
@@ -147,6 +172,15 @@ export function AnalyticsProvider({ children }: { children: ReactNode }) {
   const [activityData, setActivityData] = useState<ActivityEvent[] | null>(null)
   const [insightsData, setInsightsData] = useState<AIInsight[] | null>(null)
 
+  const [deviceData, setDeviceData] = useState<DeviceBreakdownData | null>(null)
+  const [geoData, setGeoData] = useState<GeoData[] | null>(null)
+  const [utmData, setUtmData] = useState<UTMData | null>(null)
+  const [searchAnalyticsData, setSearchAnalyticsData] = useState<SearchAnalyticsData | null>(null)
+  const [performanceData, setPerformanceData] = useState<PerformanceData | null>(null)
+  const [systemHealthData, setSystemHealthData] = useState<SystemHealthData | null>(null)
+  const [enterpriseInsights, setEnterpriseInsights] = useState<AIInsightData[] | null>(null)
+  const [topLocationsData, setTopLocationsData] = useState<TopLocationsData | null>(null)
+
   const [sources, setSources] = useState<DataSources>(initialSources())
 
   const [alerts, setAlerts] = useState<Alert[]>([])
@@ -177,6 +211,14 @@ export function AnalyticsProvider({ children }: { children: ReactNode }) {
         heatmap,
         activity,
         insights,
+        devices,
+        geo,
+        utm,
+        searchAnalytics,
+        perf,
+        health,
+        entInsights,
+        topLocations,
       ] = await Promise.all([
         getKpiData(range),
         getTrafficData(range),
@@ -193,6 +235,14 @@ export function AnalyticsProvider({ children }: { children: ReactNode }) {
         getHeatmapData(),
         getRecentActivity(),
         getAIInsights(range),
+        getDeviceBreakdown(range),
+        getGeoBreakdownData(range),
+        getUTMBreakdownData(range),
+        getSearchAnalyticsData(range),
+        getPerformanceData(range),
+        getSystemHealthData(),
+        getAIInsightsEnterprise(range),
+        getTopLocationsData(range),
       ])
 
       setKpiData(kpi.data)
@@ -215,6 +265,15 @@ export function AnalyticsProvider({ children }: { children: ReactNode }) {
       setHeatmapData(heatmap.data)
       setActivityData(activity.data)
       setInsightsData(insights.data)
+
+      setDeviceData(devices.data)
+      setGeoData(geo.data)
+      setUtmData(utm.data)
+      setSearchAnalyticsData(searchAnalytics.data)
+      setPerformanceData(perf.data)
+      setSystemHealthData(health.data)
+      setEnterpriseInsights(entInsights.data)
+      setTopLocationsData(topLocations.data)
 
       setSources({
         ga4: kpi.source,   // representative — GA4 used for KPI, traffic, acquisition
@@ -322,6 +381,7 @@ export function AnalyticsProvider({ children }: { children: ReactNode }) {
     kpiData, trafficData, acquisitionData, toolPerfData, categoryPerfData, funnelData,
     liveActivity, seoMetrics, seoTrend, seoLandingPages, seoQueries,
     blogPerfData, publishedBlogCount, publishedToolCount, trendingData, searchConsoleData, scKpiData, scTrafficData, heatmapData, activityData, insightsData,
+    deviceData, geoData, utmData, searchAnalyticsData, performanceData, systemHealthData, enterpriseInsights, topLocationsData,
     sources,
     alerts, activeAlertCount, dismissAlert, dismissAllAlerts,
     state,
@@ -330,6 +390,7 @@ export function AnalyticsProvider({ children }: { children: ReactNode }) {
     kpiData, trafficData, acquisitionData, toolPerfData, categoryPerfData, funnelData,
     liveActivity, seoMetrics, seoTrend, seoLandingPages, seoQueries,
     blogPerfData, publishedBlogCount, publishedToolCount, trendingData, searchConsoleData, scKpiData, scTrafficData, heatmapData, activityData, insightsData,
+    deviceData, geoData, utmData, searchAnalyticsData, performanceData, systemHealthData, enterpriseInsights, topLocationsData,
     sources, alerts, activeAlertCount, state,
     dismissAllAlerts,
   ])

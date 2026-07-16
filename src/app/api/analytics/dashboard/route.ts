@@ -12,9 +12,19 @@ import {
   getRealtimeData,
   getSourceBreakdown,
   getHourlyTrend,
+  getDeviceBreakdown,
+  getGeoBreakdown,
+  getUTMBreakdown,
+  getFunnelData,
+  getSearchAnalytics,
+  getPerformanceMetrics,
+  getSystemHealth,
+  getAIInsightsEngine,
   toDateRange,
+  BUILT_IN_FUNNELS,
   type AnalyticsDateRange,
 } from "@/lib/analytics-db"
+import { getTopLocations } from "@/lib/analytics-locations"
 
 export const runtime = "nodejs"
 export const dynamic = "force-dynamic"
@@ -75,6 +85,55 @@ export async function GET(request: NextRequest) {
       case "tools-popular": {
         const tools = await getPopularTools(20, range)
         return NextResponse.json({ success: true, data: { tools } })
+      }
+
+      case "devices": {
+        const devices = await getDeviceBreakdown(range)
+        return NextResponse.json({ success: true, data: { devices } })
+      }
+
+      case "geo": {
+        const geo = await getGeoBreakdown(range)
+        return NextResponse.json({ success: true, data: { geo } })
+      }
+
+      case "utm": {
+        const utm = await getUTMBreakdown(range)
+        return NextResponse.json({ success: true, data: { utm } })
+      }
+
+      case "funnels": {
+        const funnelName = searchParams.get("funnel") || BUILT_IN_FUNNELS[0].name
+        const [funnelData, availableFunnels] = await Promise.all([
+          getFunnelData(funnelName, range),
+          Promise.resolve(BUILT_IN_FUNNELS.map(f => f.name)),
+        ])
+        return NextResponse.json({ success: true, data: { funnelData, availableFunnels, selectedFunnel: funnelName } })
+      }
+
+      case "search": {
+        const search = await getSearchAnalytics(range)
+        return NextResponse.json({ success: true, data: { search } })
+      }
+
+      case "performance": {
+        const performance = await getPerformanceMetrics(range)
+        return NextResponse.json({ success: true, data: { performance } })
+      }
+
+      case "health": {
+        const health = await getSystemHealth()
+        return NextResponse.json({ success: true, data: { health } })
+      }
+
+      case "insights": {
+        const insights = await getAIInsightsEngine(range)
+        return NextResponse.json({ success: true, data: { insights } })
+      }
+
+      case "locations": {
+        const locations = await getTopLocations(range)
+        return NextResponse.json({ success: true, data: { locations } })
       }
 
       default: {

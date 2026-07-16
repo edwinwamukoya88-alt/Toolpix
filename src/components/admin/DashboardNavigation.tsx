@@ -1,9 +1,9 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { BarChart3, TrendingUp, Wrench, FileText, Search, Users, Activity, Sparkles } from "lucide-react"
+import { BarChart3, TrendingUp, Wrench, FileText, Search, Users, Activity, Sparkles, Building2 } from "lucide-react"
 
-export type TabId = "overview" | "traffic" | "tools" | "content" | "seo" | "users" | "live" | "insights"
+export type TabId = "overview" | "traffic" | "tools" | "content" | "seo" | "users" | "live" | "insights" | "enterprise"
 
 const tabs: { id: TabId; label: string; icon: typeof BarChart3 }[] = [
   { id: "overview", label: "Overview", icon: BarChart3 },
@@ -13,6 +13,7 @@ const tabs: { id: TabId; label: string; icon: typeof BarChart3 }[] = [
   { id: "seo", label: "SEO", icon: Search },
   { id: "users", label: "Users", icon: Users },
   { id: "live", label: "Live", icon: Activity },
+  { id: "enterprise", label: "Enterprise", icon: Building2 },
   { id: "insights", label: "AI Insights", icon: Sparkles },
 ]
 

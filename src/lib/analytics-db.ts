@@ -1,6 +1,8 @@
 /* ─── Server-Side Analytics Database Layer ─────────────────────────
  * Provides optimized queries against the analytics tables in PostgreSQL.
  * Used by API routes to power dashboard metrics.
+ * Enterprise-grade with visitor intelligence, funnel analytics,
+ * search analytics, performance monitoring, and geo breakdowns.
  * ────────────────────────────────────────────────────────────────── */
 
 import { prisma } from "./db"
@@ -128,6 +130,17 @@ export interface IncomingEvent {
   browser?: string
   os?: string
   country?: string
+  region?: string
+  city?: string
+  screen?: string
+  viewport?: string
+  language?: string
+  timezone?: string
+  utmSource?: string
+  utmMedium?: string
+  utmCampaign?: string
+  utmContent?: string
+  utmTerm?: string
   properties?: Record<string, unknown>
   duration?: number
   value?: number
@@ -151,6 +164,17 @@ export async function ingestEvents(events: IncomingEvent[]): Promise<{ ingested:
         browser: e.browser || "unknown",
         os: e.os || "unknown",
         country: e.country || "",
+        region: e.region || "",
+        city: e.city || "",
+        screen: e.screen || "",
+        viewport: e.viewport || "",
+        language: e.language || "",
+        timezone: e.timezone || "",
+        utmSource: e.utmSource || "",
+        utmMedium: e.utmMedium || "",
+        utmCampaign: e.utmCampaign || "",
+        utmContent: e.utmContent || "",
+        utmTerm: e.utmTerm || "",
         properties: JSON.stringify(e.properties || {}),
         duration: e.duration || 0,
         value: e.value || 0,
@@ -192,6 +216,16 @@ async function updateSessionFromEvents(events: IncomingEvent[]): Promise<void> {
           os: String(f?.os || "unknown"),
           country: String(f?.country || ""),
           referrer: String(f?.referrer || ""),
+          screen: String(f?.screen || ""),
+          viewport: String(f?.viewport || ""),
+          language: String(f?.language || ""),
+          timezone: String(f?.timezone || ""),
+          utmSource: String(f?.utmSource || ""),
+          utmMedium: String(f?.utmMedium || ""),
+          utmCampaign: String(f?.utmCampaign || ""),
+          utmContent: String(f?.utmContent || ""),
+          utmTerm: String(f?.utmTerm || ""),
+          landingPage: String(f?.path || ""),
           pageViews: pageViewCount,
           toolEvents: toolEventCount,
           aiRequests: aiRequestCount,
@@ -228,6 +262,7 @@ async function updateVisitorFromEvents(events: IncomingEvent[]): Promise<void> {
           where: { visitorId: vid },
           data: {
             lastVisitAt: new Date(),
+            returning: true,
             totalPages: { increment: pv },
             totalToolEvents: { increment: te },
             totalAIRequests: { increment: ai },
@@ -247,6 +282,13 @@ async function updateVisitorFromEvents(events: IncomingEvent[]): Promise<void> {
             device: String(f?.device || "unknown"),
             browser: String(f?.browser || "unknown"),
             country: String(f?.country || ""),
+            screen: String(f?.screen || ""),
+            language: String(f?.language || ""),
+            timezone: String(f?.timezone || ""),
+            utmSource: String(f?.utmSource || ""),
+            utmMedium: String(f?.utmMedium || ""),
+            utmCampaign: String(f?.utmCampaign || ""),
+            returning: false,
           },
         })
       }
@@ -829,6 +871,348 @@ export async function getSourceBreakdown(range: AnalyticsDateRange = "last7") {
       percentage: totalWithDirect > 0 ? Math.round((count / totalWithDirect) * 1000) / 10 : 0,
     }))
     .sort((a, b) => b.count - a.count)
+}
+
+/* ─── Phase 2: Visitor Intelligence Queries ─────── */
+
+export async function getDeviceBreakdown(range: AnalyticsDateRange = "last7") {
+  const { startDate, endDate } = toDateRange(range)
+  const start = new Date(startDate + "T00:00:00.000Z")
+  const end = dateToEndOfDay(endDate)
+
+  const [devices, browsers, oses, screens] = await Promise.all([
+    prisma.analyticsEvent.groupBy({
+      by: ["device"],
+      where: { createdAt: { gte: start, lte: end }, device: { not: "unknown" } },
+      _count: { id: true },
+      orderBy: { _count: { id: "desc" } },
+    }),
+    prisma.analyticsEvent.groupBy({
+      by: ["browser"],
+      where: { createdAt: { gte: start, lte: end }, browser: { not: "unknown" } },
+      _count: { id: true },
+      orderBy: { _count: { id: "desc" } },
+    }),
+    prisma.analyticsEvent.groupBy({
+      by: ["os"],
+      where: { createdAt: { gte: start, lte: end }, os: { not: "unknown" } },
+      _count: { id: true },
+      orderBy: { _count: { id: "desc" } },
+    }),
+    prisma.analyticsEvent.groupBy({
+      by: ["screen"],
+      where: { createdAt: { gte: start, lte: end }, screen: { not: "" } },
+      _count: { id: true },
+      orderBy: { _count: { id: "desc" } },
+      take: 10,
+    }),
+  ])
+
+  const total = devices.reduce((s, d) => s + d._count.id, 0)
+  return {
+    devices: devices.map(d => ({ name: d.device, count: d._count.id, percentage: total > 0 ? Math.round((d._count.id / total) * 1000) / 10 : 0 })),
+    browsers: browsers.map(b => ({ name: b.browser, count: b._count.id })),
+    operatingSystems: oses.map(o => ({ name: o.os, count: o._count.id })),
+    screens: screens.map(s => ({ name: s.screen, count: s._count.id })),
+  }
+}
+
+export async function getGeoBreakdown(range: AnalyticsDateRange = "last7") {
+  const { startDate, endDate } = toDateRange(range)
+  const start = new Date(startDate + "T00:00:00.000Z")
+  const end = dateToEndOfDay(endDate)
+
+  const countries = await prisma.analyticsEvent.groupBy({
+    by: ["country"],
+    where: { createdAt: { gte: start, lte: end }, country: { not: "" } },
+    _count: { id: true },
+    orderBy: { _count: { id: "desc" } },
+    take: 20,
+  })
+
+  const total = countries.reduce((s, c) => s + c._count.id, 0)
+  return countries.map(c => ({
+    country: c.country,
+    count: c._count.id,
+    percentage: total > 0 ? Math.round((c._count.id / total) * 1000) / 10 : 0,
+  }))
+}
+
+export async function getUTMBreakdown(range: AnalyticsDateRange = "last7") {
+  const { startDate, endDate } = toDateRange(range)
+  const start = new Date(startDate + "T00:00:00.000Z")
+  const end = dateToEndOfDay(endDate)
+
+  const [sources, mediums, campaigns] = await Promise.all([
+    prisma.analyticsEvent.groupBy({
+      by: ["utmSource"],
+      where: { createdAt: { gte: start, lte: end }, utmSource: { not: "" } },
+      _count: { id: true },
+      orderBy: { _count: { id: "desc" } },
+      take: 10,
+    }),
+    prisma.analyticsEvent.groupBy({
+      by: ["utmMedium"],
+      where: { createdAt: { gte: start, lte: end }, utmMedium: { not: "" } },
+      _count: { id: true },
+      orderBy: { _count: { id: "desc" } },
+      take: 10,
+    }),
+    prisma.analyticsEvent.groupBy({
+      by: ["utmCampaign"],
+      where: { createdAt: { gte: start, lte: end }, utmCampaign: { not: "" } },
+      _count: { id: true },
+      orderBy: { _count: { id: "desc" } },
+      take: 10,
+    }),
+  ])
+
+  return {
+    sources: sources.map(s => ({ name: s.utmSource, count: s._count.id })),
+    mediums: mediums.map(m => ({ name: m.utmMedium, count: m._count.id })),
+    campaigns: campaigns.map(c => ({ name: c.utmCampaign, count: c._count.id })),
+  }
+}
+
+/* ─── Phase 4: Funnel Analytics ─────────────────── */
+
+export interface FunnelDefinition {
+  name: string
+  steps: { eventType: string; path?: string }[]
+}
+
+export const BUILT_IN_FUNNELS: FunnelDefinition[] = [
+  {
+    name: "Tool Usage",
+    steps: [
+      { eventType: "page_view", path: "/tools" },
+      { eventType: "tool_opened" },
+      { eventType: "tool_used" },
+      { eventType: "tool_completed" },
+    ],
+  },
+  {
+    name: "AI Workspace",
+    steps: [
+      { eventType: "page_view", path: "/tools/ai-workspace" },
+      { eventType: "ai_prompt_submitted" },
+      { eventType: "ai_completion_returned" },
+    ],
+  },
+  {
+    name: "Blog Engagement",
+    steps: [
+      { eventType: "page_view", path: "/blog" },
+      { eventType: "blog_article_view" },
+      { eventType: "blog_scroll_depth" },
+      { eventType: "blog_cta_click" },
+    ],
+  },
+]
+
+export async function getFunnelData(funnelName: string, range: AnalyticsDateRange = "last7") {
+  const funnel = BUILT_IN_FUNNELS.find(f => f.name === funnelName) || BUILT_IN_FUNNELS[0]
+  const { startDate, endDate } = toDateRange(range)
+  const start = new Date(startDate + "T00:00:00.000Z")
+  const end = dateToEndOfDay(endDate)
+
+  const stepCounts: number[] = []
+  for (const step of funnel.steps) {
+    const where: any = {
+      eventType: step.eventType,
+      createdAt: { gte: start, lte: end },
+    }
+    if (step.path) {
+      where.path = { contains: step.path }
+    }
+    const count = await prisma.analyticsEvent.count({ where })
+    stepCounts.push(count)
+  }
+
+  const totalVisitors = stepCounts[0] || 1
+  return funnel.steps.map((step, i) => ({
+    label: step.eventType.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase()),
+    value: stepCounts[i] || 0,
+    percentage: totalVisitors > 0 ? Math.round((stepCounts[i] / totalVisitors) * 100) : 0,
+    dropped: i > 0 ? Math.max(0, (stepCounts[i - 1] || 0) - (stepCounts[i] || 0)) : 0,
+  }))
+}
+
+/* ─── Phase 7: Search Analytics ─────────────────── */
+
+export async function getSearchAnalytics(range: AnalyticsDateRange = "last7") {
+  const { startDate, endDate } = toDateRange(range)
+  const start = new Date(startDate + "T00:00:00.000Z")
+  const end = dateToEndOfDay(endDate)
+
+  const [searchEvents, noResultSearches] = await Promise.all([
+    prisma.analyticsEvent.groupBy({
+      by: ["name"],
+      where: {
+        eventType: "search",
+        createdAt: { gte: start, lte: end },
+        name: { not: "" },
+      },
+      _count: { id: true },
+      orderBy: { _count: { id: "desc" } },
+      take: 20,
+    }),
+    prisma.analyticsEvent.groupBy({
+      by: ["name"],
+      where: {
+        eventType: "search_no_results",
+        createdAt: { gte: start, lte: end },
+        name: { not: "" },
+      },
+      _count: { id: true },
+      orderBy: { _count: { id: "desc" } },
+      take: 20,
+    }),
+  ])
+
+  const totalSearches = searchEvents.reduce((s, e) => s + e._count.id, 0)
+  const totalNoResults = noResultSearches.reduce((s, e) => s + e._count.id, 0)
+
+  return {
+    totalSearches,
+    totalNoResults,
+    successRate: totalSearches > 0 ? Math.round(((totalSearches - totalNoResults) / totalSearches) * 100) : 0,
+    topQueries: searchEvents.map(e => ({ query: e.name, count: e._count.id })),
+    noResultQueries: noResultSearches.map(e => ({ query: e.name, count: e._count.id })),
+  }
+}
+
+/* ─── Phase 8: Performance Monitoring ───────────── */
+
+export async function getPerformanceMetrics(range: AnalyticsDateRange = "last7") {
+  const { startDate, endDate } = toDateRange(range)
+  const start = new Date(startDate + "T00:00:00.000Z")
+  const end = dateToEndOfDay(endDate)
+
+  const [webVitals, perfMetrics] = await Promise.all([
+    prisma.analyticsEvent.findMany({
+      where: {
+        eventType: "web_vitals",
+        createdAt: { gte: start, lte: end },
+      },
+      select: { properties: true, createdAt: true },
+      orderBy: { createdAt: "desc" },
+      take: 500,
+    }),
+    prisma.analyticsEvent.findMany({
+      where: {
+        eventType: "performance_metric",
+        createdAt: { gte: start, lte: end },
+      },
+      select: { properties: true, createdAt: true },
+      orderBy: { createdAt: "desc" },
+      take: 500,
+    }),
+  ])
+
+  const vitalsMap: Record<string, number[]> = { LCP: [], FID: [], CLS: [], INP: [], TTFB: [], FCP: [] }
+  for (const v of webVitals) {
+    try {
+      const props = JSON.parse(v.properties)
+      for (const key of Object.keys(vitalsMap)) {
+        if (props[key] !== undefined) vitalsMap[key].push(Number(props[key]))
+      }
+    } catch {}
+  }
+
+  const avg = (arr: number[]) => arr.length > 0 ? Math.round(arr.reduce((s, v) => s + v, 0) / arr.length) : 0
+
+  return {
+    coreWebVitals: {
+      LCP: { value: avg(vitalsMap.LCP), unit: "ms", rating: avg(vitalsMap.LCP) < 2500 ? "good" : avg(vitalsMap.LCP) < 4000 ? "needs_improvement" : "poor" },
+      FID: { value: avg(vitalsMap.FID), unit: "ms", rating: avg(vitalsMap.FID) < 100 ? "good" : avg(vitalsMap.FID) < 300 ? "needs_improvement" : "poor" },
+      CLS: { value: avg(vitalsMap.CLS), unit: "", rating: avg(vitalsMap.CLS) < 0.1 ? "good" : avg(vitalsMap.CLS) < 0.25 ? "needs_improvement" : "poor" },
+      INP: { value: avg(vitalsMap.INP), unit: "ms", rating: avg(vitalsMap.INP) < 200 ? "good" : avg(vitalsMap.INP) < 500 ? "needs_improvement" : "poor" },
+      TTFB: { value: avg(vitalsMap.TTFB), unit: "ms", rating: avg(vitalsMap.TTFB) < 800 ? "good" : avg(vitalsMap.TTFB) < 1800 ? "needs_improvement" : "poor" },
+      FCP: { value: avg(vitalsMap.FCP), unit: "ms", rating: avg(vitalsMap.FCP) < 1800 ? "good" : avg(vitalsMap.FCP) < 3000 ? "needs_improvement" : "poor" },
+    },
+    sampleSize: webVitals.length,
+  }
+}
+
+/* ─── Phase 9: System Health Alerts ─────────────── */
+
+export async function getSystemHealth() {
+  const fiveMinAgo = new Date(Date.now() - 5 * 60 * 1000)
+  const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000)
+  const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000)
+
+  const [recentEvents, recentErrors, activeSessions, dbHealthy] = await Promise.all([
+    prisma.analyticsEvent.count({ where: { createdAt: { gte: fiveMinAgo } } }),
+    prisma.analyticsEvent.count({ where: { createdAt: { gte: oneHourAgo }, eventType: { in: ["tool_error", "ai_error"] } } }),
+    prisma.analyticsSession.count({ where: { lastActivityAt: { gte: fiveMinAgo } } }),
+    prisma.$queryRaw`SELECT 1`.then(() => true).catch(() => false),
+  ])
+
+  const alerts: { severity: "critical" | "warning" | "info"; title: string; message: string }[] = []
+
+  if (!dbHealthy) {
+    alerts.push({ severity: "critical", title: "Database Unreachable", message: "PostgreSQL connection failed" })
+  }
+  if (recentEvents === 0 && activeSessions > 0) {
+    alerts.push({ severity: "warning", title: "No Recent Events", message: "Active sessions exist but no events in last 5 minutes" })
+  }
+  if (recentErrors > 10) {
+    alerts.push({ severity: "warning", title: "High Error Rate", message: `${recentErrors} errors in the last hour` })
+  }
+
+  return {
+    dbHealthy,
+    recentEventsLast5Min: recentEvents,
+    recentErrorsLastHour: recentErrors,
+    activeSessions,
+    alerts,
+  }
+}
+
+/* ─── Phase 10: AI Insights Engine ──────────────── */
+
+export async function getAIInsightsEngine(range: AnalyticsDateRange = "last7") {
+  const { startDate, endDate } = toDateRange(range)
+  const prev = getPreviousDateRange(range)
+
+  const [currentMetrics, previousMetrics] = await Promise.all([
+    prisma.analyticsDailyMetric.aggregate({
+      where: { date: { gte: startDate, lte: endDate } },
+      _sum: { visitors: true, sessions: true, pageViews: true, toolOpens: true, aiRequests: true, blogViews: true },
+    }),
+    prisma.analyticsDailyMetric.aggregate({
+      where: { date: { gte: prev.startDate, lte: prev.endDate } },
+      _sum: { visitors: true, sessions: true, pageViews: true, toolOpens: true, aiRequests: true, blogViews: true },
+    }),
+  ])
+
+  const insights: { type: "positive" | "negative" | "recommendation" | "neutral"; message: string; metric?: string; change?: number }[] = []
+  const c = currentMetrics._sum
+  const p = previousMetrics._sum
+
+  const calcChange = (curr: number, prev: number) => prev > 0 ? Math.round(((curr - prev) / prev) * 100) : 0
+
+  const visitorChange = calcChange(c.visitors ?? 0, p.visitors ?? 0)
+  if (visitorChange > 10) insights.push({ type: "positive", message: `Visitor count grew by ${visitorChange}%`, metric: "visitors", change: visitorChange })
+  else if (visitorChange < -10) insights.push({ type: "negative", message: `Visitor count dropped by ${Math.abs(visitorChange)}%`, metric: "visitors", change: visitorChange })
+
+  const toolChange = calcChange(c.toolOpens ?? 0, p.toolOpens ?? 0)
+  if (toolChange > 15) insights.push({ type: "positive", message: `Tool usage surged by ${toolChange}%`, metric: "toolOpens", change: toolChange })
+  else if (toolChange < -15) insights.push({ type: "negative", message: `Tool usage declined by ${Math.abs(toolChange)}%`, metric: "toolOpens", change: toolChange })
+
+  const aiChange = calcChange(c.aiRequests ?? 0, p.aiRequests ?? 0)
+  if (aiChange > 20) insights.push({ type: "positive", message: `AI feature usage grew by ${aiChange}%`, metric: "aiRequests", change: aiChange })
+
+  if ((c.toolOpens ?? 0) > 100 && (c.blogViews ?? 0) < 10) {
+    insights.push({ type: "recommendation", message: "High tool usage but low blog engagement. Consider promoting blog content within tools." })
+  }
+
+  if (insights.length === 0) {
+    insights.push({ type: "neutral", message: "Analytics are being collected. Check back after more data accumulates for detailed insights." })
+  }
+
+  return insights
 }
 
 /* ─── Helpers ────────────────────────────────────── */

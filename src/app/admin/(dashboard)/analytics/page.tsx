@@ -20,7 +20,7 @@ import UserBehaviourHeatmap from "@/components/admin/UserBehaviourHeatmap"
 import RecentActivityFeed from "@/components/admin/RecentActivityFeed"
 import AIInsightsPanel from "@/components/admin/AIInsightsPanel"
 import DataSourceIndicator from "@/components/admin/DataSourceIndicator"
-import { Bell, BellOff, Database, Search, BarChart3, Users, Activity, FileText, MousePointerClick, Heart, Globe, Clock, TrendingUp, ArrowUp, ArrowDown, Hash, Target, Eye, List, Layers, UserCircle } from "lucide-react"
+import { Bell, BellOff, Database, Search, BarChart3, Users, Activity, FileText, MousePointerClick, Heart, Globe, Clock, TrendingUp, ArrowUp, ArrowDown, Hash, Target, Eye, List, Layers, UserCircle, Smartphone, Monitor, Tablet, MapPin, Link2, Share2, Zap, Gauge, Shield, AlertTriangle } from "lucide-react"
 import { useState, useCallback } from "react"
 import type { TabId } from "@/components/admin/DashboardNavigation"
 import type { SourceInfo } from "@/lib/analytics-service"
@@ -45,6 +45,7 @@ function AnalyticsDashboard() {
     seoQueries, blogPerfData, publishedBlogCount, publishedToolCount, trendingData,
     searchConsoleData, scKpiData, scTrafficData,
     heatmapData, activityData, insightsData, alerts, activeAlertCount, dismissAlert, dismissAllAlerts,
+    deviceData, geoData, utmData, searchAnalyticsData, performanceData, systemHealthData, enterpriseInsights, topLocationsData,
     sources, state,
   } = useAnalytics()
 
@@ -276,6 +277,18 @@ function AnalyticsDashboard() {
           />
         )}
         {activeTab === "live" && <LiveTab liveData={liveActivity} source={sources.realtime} />}
+        {activeTab === "enterprise" && (
+          <EnterpriseTab
+            deviceData={deviceData}
+            geoData={geoData}
+            utmData={utmData}
+            searchAnalyticsData={searchAnalyticsData}
+            performanceData={performanceData}
+            systemHealthData={systemHealthData}
+            topLocationsData={topLocationsData}
+            loading={loading}
+          />
+        )}
         {activeTab === "insights" && (
           <InsightsTab insightsData={insightsData} loading={loading} />
         )}
@@ -633,6 +646,311 @@ function LiveTab({ liveData, source }: { liveData: any; source: SourceInfo }) {
 
 function InsightsTab({ insightsData, loading }: { insightsData: any; loading: boolean }) {
   return <AIInsightsPanel insights={insightsData} loading={loading} />
+}
+
+function EnterpriseTab({
+  deviceData, geoData, utmData, searchAnalyticsData, performanceData, systemHealthData, topLocationsData, loading,
+}: {
+  deviceData: any; geoData: any; utmData: any; searchAnalyticsData: any; performanceData: any; systemHealthData: any; topLocationsData: any; loading: boolean;
+}) {
+  if (loading) return <LoadingSkeletons />
+
+  return (
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <DeviceBreakdownCard data={deviceData} />
+        <GeoBreakdownCard data={geoData} />
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <TopLocationsCard data={topLocationsData} />
+        <UTMCard data={utmData} />
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <SearchAnalyticsCard data={searchAnalyticsData} />
+        <WebVitalsCard data={performanceData} />
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <SystemHealthCard data={systemHealthData} />
+      </div>
+    </div>
+  )
+}
+
+function DeviceBreakdownCard({ data }: { data: any }) {
+  if (!data) return <EmptySection icon={Smartphone} title="No Device Data" message="Device breakdown data is not available yet." />
+  return (
+    <div className="rounded-2xl border bg-card p-5 space-y-4">
+      <div className="flex items-center gap-2 text-sm font-semibold"><Smartphone className="h-4 w-4 text-primary" />Device Breakdown</div>
+      <div className="space-y-2">
+        {data.devices?.map((d: any) => (
+          <div key={d.name} className="flex items-center justify-between text-xs">
+            <div className="flex items-center gap-2">
+              <span className="font-medium capitalize">{d.name}</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="text-muted-foreground">{d.count.toLocaleString()}</span>
+              <span className="text-muted-foreground/60 w-12 text-right">{d.percentage}%</span>
+            </div>
+          </div>
+        ))}
+      </div>
+      {data.browsers?.length > 0 && (
+        <>
+          <div className="border-t pt-3 text-xs font-medium text-muted-foreground">Browsers</div>
+          <div className="space-y-1.5">
+            {data.browsers.slice(0, 5).map((b: any) => (
+              <div key={b.name} className="flex items-center justify-between text-xs">
+                <span className="capitalize">{b.name}</span>
+                <span className="text-muted-foreground">{b.count.toLocaleString()}</span>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+      {data.operatingSystems?.length > 0 && (
+        <>
+          <div className="border-t pt-3 text-xs font-medium text-muted-foreground">Operating Systems</div>
+          <div className="space-y-1.5">
+            {data.operatingSystems.slice(0, 5).map((o: any) => (
+              <div key={o.name} className="flex items-center justify-between text-xs">
+                <span className="uppercase">{o.name}</span>
+                <span className="text-muted-foreground">{o.count.toLocaleString()}</span>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  )
+}
+
+function GeoBreakdownCard({ data }: { data: any }) {
+  if (!data || data.length === 0) return <EmptySection icon={MapPin} title="No Geo Data" message="Geographic breakdown data is not available yet." />
+  return (
+    <div className="rounded-2xl border bg-card p-5 space-y-4">
+      <div className="flex items-center gap-2 text-sm font-semibold"><MapPin className="h-4 w-4 text-primary" />Geographic Breakdown</div>
+      <div className="space-y-2">
+        {data.slice(0, 10).map((g: any) => (
+          <div key={g.country} className="flex items-center justify-between text-xs">
+            <span className="font-medium">{g.country}</span>
+            <div className="flex items-center gap-3">
+              <span className="text-muted-foreground">{g.count.toLocaleString()}</span>
+              <span className="text-muted-foreground/60 w-12 text-right">{g.percentage}%</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function UTMCard({ data }: { data: any }) {
+  if (!data) return <EmptySection icon={Link2} title="No UTM Data" message="UTM campaign data is not available yet." />
+  return (
+    <div className="rounded-2xl border bg-card p-5 space-y-4">
+      <div className="flex items-center gap-2 text-sm font-semibold"><Link2 className="h-4 w-4 text-primary" />UTM Campaigns</div>
+      {data.sources?.length > 0 && (
+        <div className="space-y-2">
+          <div className="text-xs font-medium text-muted-foreground">Sources</div>
+          {data.sources.slice(0, 5).map((s: any) => (
+            <div key={s.name} className="flex items-center justify-between text-xs">
+              <span>{s.name}</span>
+              <span className="text-muted-foreground">{s.count.toLocaleString()}</span>
+            </div>
+          ))}
+        </div>
+      )}
+      {data.mediums?.length > 0 && (
+        <div className="space-y-2 border-t pt-3">
+          <div className="text-xs font-medium text-muted-foreground">Mediums</div>
+          {data.mediums.slice(0, 5).map((m: any) => (
+            <div key={m.name} className="flex items-center justify-between text-xs">
+              <span>{m.name}</span>
+              <span className="text-muted-foreground">{m.count.toLocaleString()}</span>
+            </div>
+          ))}
+        </div>
+      )}
+      {data.campaigns?.length > 0 && (
+        <div className="space-y-2 border-t pt-3">
+          <div className="text-xs font-medium text-muted-foreground">Campaigns</div>
+          {data.campaigns.slice(0, 5).map((c: any) => (
+            <div key={c.name} className="flex items-center justify-between text-xs">
+              <span>{c.name}</span>
+              <span className="text-muted-foreground">{c.count.toLocaleString()}</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+function SearchAnalyticsCard({ data }: { data: any }) {
+  if (!data) return <EmptySection icon={Search} title="No Search Data" message="Search analytics data is not available yet." />
+  return (
+    <div className="rounded-2xl border bg-card p-5 space-y-4">
+      <div className="flex items-center gap-2 text-sm font-semibold"><Search className="h-4 w-4 text-primary" />Search Analytics</div>
+      <div className="grid grid-cols-3 gap-3">
+        <div className="text-center p-2 rounded-lg bg-muted/30">
+          <div className="text-lg font-bold">{data.totalSearches}</div>
+          <div className="text-[10px] text-muted-foreground">Total Searches</div>
+        </div>
+        <div className="text-center p-2 rounded-lg bg-muted/30">
+          <div className="text-lg font-bold">{data.totalNoResults}</div>
+          <div className="text-[10px] text-muted-foreground">No Results</div>
+        </div>
+        <div className="text-center p-2 rounded-lg bg-muted/30">
+          <div className="text-lg font-bold">{data.successRate}%</div>
+          <div className="text-[10px] text-muted-foreground">Success Rate</div>
+        </div>
+      </div>
+      {data.topQueries?.length > 0 && (
+        <div className="space-y-2">
+          <div className="text-xs font-medium text-muted-foreground">Top Queries</div>
+          {data.topQueries.slice(0, 5).map((q: any) => (
+            <div key={q.query} className="flex items-center justify-between text-xs">
+              <span className="truncate">{q.query}</span>
+              <span className="text-muted-foreground ml-2 shrink-0">{q.count}</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+function WebVitalsCard({ data }: { data: any }) {
+  if (!data?.coreWebVitals) return <EmptySection icon={Gauge} title="No Web Vitals" message="Web vitals data is not available yet. Visit pages to collect metrics." />
+  const vitals = data.coreWebVitals
+  const ratingColor: Record<string, string> = {
+    good: "text-emerald-400",
+    needs_improvement: "text-amber-400",
+    poor: "text-red-400",
+  }
+  return (
+    <div className="rounded-2xl border bg-card p-5 space-y-4">
+      <div className="flex items-center gap-2 text-sm font-semibold"><Gauge className="h-4 w-4 text-primary" />Core Web Vitals</div>
+      <div className="text-[10px] text-muted-foreground mb-2">Sample size: {data.sampleSize} events</div>
+      <div className="grid grid-cols-2 gap-3">
+        {Object.entries(vitals).map(([key, v]: [string, any]) => (
+          <div key={key} className="rounded-lg bg-muted/30 p-3 text-center">
+            <div className="text-xs font-medium text-muted-foreground mb-1">{key}</div>
+            <div className="text-lg font-bold">{v.value}<span className="text-xs text-muted-foreground ml-0.5">{v.unit}</span></div>
+            <div className={`text-[10px] font-medium capitalize ${ratingColor[v.rating] ?? "text-muted-foreground"}`}>
+              {v.rating?.replace("_", " ")}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function SystemHealthCard({ data }: { data: any }) {
+  if (!data) return <EmptySection icon={Shield} title="No Health Data" message="System health data is not available." />
+  return (
+    <div className="rounded-2xl border bg-card p-5 space-y-4">
+      <div className="flex items-center gap-2 text-sm font-semibold"><Shield className="h-4 w-4 text-primary" />System Health</div>
+      <div className="grid grid-cols-2 gap-3">
+        <div className="rounded-lg bg-muted/30 p-3 text-center">
+          <div className={`text-lg font-bold ${data.dbHealthy ? "text-emerald-400" : "text-red-400"}`}>
+            {data.dbHealthy ? "Healthy" : "Down"}
+          </div>
+          <div className="text-[10px] text-muted-foreground">Database</div>
+        </div>
+        <div className="rounded-lg bg-muted/30 p-3 text-center">
+          <div className="text-lg font-bold">{data.activeSessions}</div>
+          <div className="text-[10px] text-muted-foreground">Active Sessions</div>
+        </div>
+        <div className="rounded-lg bg-muted/30 p-3 text-center">
+          <div className="text-lg font-bold">{data.recentEventsLast5Min}</div>
+          <div className="text-[10px] text-muted-foreground">Events (5min)</div>
+        </div>
+        <div className="rounded-lg bg-muted/30 p-3 text-center">
+          <div className={`text-lg font-bold ${data.recentErrorsLastHour > 0 ? "text-amber-400" : ""}`}>
+            {data.recentErrorsLastHour}
+          </div>
+          <div className="text-[10px] text-muted-foreground">Errors (1hr)</div>
+        </div>
+      </div>
+      {data.alerts?.length > 0 && (
+        <div className="space-y-2 border-t pt-3">
+          <div className="text-xs font-medium text-muted-foreground flex items-center gap-1"><AlertTriangle className="h-3 w-3" />Active Alerts</div>
+          {data.alerts.map((a: any, i: number) => (
+            <div key={i} className="flex items-start gap-2 text-xs">
+              <span className={`h-1.5 w-1.5 rounded-full mt-1.5 shrink-0 ${
+                a.severity === "critical" ? "bg-red-500" : a.severity === "warning" ? "bg-amber-500" : "bg-blue-500"
+              }`} />
+              <div>
+                <span className="font-medium">{a.title}</span>
+                <span className="text-muted-foreground ml-1">- {a.message}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+function TopLocationsCard({ data }: { data: any }) {
+  if (!data) return <EmptySection icon={MapPin} title="No Location Data" message="Top locations data is not available yet." />
+  const hasCountries = data.countries?.length > 0
+  const hasRegions = data.regions?.length > 0
+  const hasCities = data.cities?.length > 0
+  if (!hasCountries && !hasRegions && !hasCities) {
+    return <EmptySection icon={MapPin} title="No Location Data" message="Geographic data will appear as visitors browse the site." />
+  }
+  return (
+    <div className="rounded-2xl border bg-card p-5 space-y-4">
+      <div className="flex items-center gap-2 text-sm font-semibold"><MapPin className="h-4 w-4 text-primary" />Top Locations</div>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        {hasCountries && (
+          <div className="space-y-2">
+            <div className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Countries</div>
+            {data.countries.slice(0, 5).map((c: any) => (
+              <div key={c.name} className="flex items-center justify-between text-xs">
+                <span className="truncate font-medium">{c.name}</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-muted-foreground">{c.count.toLocaleString()}</span>
+                  <span className="text-muted-foreground/60 w-10 text-right">{c.percentage}%</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+        {hasRegions && (
+          <div className="space-y-2">
+            <div className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Regions</div>
+            {data.regions.slice(0, 5).map((r: any) => (
+              <div key={r.name} className="flex items-center justify-between text-xs">
+                <span className="truncate font-medium">{r.name}</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-muted-foreground">{r.count.toLocaleString()}</span>
+                  <span className="text-muted-foreground/60 w-10 text-right">{r.percentage}%</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+        {hasCities && (
+          <div className="space-y-2">
+            <div className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Cities</div>
+            {data.cities.slice(0, 5).map((ci: any) => (
+              <div key={ci.name} className="flex items-center justify-between text-xs">
+                <span className="truncate font-medium">{ci.name}</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-muted-foreground">{ci.count.toLocaleString()}</span>
+                  <span className="text-muted-foreground/60 w-10 text-right">{ci.percentage}%</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  )
 }
 
 function LoadingSkeletons({ overview }: { overview?: boolean }) {

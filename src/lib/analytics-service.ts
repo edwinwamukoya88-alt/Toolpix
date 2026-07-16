@@ -888,6 +888,198 @@ export async function getAIInsights(range: DateRange = "last7"): Promise<{ data:
   }
 }
 
+/* ─── Enterprise Analytics Queries (Phase 2-10) ───────────── */
+
+export interface DeviceBreakdownData {
+  devices: { name: string; count: number; percentage: number }[]
+  browsers: { name: string; count: number }[]
+  operatingSystems: { name: string; count: number }[]
+  screens: { name: string; count: number }[]
+}
+
+export interface GeoData {
+  country: string
+  count: number
+  percentage: number
+}
+
+export interface UTMData {
+  sources: { name: string; count: number }[]
+  mediums: { name: string; count: number }[]
+  campaigns: { name: string; count: number }[]
+}
+
+export interface FunnelStepData {
+  label: string
+  value: number
+  percentage: number
+  dropped: number
+}
+
+export interface SearchAnalyticsData {
+  totalSearches: number
+  totalNoResults: number
+  successRate: number
+  topQueries: { query: string; count: number }[]
+  noResultQueries: { query: string; count: number }[]
+}
+
+export interface WebVitalMetric {
+  value: number
+  unit: string
+  rating: "good" | "needs_improvement" | "poor"
+}
+
+export interface PerformanceData {
+  coreWebVitals: {
+    LCP: WebVitalMetric
+    FID: WebVitalMetric
+    CLS: WebVitalMetric
+    INP: WebVitalMetric
+    TTFB: WebVitalMetric
+    FCP: WebVitalMetric
+  }
+  sampleSize: number
+}
+
+export interface SystemHealthData {
+  dbHealthy: boolean
+  recentEventsLast5Min: number
+  recentErrorsLastHour: number
+  activeSessions: number
+  alerts: { severity: "critical" | "warning" | "info"; title: string; message: string }[]
+}
+
+export interface AIInsightData {
+  type: "positive" | "negative" | "recommendation" | "neutral"
+  message: string
+  metric?: string
+  change?: number
+}
+
+export async function getDeviceBreakdown(range: DateRange = "last7"): Promise<{ data: DeviceBreakdownData | null; source: SourceInfo }> {
+  try {
+    const dash = await fetchDashboard("devices", range)
+    if (dash?.devices) {
+      return { data: dash.devices, source: { status: "available", lastUpdated: Date.now(), error: null } }
+    }
+  } catch (e) {
+    console.error("[analytics] getDeviceBreakdown failed:", e)
+  }
+  return { data: null, source: { status: "unavailable", lastUpdated: null, error: "No device data available" } }
+}
+
+export async function getGeoBreakdownData(range: DateRange = "last7"): Promise<{ data: GeoData[] | null; source: SourceInfo }> {
+  try {
+    const dash = await fetchDashboard("geo", range)
+    if (dash?.geo?.length > 0) {
+      return { data: dash.geo, source: { status: "available", lastUpdated: Date.now(), error: null } }
+    }
+  } catch (e) {
+    console.error("[analytics] getGeoBreakdownData failed:", e)
+  }
+  return { data: null, source: { status: "unavailable", lastUpdated: null, error: "No geo data available" } }
+}
+
+export async function getUTMBreakdownData(range: DateRange = "last7"): Promise<{ data: UTMData | null; source: SourceInfo }> {
+  try {
+    const dash = await fetchDashboard("utm", range)
+    if (dash?.utm) {
+      return { data: dash.utm, source: { status: "available", lastUpdated: Date.now(), error: null } }
+    }
+  } catch (e) {
+    console.error("[analytics] getUTMBreakdownData failed:", e)
+  }
+  return { data: null, source: { status: "unavailable", lastUpdated: null, error: "No UTM data available" } }
+}
+
+export async function getFunnelDataEnterprise(range: DateRange = "last7", funnelName?: string): Promise<{ data: FunnelStepData[] | null; availableFunnels: string[]; selectedFunnel: string; source: SourceInfo }> {
+  try {
+    const qs = funnelName ? `&funnel=${encodeURIComponent(funnelName)}` : ""
+    const dash = await fetchDashboard(`funnels${qs}`, range)
+    if (dash?.funnelData) {
+      return { data: dash.funnelData, availableFunnels: dash.availableFunnels ?? [], selectedFunnel: dash.selectedFunnel ?? "", source: { status: "available", lastUpdated: Date.now(), error: null } }
+    }
+  } catch (e) {
+    console.error("[analytics] getFunnelDataEnterprise failed:", e)
+  }
+  return { data: null, availableFunnels: [], selectedFunnel: "", source: { status: "unavailable", lastUpdated: null, error: "No funnel data available" } }
+}
+
+export async function getSearchAnalyticsData(range: DateRange = "last7"): Promise<{ data: SearchAnalyticsData | null; source: SourceInfo }> {
+  try {
+    const dash = await fetchDashboard("search", range)
+    if (dash?.search) {
+      return { data: dash.search, source: { status: "available", lastUpdated: Date.now(), error: null } }
+    }
+  } catch (e) {
+    console.error("[analytics] getSearchAnalyticsData failed:", e)
+  }
+  return { data: null, source: { status: "unavailable", lastUpdated: null, error: "No search analytics available" } }
+}
+
+export async function getPerformanceData(range: DateRange = "last7"): Promise<{ data: PerformanceData | null; source: SourceInfo }> {
+  try {
+    const dash = await fetchDashboard("performance", range)
+    if (dash?.performance) {
+      return { data: dash.performance, source: { status: "available", lastUpdated: Date.now(), error: null } }
+    }
+  } catch (e) {
+    console.error("[analytics] getPerformanceData failed:", e)
+  }
+  return { data: null, source: { status: "unavailable", lastUpdated: null, error: "No performance data available" } }
+}
+
+export async function getSystemHealthData(): Promise<{ data: SystemHealthData | null; source: SourceInfo }> {
+  try {
+    const dash = await fetchDashboard("health", "today")
+    if (dash?.health) {
+      return { data: dash.health, source: { status: "available", lastUpdated: Date.now(), error: null } }
+    }
+  } catch (e) {
+    console.error("[analytics] getSystemHealthData failed:", e)
+  }
+  return { data: null, source: { status: "unavailable", lastUpdated: null, error: "No health data available" } }
+}
+
+export async function getAIInsightsEnterprise(range: DateRange = "last7"): Promise<{ data: AIInsightData[] | null; source: SourceInfo }> {
+  try {
+    const dash = await fetchDashboard("insights", range)
+    if (dash?.insights?.length > 0) {
+      return { data: dash.insights, source: { status: "available", lastUpdated: Date.now(), error: null } }
+    }
+  } catch (e) {
+    console.error("[analytics] getAIInsightsEnterprise failed:", e)
+  }
+  return { data: null, source: { status: "unavailable", lastUpdated: null, error: "No insights available" } }
+}
+
+/* ─── Top Locations ──────────────────────────────── */
+
+export interface LocationEntry {
+  name: string
+  count: number
+  percentage: number
+}
+
+export interface TopLocationsData {
+  countries: LocationEntry[]
+  regions: LocationEntry[]
+  cities: LocationEntry[]
+}
+
+export async function getTopLocationsData(range: DateRange = "last7"): Promise<{ data: TopLocationsData | null; source: SourceInfo }> {
+  try {
+    const dash = await fetchDashboard("locations", range)
+    if (dash?.locations) {
+      return { data: dash.locations, source: { status: "available", lastUpdated: Date.now(), error: null } }
+    }
+  } catch (e) {
+    console.error("[analytics] getTopLocationsData failed:", e)
+  }
+  return { data: null, source: { status: "unavailable", lastUpdated: null, error: "No location data available" } }
+}
+
 export async function initAnalytics(): Promise<void> {
   if (typeof window === "undefined") return
   try {
